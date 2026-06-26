@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Your Mark — PolyU IS Lab</title>
+<title>Your Mark · PolyU IS Lab</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;600;700&family=Inter:wght@400;500;600&family=Source+Serif+4:ital,opsz,wght@0,8..60,400..700;1,8..60,400..500&family=Noto+Sans+TC:wght@400;500;700&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="style.css">
@@ -32,7 +32,7 @@
   <div class="wrap">
     <div class="kicker" style="--accent: var(--is-blue);">The Lab · Exhibit 5 of 8</div>
     <h1>Your Mark</h1>
-    <p class="lede">Type anything — a name, a student number, a line of poetry, any language, any length. A 128-bit hash seeds a free cell composition on any grid <strong>up to 256 × 256</strong>: one lead family, sparse accent cells, and the quarter, split, circle and square primitives. Drag the preview's corner to resize it — the mark always fits, keeping its aspect ratio. Same input, same mark, forever. (The business-card application comes later — this is the raw generator.)</p>
+    <p class="lede">Type anything: a name, a student number, a line of poetry. A 128-bit hash turns it into a cell composition on a grid <strong>up to 256 × 256</strong>, using one lead colour family, a few accent cells, and the quarter, split, circle, and square shapes. Drag the corner of the preview to resize it; the mark keeps its proportions. The same text always produces the same mark. (A business-card version comes later. This is the raw generator.)</p>
   </div>
 </header>
 
@@ -41,7 +41,7 @@
   <div class="wrap">
     <div class="exhibit">
       <div class="mark-input">
-        <input id="mark-name" type="text" maxlength="120" placeholder="Type anything — any language, any length" aria-label="Input string" value="Lyra Chan" style="min-width:280px; flex:1;">
+        <input id="mark-name" type="text" maxlength="120" placeholder="Type anything, in any language" aria-label="Input string" value="Lyra Chan" style="min-width:280px; flex:1;">
         <label class="hint" for="mark-cols" style="display:flex; align-items:center; gap:0.4rem;">W <input id="mark-cols" type="number" min="2" max="256" value="7" style="width:64px;"></label>
         <label class="hint" for="mark-rows" style="display:flex; align-items:center; gap:0.4rem;">H <input id="mark-rows" type="number" min="2" max="256" value="5" style="width:64px;"></label>
         <button class="btn-prime" type="button" id="mark-make">Generate</button>
@@ -50,7 +50,7 @@
       </div>
       <div id="mark-out"></div>
       <div id="mark-label"></div>
-      <p class="hint" style="margin-top:1.2rem;">How it works: cyrb128 hashes the input to 128 bits; an sfc32 stream composes every cell in order — quarter 50%, split 16%, circle 12%, square 10%, empty 12%. Collision probability is negligible (2⁻¹²⁸-scale), and the mark is deterministic. Preview is canvas (65,536 cells render instantly); SVG download uses shared gradient definitions so files stay light; PNG caps at 8192 px.</p>
+      <p class="hint" style="margin-top:1.2rem;">How it works: cyrb128 hashes the input to 128 bits, then an sfc32 stream lays out every cell in order (quarter 50%, split 16%, circle 12%, square 10%, empty 12%). The odds of two inputs landing on the same mark are tiny, around 2⁻¹²⁸, and the result is deterministic. The preview is a canvas, so 65,536 cells render instantly; the SVG download shares its gradient definitions to keep files small; PNG output caps at 8192 px.</p>
     </div>
   </div>
 </section>

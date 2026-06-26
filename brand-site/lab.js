@@ -454,7 +454,7 @@ const MONOGRAM = [[0,0,'q','tr',1],[1,0,'q','tl',4],[2,0,'q','tr',4],[0,1,'dsq',
       if (paused) $('disp-pause').click();
       return true;
     } catch (err) {
-      $('disp-hint').textContent = 'Camera unavailable or permission declined — the other programmes still run.';
+      $('disp-hint').textContent = 'Camera unavailable or permission declined. The other programmes still run.';
       return false;
     }
   }
@@ -843,7 +843,7 @@ const MONOGRAM = [[0,0,'q','tr',1],[1,0,'q','tl',4],[2,0,'q','tr',4],[0,1,'dsq',
       } else {
         b.classList.add('open');
         b.style.setProperty('--d', (i * 0.31 % 2.6).toFixed(2) + 's');
-        b.setAttribute('aria-label', 'Open seat — choose it');
+        b.setAttribute('aria-label', 'Open seat, choose it');
       }
       seats.appendChild(b);
     }
@@ -870,7 +870,7 @@ const MONOGRAM = [[0,0,'q','tr',1],[1,0,'q','tl',4],[2,0,'q','tr',4],[0,1,'dsq',
     const count = 16 + randInt(8); // 16–23 of 30 taken
     const taken = shuffle([...Array(30).keys()]).slice(0, count).sort((a, b) => a - b);
     populate(taken, shuffle([...FOCI]));
-    msg.innerHTML = `<span class="hint">${count} taken · ${30 - count} breathing · hover a filled cell · choose an open one</span>`;
+    msg.innerHTML = `<span class="hint">${count} taken · ${30 - count} open · hover a filled cell · choose an open one</span>`;
   });
   populate(DEFAULT_TAKEN, FOCI);
   const showTip = b => {
@@ -913,7 +913,7 @@ const MONOGRAM = [[0,0,'q','tr',1],[1,0,'q','tl',4],[2,0,'q','tr',4],[0,1,'dsq',
   else init();
 
   function init() {
-    if (!window.Matter) { $('bin-hint').textContent = 'Physics engine unavailable (offline) — the rest of the Lab still works.'; return; }
+    if (!window.Matter) { $('bin-hint').textContent = 'Physics engine unavailable (offline). The rest of the Lab still works.'; return; }
     const { Engine, Bodies, Body, Composite, Mouse, MouseConstraint, Runner } = Matter;
     const ctx = cv.getContext('2d');
     let W = 0, H = 400, S = 56;
@@ -1317,7 +1317,7 @@ const MONOGRAM = [[0,0,'q','tr',1],[1,0,'q','tl',4],[2,0,'q','tr',4],[0,1,'dsq',
         catch { continue; }
       }
     }
-    return { ok:false, err:'Discs found but no valid read — hold flatter / closer' };
+    return { ok:false, err:'Discs found but no valid read. Hold flatter or closer.' };
   }
 
   function homography(src, dst) { // 4-point DLT, returns [h0..h7]
@@ -1352,7 +1352,7 @@ const MONOGRAM = [[0,0,'q','tr',1],[1,0,'q','tl',4],[2,0,'q','tr',4],[0,1,'dsq',
   function make() {
     const text = $('code-text').value || 'BDSIS JS3000';
     const e = encode(text);
-    if (!e) { result(false, 'Too long — max ~100 bytes.'); return; }
+    if (!e) { result(false, 'Too long. Max ~100 bytes.'); return; }
     curGrid = e.grid; curN = e.N; lastText = text;
     drawCode();
     $('code-label').textContent = `CELL CODE · ${e.N}×${e.N} · ${new TextEncoder().encode(text).length} BYTES + CRC-16`;
