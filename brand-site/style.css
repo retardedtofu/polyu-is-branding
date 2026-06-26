@@ -1,0 +1,243 @@
+/* ============================================================
+   BDSIS Brand Guideline — site styles
+   The site demonstrates the refined identity:
+   ink + paper foundation, spectrum as accent, grotesk × serif.
+   ============================================================ */
+
+:root {
+  /* Foundation */
+  --ink: #11151C;
+  --ink-soft: #2A2F38;
+  --paper: #FBFAF7;
+  --paper-deep: #F1EFE9;
+  --grey: #58595B;
+  --line: #E4E1DA;
+
+  /* Spectrum — anchored to the logo */
+  --is-purple: #634093;
+  --is-crimson: #ED174B;
+  --is-orange: #F47C36;
+  --is-green: #30B44D;
+  --is-green-light: #96C664;
+  --is-blue: #157AB5;
+  --is-blue-deep: #0766A0;
+
+  /* Gradients (always within a family) */
+  --grad-purple: linear-gradient(135deg, #634093, #A4346B);
+  --grad-crimson: linear-gradient(135deg, #ED174B, #F0584A);
+  --grad-orange: linear-gradient(135deg, #F47C36, #ED224B);
+  --grad-green: linear-gradient(135deg, #96C664, #30B44D);
+  --grad-blue: linear-gradient(135deg, #157AB5, #0766A0);
+
+  /* Type */
+  --font-display: "Space Grotesk", "Noto Sans TC", sans-serif;
+  --font-body: "Inter", "Noto Sans TC", sans-serif;
+  --font-voice: "Source Serif 4", "Noto Serif TC", Georgia, serif;
+
+  --maxw: 1080px;
+}
+
+* { margin: 0; padding: 0; box-sizing: border-box; }
+
+html { scroll-behavior: smooth; }
+
+body {
+  font-family: var(--font-body);
+  font-size: 16px;
+  line-height: 1.7;
+  color: var(--ink);
+  background: var(--paper);
+  -webkit-font-smoothing: antialiased;
+}
+
+/* ---------- Navigation ---------- */
+nav.site-nav {
+  position: sticky; top: 0; z-index: 50;
+  background: rgba(251, 250, 247, 0.92);
+  backdrop-filter: blur(10px);
+  border-bottom: 1px solid var(--line);
+}
+.nav-inner {
+  max-width: var(--maxw); margin: 0 auto;
+  display: flex; align-items: center; gap: 1.5rem;
+  padding: 0.85rem 1.5rem;
+}
+.nav-brand {
+  display: flex; align-items: center; gap: 0.6rem;
+  font-family: var(--font-display); font-weight: 700;
+  font-size: 0.95rem; letter-spacing: 0.06em;
+  color: var(--ink); text-decoration: none; margin-right: auto;
+}
+.nav-brand img { height: 26px; width: auto; }
+.nav-links { display: flex; gap: 0.25rem; flex-wrap: wrap; }
+.nav-links a {
+  font-size: 0.82rem; font-weight: 500; letter-spacing: 0.04em;
+  color: var(--grey); text-decoration: none;
+  padding: 0.35rem 0.7rem; border-radius: 999px;
+  transition: color .15s, background .15s;
+}
+.nav-links a:hover { color: var(--ink); background: var(--paper-deep); }
+.nav-links a.active { color: #fff; background: var(--ink); }
+
+/* ---------- Layout primitives ---------- */
+.wrap { max-width: var(--maxw); margin: 0 auto; padding: 0 1.5rem; }
+section.block { padding: 4.5rem 0; }
+section.block + section.block { border-top: 1px solid var(--line); }
+
+.kicker {
+  font-family: var(--font-display);
+  font-size: 0.78rem; font-weight: 700;
+  letter-spacing: 0.22em; text-transform: uppercase;
+  color: var(--grey); margin-bottom: 1rem;
+  display: flex; align-items: center; gap: 0.6rem;
+}
+.kicker::before {
+  content: ""; width: 0.65rem; height: 0.65rem; flex: none;
+  background: var(--accent, var(--is-blue));
+  border-radius: 50% 0 0 0; /* quarter-circle: the logo's DNA */
+}
+
+h1 {
+  font-family: var(--font-display);
+  font-size: clamp(2.4rem, 5.5vw, 4rem);
+  font-weight: 700; line-height: 1.08;
+  letter-spacing: -0.015em; margin-bottom: 1.4rem;
+}
+h2 {
+  font-family: var(--font-display);
+  font-size: clamp(1.6rem, 3vw, 2.2rem);
+  font-weight: 700; line-height: 1.15;
+  letter-spacing: -0.01em; margin-bottom: 1rem;
+}
+h3 {
+  font-family: var(--font-display);
+  font-size: 1.12rem; font-weight: 600;
+  margin: 1.8rem 0 0.5rem;
+}
+p { margin-bottom: 1rem; max-width: 68ch; }
+.lede { font-size: 1.18rem; color: var(--ink-soft); max-width: 58ch; }
+a { color: var(--is-blue-deep); }
+strong { font-weight: 600; }
+
+/* Human voice — the serif register */
+.voice, blockquote {
+  font-family: var(--font-voice);
+  font-style: italic;
+  font-size: 1.35rem; line-height: 1.5;
+  color: var(--ink);
+  max-width: 30em;
+}
+blockquote { padding-left: 1.4rem; border-left: 3px solid var(--accent, var(--is-crimson)); margin: 2rem 0; }
+blockquote cite {
+  display: block; margin-top: 0.8rem;
+  font-family: var(--font-body); font-style: normal;
+  font-size: 0.82rem; letter-spacing: 0.05em; color: var(--grey);
+}
+
+/* Dark sections */
+.dark { background: var(--ink); color: #EDEBE6; }
+.dark h1, .dark h2, .dark h3, .dark .voice, .dark blockquote { color: #fff; }
+.dark p { color: #C9C7C1; }
+.dark .kicker { color: #8B8F98; }
+
+/* ---------- Components ---------- */
+.grid { display: grid; gap: 1.25rem; }
+.grid.cols-2 { grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); }
+.grid.cols-3 { grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); }
+.grid.cols-4 { grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); }
+
+.card {
+  background: #fff; border: 1px solid var(--line);
+  border-radius: 14px; padding: 1.6rem;
+}
+.card.flat { background: var(--paper-deep); border: none; }
+.card h3 { margin-top: 0; }
+.card .tag {
+  display: inline-block; font-size: 0.72rem; font-weight: 600;
+  letter-spacing: 0.08em; text-transform: uppercase;
+  color: var(--accent, var(--is-blue)); margin-bottom: 0.5rem;
+}
+
+/* nav cards on home */
+a.card { text-decoration: none; color: inherit; transition: transform .15s, box-shadow .15s; display: block; }
+a.card:hover { transform: translateY(-3px); box-shadow: 0 10px 30px rgba(17,21,28,0.08); }
+
+/* Tables */
+table { width: 100%; border-collapse: collapse; margin: 1.2rem 0 1.6rem; font-size: 0.93rem; }
+th { font-family: var(--font-display); font-size: 0.78rem; letter-spacing: 0.1em; text-transform: uppercase; text-align: left; color: var(--grey); }
+th, td { padding: 0.7rem 0.9rem 0.7rem 0; border-bottom: 1px solid var(--line); vertical-align: top; }
+td:first-child { font-weight: 600; }
+
+/* Do / Don't */
+.dodont { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 1.25rem; margin: 1.5rem 0; }
+.do, .dont { border-radius: 14px; padding: 1.4rem 1.6rem; background: #fff; border: 1px solid var(--line); }
+.do { border-top: 4px solid var(--is-green); }
+.dont { border-top: 4px solid var(--is-crimson); }
+.do h4, .dont h4 { font-family: var(--font-display); font-size: 0.85rem; letter-spacing: 0.15em; text-transform: uppercase; margin-bottom: 0.7rem; }
+.do h4 { color: var(--is-green); } .dont h4 { color: var(--is-crimson); }
+.do ul, .dont ul { padding-left: 1.2rem; font-size: 0.93rem; }
+.do li, .dont li { margin-bottom: 0.45rem; }
+
+/* Color swatches */
+.swatch-row { display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 1rem; margin: 1.4rem 0 2rem; }
+.swatch {
+  border-radius: 14px; overflow: hidden; cursor: pointer;
+  border: 1px solid var(--line); background: #fff;
+  transition: transform .12s;
+}
+.swatch:hover { transform: scale(1.02); }
+.swatch .chip { height: 96px; }
+.swatch .meta { padding: 0.7rem 0.9rem; }
+.swatch .name { font-family: var(--font-display); font-weight: 600; font-size: 0.85rem; }
+.swatch .hex { font-size: 0.78rem; color: var(--grey); font-family: ui-monospace, "SF Mono", Menlo, monospace; }
+.swatch .copied { color: var(--is-green); font-weight: 600; }
+
+/* Ratio bar */
+.ratio-bar { display: flex; height: 56px; border-radius: 12px; overflow: hidden; margin: 1.2rem 0; font-family: var(--font-display); font-size: 0.75rem; font-weight: 600; letter-spacing: 0.05em; }
+.ratio-bar > div { display: flex; align-items: center; justify-content: center; }
+
+/* Type specimens */
+.specimen { border: 1px solid var(--line); background: #fff; border-radius: 14px; padding: 2rem; margin: 1.2rem 0; }
+.specimen .label { font-size: 0.72rem; letter-spacing: 0.12em; text-transform: uppercase; color: var(--grey); margin-bottom: 0.6rem; font-family: var(--font-body); }
+
+/* Asset frames */
+.asset { background: #fff; border: 1px solid var(--line); border-radius: 14px; padding: 1.4rem; text-align: center; }
+.asset.on-dark { background: var(--ink); }
+.asset.on-grad { background: var(--grad-blue); }
+.asset img { max-width: 100%; height: auto; max-height: 200px; }
+.asset .cap { font-size: 0.78rem; color: var(--grey); margin-top: 0.8rem; }
+.asset.on-dark .cap, .asset.on-grad .cap { color: rgba(255,255,255,0.75); }
+
+/* Quadrant-grid demo */
+.quad-demo { display: grid; grid-template-columns: repeat(4, 1fr); aspect-ratio: 2.2; border-radius: 14px; overflow: hidden; margin: 1.4rem 0; }
+.quad-demo div { width: 100%; height: 100%; }
+
+/* Footer */
+footer { border-top: 1px solid var(--line); padding: 2.5rem 0 3.5rem; margin-top: 2rem; font-size: 0.85rem; color: var(--grey); }
+footer .wrap { display: flex; justify-content: space-between; gap: 1rem; flex-wrap: wrap; }
+footer a { color: var(--grey); }
+
+/* Page-turn links */
+.pageturn { display: flex; justify-content: space-between; gap: 1rem; padding: 2.5rem 0; }
+.pageturn a {
+  font-family: var(--font-display); font-weight: 600; text-decoration: none;
+  color: var(--ink); font-size: 0.95rem;
+  padding: 0.8rem 1.3rem; border: 1px solid var(--line); border-radius: 999px;
+  background: #fff; transition: background .15s;
+}
+.pageturn a:hover { background: var(--paper-deep); }
+
+/* Spectrum hairline — the 5-colour signature, used sparingly */
+.spectrum-line { height: 4px; display: flex; }
+.spectrum-line span { flex: 1; }
+.spectrum-line span:nth-child(1) { background: var(--is-purple); }
+.spectrum-line span:nth-child(2) { background: var(--is-crimson); }
+.spectrum-line span:nth-child(3) { background: var(--is-orange); }
+.spectrum-line span:nth-child(4) { background: var(--is-green); }
+.spectrum-line span:nth-child(5) { background: var(--is-blue); }
+
+@media (max-width: 720px) {
+  .nav-inner { flex-wrap: wrap; gap: 0.5rem; }
+  .nav-brand { width: 100%; }
+  .nav-links a { padding: 0.25rem 0.55rem; font-size: 0.78rem; }
+}

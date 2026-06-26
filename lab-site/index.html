@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Lab — PolyU IS Lab</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;600;700&family=Inter:wght@400;500;600&family=Source+Serif+4:ital,opsz,wght@0,8..60,400..700;1,8..60,400..500&family=Noto+Sans+TC:wght@400;500;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="style.css">
+<link rel="stylesheet" href="lab.css">
+</head>
+<body>
+
+<nav class="site-nav">
+  <div class="nav-inner">
+    <a class="nav-brand" href="index.html"><img src="assets/logo-original.png" alt="PolyU IS"> PolyU IS Lab</a>
+    <div class="nav-links">
+      <a href="index.html" class="active">Lab</a>
+      <a href="lab-assembly.html">Assembly</a>
+      <a href="lab-display.html">Display</a>
+      <a href="lab-kaleidoscope.html">Kaleidoscope</a>
+      <a href="lab-composer.html">Composer</a>
+      <a href="lab-mark.html">Your Mark</a>
+      <a href="lab-seat.html">Open Seat</a>
+      <a href="lab-bin.html">Toy Bin</a>
+      <a href="lab-code.html">Cell Code</a>
+    </div>
+  </div>
+</nav>
+
+<header class="block">
+  <div class="wrap">
+    <div class="kicker" style="--accent: var(--is-blue);">The Lab</div>
+    <h1>The system,<br>in motion</h1>
+    <p class="lede">Eight working pieces built on the Cell System — motion studies, production tools and campaign interactives. Each exhibit is its own page, with a palette switcher to compare all four direction colour stories. The vocabulary is now five primitives: <strong>quarter, split square, circle, square, ghost</strong>.</p>
+  </div>
+</header>
+
+<div id="labstage" data-theme="d3" style="padding-bottom:4rem;">
+  <div class="wrap">
+    <div class="hubgrid">
+
+      <a class="hubcard" href="lab-assembly.html">
+        <div class="demo">
+          <div class="qq tr" style="--ca:var(--f1a);--cb:var(--f1b);"></div>
+          <div class="dd" style="--ca:var(--f2a);--cb:var(--f3a);"></div>
+          <div class="gg"></div>
+          <div class="qq bl" style="--ca:var(--f5a);--cb:var(--f5b);"></div>
+        </div>
+        <span class="num">EXHIBIT 1 · MOTION</span>
+        <h3>The Assembly</h3>
+        <p>The monogram builds itself — clockwork travel along the grid, 90° rotation snaps.</p>
+      </a>
+
+      <a class="hubcard" href="lab-display.html">
+        <div class="demo" style="grid-template-columns:repeat(8,1fr); gap:3px;">
+          <div class="qq tl" style="--ca:var(--f5a);--cb:var(--f5a);"></div><div class="qq tr" style="--ca:var(--f5b);--cb:var(--f5b);"></div><div class="gg"></div><div class="qq br" style="--ca:var(--f5a);--cb:var(--f5a);"></div><div class="qq bl" style="--ca:var(--f2a);--cb:var(--f2a);"></div><div class="qq tl" style="--ca:var(--f5b);--cb:var(--f5b);"></div><div class="gg"></div><div class="qq tr" style="--ca:var(--f5a);--cb:var(--f5a);"></div>
+        </div>
+        <span class="num">EXHIBIT 2 · MOTION</span>
+        <h3>The Display</h3>
+        <p>The grid as a low-res screen: flow field, cell-font marquee, monogram — and a live camera filter.</p>
+      </a>
+
+      <a class="hubcard" href="lab-kaleidoscope.html">
+        <div class="demo" style="grid-template-columns:repeat(4,1fr); gap:0;">
+          <div class="qq br" style="--ca:var(--f5a);--cb:var(--f5b);"></div>
+          <div class="qq bl" style="--ca:var(--f5b);--cb:var(--f5a);"></div>
+          <div class="qq br" style="--ca:var(--f3a);--cb:var(--f3b);"></div>
+          <div class="qq bl" style="--ca:var(--f5a);--cb:var(--f5b);"></div>
+        </div>
+        <span class="num">EXHIBIT 3 · MOTION</span>
+        <h3>The Kaleidoscope</h3>
+        <p>Seventy-two discs turning in step — ambient patterns for screens and receptions.</p>
+      </a>
+
+      <a class="hubcard" href="lab-composer.html">
+        <div class="demo">
+          <div class="qq tl" style="--ca:var(--f2a);--cb:var(--f2b);"></div>
+          <div class="dd" style="--ca:var(--f2a);--cb:var(--f3a);"></div>
+          <div class="cc" style="--ca:var(--f2a);--cb:var(--f2b);"></div>
+          <div class="ss" style="--ca:var(--f2b);--cb:var(--f2a);"></div>
+        </div>
+        <span class="num">EXHIBIT 4 · TOOL</span>
+        <h3>The Composer</h3>
+        <p>Stamp, rotate, export — production SVG/PNG from the system grid. Now with circle and square.</p>
+      </a>
+
+      <a class="hubcard" href="lab-mark.html">
+        <div class="demo" style="grid-template-columns:repeat(6,1fr); gap:3px;">
+          <div class="qq tr" style="--ca:var(--f4a);--cb:var(--f4b);"></div>
+          <div class="cc" style="--ca:var(--f1a);--cb:var(--f1b);"></div>
+          <div class="ss" style="--ca:var(--f3a);--cb:var(--f3b);"></div>
+          <div class="qq bl" style="--ca:var(--f5a);--cb:var(--f5b);"></div>
+          <div class="dd" style="--ca:var(--f2a);--cb:var(--f2b);"></div>
+          <div class="gg"></div>
+        </div>
+        <span class="num">EXHIBIT 5 · TOOL</span>
+        <h3>Your Mark</h3>
+        <p>Hash anything — any language, any length — into a cell mark on any grid up to 256×256. Same input, same mark, forever.</p>
+      </a>
+
+      <a class="hubcard" href="lab-seat.html">
+        <div class="demo">
+          <div class="gg"></div><div class="gg"></div>
+          <div class="qq tl" style="--ca:var(--f2a);--cb:var(--f2b);"></div>
+          <div class="gg"></div>
+        </div>
+        <span class="num">EXHIBIT 6 · CAMPAIGN</span>
+        <h3>The Open Seat</h3>
+        <p>Nineteen taken, eleven breathing — the founding cohort as an invitation.</p>
+      </a>
+
+      <a class="hubcard" href="lab-bin.html">
+        <div class="demo" style="gap:4px;">
+          <div class="qq br" style="--ca:var(--f4a);--cb:var(--f4b); transform:rotate(14deg);"></div>
+          <div class="cc" style="--ca:var(--f2a);--cb:var(--f2b); transform:translateY(12%);"></div>
+          <div class="dd" style="--ca:var(--f3a);--cb:var(--f2a); transform:rotate(-18deg);"></div>
+          <div class="ss" style="--ca:var(--f5a);--cb:var(--f5b); transform:rotate(7deg);"></div>
+        </div>
+        <span class="num">EXHIBIT 7 · CAMPAIGN</span>
+        <h3>The Toy Bin</h3>
+        <p>Real physics, then discipline: pieces tumble, snap to the grid, release, reset.</p>
+      </a>
+
+      <a class="hubcard" href="lab-code.html">
+        <div class="demo" style="grid-template-columns:repeat(6,1fr); gap:3px;">
+          <div class="qq br" style="--ca:var(--f2a);--cb:var(--f2b);"></div>
+          <div class="qq tl" style="--ca:var(--f5a);--cb:var(--f5b);"></div>
+          <div class="qq tr" style="--ca:var(--f5b);--cb:var(--f5a);"></div>
+          <div class="cc" style="--ca:var(--f3a);--cb:var(--f3b);"></div>
+          <div class="qq bl" style="--ca:var(--f5a);--cb:var(--f5b);"></div>
+          <div class="qq br" style="--ca:var(--f2b);--cb:var(--f2a);"></div>
+        </div>
+        <span class="num">EXHIBIT 8 · TOOL</span>
+        <h3>The Cell Code</h3>
+        <p>A scannable mark: data in shape and rotation, brand in colour. Encode, then read it back with the camera.</p>
+      </a>
+
+    </div>
+  </div>
+</div>
+
+<div class="wrap pageturn">
+  <span class="pageturn-spacer"></span>
+  <a href="lab-assembly.html">Exhibit 1: The Assembly →</a>
+</div>
+
+<footer>
+  <div class="wrap">
+    <span>BDSIS · Bachelor's Degree Scheme in Interdisciplinary Studies · 跨學科組合學士課程 · JS3000</span>
+    <span>College of Undergraduate Studies, The Hong Kong Polytechnic University</span>
+  </div>
+</footer>
+
+</body>
+</html>

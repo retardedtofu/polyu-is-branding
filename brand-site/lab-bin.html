@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>The Toy Bin — BDSIS Brand Guidelines</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;600;700&family=Inter:wght@400;500;600&family=Source+Serif+4:ital,opsz,wght@1,8..60,400;1,8..60,500&family=Noto+Sans+TC:wght@400;500;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="style.css">
+<link rel="stylesheet" href="lab.css">
+</head>
+<body>
+
+<nav class="site-nav">
+  <div class="nav-inner">
+    <a class="nav-brand" href="index.html"><img src="assets/logo-original.png" alt="BDSIS"> BDSIS BRAND</a>
+    <div class="nav-links">
+      <a href="index.html">Core</a>
+      <a href="story.html">Story</a>
+      <a href="voice.html">Voice</a>
+      <a href="logo.html">Logo</a>
+      <a href="color.html">Colour</a>
+      <a href="typography.html">Type</a>
+      <a href="graphics.html">Graphics</a>
+      <a href="applications.html">Applications</a>
+      <a href="explorations.html">Explorations</a>
+      <a href="mockups.html">Mockups</a>
+      <a href="themes.html">Themes</a>
+      <a href="lab.html" class="active">Lab</a>
+    </div>
+  </div>
+</nav>
+
+<header class="block" style="padding-bottom:2rem;">
+  <div class="wrap">
+    <div class="kicker" style="--accent: var(--is-crimson);">The Lab · Exhibit 7 of 8</div>
+    <h1>The Toy Bin</h1>
+    <p class="lede">Real physics: drop primitives into the bin — quarters, splits, circles, squares, ghosts — throw them around, then <strong>Snap to grid</strong> and watch order assert itself, every piece finding a cell and a right angle. Release them, or reset the bin entirely. Built for an Info Day touchscreen.</p>
+    <div class="switcher" id="dir-switch">
+      <button data-d="d1" class="on">01 Ink &amp; Paper</button>
+      <button data-d="d2">02 Midnight Scholar</button>
+      <button data-d="d3">03 Daylight Campus</button>
+      <button data-d="d4">04 Precision Spectrum</button>
+    </div>
+  </div>
+</header>
+
+<div id="labstage" data-theme="d1">
+<section class="block" style="padding-top:2rem;">
+  <div class="wrap">
+    <div class="exhibit" style="padding:1.2rem;">
+      <div class="cv-wrap"><canvas id="bin" height="400"></canvas></div>
+      <div class="cv-controls">
+        <button class="btn-prime" type="button" id="bin-drop">Drop 5</button>
+        <button class="btn-ghosty" type="button" id="bin-snap">Snap to grid</button>
+        <button class="btn-ghosty" type="button" id="bin-release">Release</button>
+        <button class="btn-ghosty" type="button" id="bin-reset">Reset</button>
+        <span class="hint" id="bin-hint">Drag pieces with the pointer</span>
+      </div>
+    </div>
+  </div>
+</section>
+</div>
+
+
+
+<div class="wrap pageturn">
+  <a href="lab-seat.html">← The Open Seat</a>
+  <a href="lab-code.html">The Cell Code →</a>
+</div>
+
+<footer>
+  <div class="wrap">
+    <span>BDSIS · Bachelor's Degree Scheme in Interdisciplinary Studies · 跨學科組合學士課程 · JS3000</span>
+    <span>College of Undergraduate Studies, The Hong Kong Polytechnic University</span>
+  </div>
+</footer>
+
+<script src="https://cdn.jsdelivr.net/npm/matter-js@0.19.0/build/matter.min.js" defer></script>
+<script src="lab.js" defer></script>
+</body>
+</html>

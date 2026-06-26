@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>The Display — BDSIS Brand Guidelines</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;600;700&family=Inter:wght@400;500;600&family=Source+Serif+4:ital,opsz,wght@1,8..60,400;1,8..60,500&family=Noto+Sans+TC:wght@400;500;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="style.css">
+<link rel="stylesheet" href="lab.css">
+</head>
+<body>
+
+<nav class="site-nav">
+  <div class="nav-inner">
+    <a class="nav-brand" href="index.html"><img src="assets/logo-original.png" alt="BDSIS"> BDSIS BRAND</a>
+    <div class="nav-links">
+      <a href="index.html">Core</a>
+      <a href="story.html">Story</a>
+      <a href="voice.html">Voice</a>
+      <a href="logo.html">Logo</a>
+      <a href="color.html">Colour</a>
+      <a href="typography.html">Type</a>
+      <a href="graphics.html">Graphics</a>
+      <a href="applications.html">Applications</a>
+      <a href="explorations.html">Explorations</a>
+      <a href="mockups.html">Mockups</a>
+      <a href="themes.html">Themes</a>
+      <a href="lab.html" class="active">Lab</a>
+    </div>
+  </div>
+</nav>
+
+<header class="block" style="padding-bottom:2rem;">
+  <div class="wrap">
+    <div class="kicker" style="--accent: var(--is-crimson);">The Lab · Exhibit 2 of 8</div>
+    <h1>The Display</h1>
+    <p class="lede">Shrink the cells, enlarge the grid, and the system becomes a low-resolution display — every pixel a quarter-disc that aims where the signal flows. Four programmes: a flow field, a marquee in a 5×7 cell font, the monogram super-scaled, and a <strong>live camera filter</strong>. Camera frames are processed entirely in your browser — nothing is recorded or transmitted.</p>
+    <div class="switcher" id="dir-switch">
+      <button data-d="d1" class="on">01 Ink &amp; Paper</button>
+      <button data-d="d2">02 Midnight Scholar</button>
+      <button data-d="d3">03 Daylight Campus</button>
+      <button data-d="d4">04 Precision Spectrum</button>
+    </div>
+  </div>
+</header>
+
+<div id="labstage" data-theme="d1">
+<section class="block" style="padding-top:2rem;">
+  <div class="wrap">
+    <div class="exhibit on-ink" style="padding:1.2rem;">
+      <div class="cv-wrap"><canvas id="display" height="380"></canvas></div>
+    </div>
+    <div class="cv-controls">
+      <button class="btn-ghosty" id="disp-pause" type="button">Pause</button>
+      <button class="btn-ghosty" id="disp-cam" type="button" onclick="document.querySelector('#disp-dots button[data-s=&quot;3&quot;]').click()">Camera</button>
+      <span class="hint" id="disp-hint">Programmes auto-cycle · 44 × 16 raster · camera stays local</span>
+      <div class="dots" id="disp-dots" role="group" aria-label="Display programme">
+        <button type="button" data-s="0" aria-pressed="true" aria-label="Flow field"></button>
+        <button type="button" data-s="1" aria-pressed="false" aria-label="Marquee"></button>
+        <button type="button" data-s="2" aria-pressed="false" aria-label="Monogram"></button>
+        <button type="button" data-s="3" aria-pressed="false" aria-label="Camera"></button>
+      </div>
+    </div>
+  </div>
+</section>
+</div>
+
+
+
+<div class="wrap pageturn">
+  <a href="lab-assembly.html">← The Assembly</a>
+  <a href="lab-kaleidoscope.html">The Kaleidoscope →</a>
+</div>
+
+<footer>
+  <div class="wrap">
+    <span>BDSIS · Bachelor's Degree Scheme in Interdisciplinary Studies · 跨學科組合學士課程 · JS3000</span>
+    <span>College of Undergraduate Studies, The Hong Kong Polytechnic University</span>
+  </div>
+</footer>
+
+<script src="lab.js" defer></script>
+</body>
+</html>

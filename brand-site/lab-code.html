@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>The Cell Code — BDSIS Brand Guidelines</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;600;700&family=Inter:wght@400;500;600&family=Source+Serif+4:ital,opsz,wght@1,8..60,400;1,8..60,500&family=Noto+Sans+TC:wght@400;500;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="style.css">
+<link rel="stylesheet" href="lab.css">
+</head>
+<body>
+
+<nav class="site-nav">
+  <div class="nav-inner">
+    <a class="nav-brand" href="index.html"><img src="assets/logo-original.png" alt="BDSIS"> BDSIS BRAND</a>
+    <div class="nav-links">
+      <a href="index.html">Core</a>
+      <a href="story.html">Story</a>
+      <a href="voice.html">Voice</a>
+      <a href="logo.html">Logo</a>
+      <a href="color.html">Colour</a>
+      <a href="typography.html">Type</a>
+      <a href="graphics.html">Graphics</a>
+      <a href="applications.html">Applications</a>
+      <a href="explorations.html">Explorations</a>
+      <a href="mockups.html">Mockups</a>
+      <a href="themes.html">Themes</a>
+      <a href="lab.html" class="active">Lab</a>
+    </div>
+  </div>
+</nav>
+
+<header class="block" style="padding-bottom:2rem;">
+  <div class="wrap">
+    <div class="kicker" style="--accent: var(--is-green);">The Lab · Exhibit 8 of 8</div>
+    <h1>The Cell Code</h1>
+    <p class="lede">A scannable mark in the brand's own vocabulary — the Spotify-Codes move. <strong>Data lives in shape and rotation; colour stays free for the brand</strong>, so the same code reads identically in all four palettes. Quarter orientations carry 2 bits each; the corner discs (four quarters composing a circle — the monogram's own trick) are the finder patterns; a CRC-16 checksum guards every read. Decoding runs entirely in your browser.</p>
+    <div class="switcher" id="dir-switch">
+      <button data-d="d1" class="on">01 Ink &amp; Paper</button>
+      <button data-d="d2">02 Midnight Scholar</button>
+      <button data-d="d3">03 Daylight Campus</button>
+      <button data-d="d4">04 Precision Spectrum</button>
+    </div>
+  </div>
+</header>
+
+<div id="labstage" data-theme="d1">
+<section class="block" style="padding-top:2rem;">
+  <div class="wrap">
+    <div class="exhibit">
+      <div class="grid cols-2" style="display:grid; gap:2rem; grid-template-columns:repeat(auto-fit,minmax(300px,1fr)); align-items:start;">
+        <div>
+          <span class="tg-label" style="font-size:0.66rem; font-weight:600; letter-spacing:0.14em; text-transform:uppercase; color:var(--grey); font-family:var(--font-display);">Encode</span>
+          <div class="mark-input" style="margin-top:0.6rem;">
+            <input id="code-text" type="text" maxlength="100" placeholder="Text to encode" aria-label="Text to encode" value="BDSIS JS3000 · The few, for the many" style="min-width:240px; flex:1;">
+            <button class="btn-prime" type="button" id="code-make">Encode</button>
+          </div>
+          <div style="margin-top:1.2rem;"><canvas id="code-canvas" style="width:100%; max-width:440px; border:1px solid var(--line); border-radius:2px;"></canvas></div>
+          <div id="code-label" style="font-family:var(--font-display); font-size:0.72rem; font-weight:700; letter-spacing:0.16em; color:var(--grey); margin-top:0.8rem;"></div>
+        </div>
+        <div>
+          <span class="tg-label" style="font-size:0.66rem; font-weight:600; letter-spacing:0.14em; text-transform:uppercase; color:var(--grey); font-family:var(--font-display);">Decode</span>
+          <div style="display:flex; gap:0.6rem; flex-wrap:wrap; margin-top:0.6rem;">
+            <button class="btn-ghosty" type="button" id="code-selftest">Self-test (read the code above)</button>
+            <label class="btn-ghosty" style="cursor:pointer;">Upload photo<input id="code-upload" type="file" accept="image/*" style="display:none;"></label>
+            <button class="btn-ghosty" type="button" id="code-scan">Scan with camera</button>
+          </div>
+          <video id="code-video" muted playsinline style="display:none; width:100%; max-width:440px; margin-top:1rem; border-radius:2px 2px 2px 18px;"></video>
+          <p id="code-result" role="status" style="font-family:var(--font-display); font-weight:600; font-size:0.95rem; min-height:1.5em; margin-top:1rem;"></p>
+          <p class="hint">Pipeline: threshold → corner-disc detection → perspective correction (4-point homography) → per-cell ink-centroid classification → CRC-16 validation. Works flat-on or tilted, in mixed light — just fill at least a quarter of the frame with the code. The live status shows how many corner discs the scanner sees; switch the palette and re-run the self-test to prove colour-independence. Camera frames stay local. For universal interop on print, pair with a standard QR — this code is for BDSIS surfaces and the BDSIS scanner.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+</div>
+
+
+
+<div class="wrap pageturn">
+  <a href="lab-bin.html">← The Toy Bin</a>
+  <a href="lab.html">The Lab →</a>
+</div>
+
+<footer>
+  <div class="wrap">
+    <span>BDSIS · Bachelor's Degree Scheme in Interdisciplinary Studies · 跨學科組合學士課程 · JS3000</span>
+    <span>College of Undergraduate Studies, The Hong Kong Polytechnic University</span>
+  </div>
+</footer>
+
+<script src="lab.js" defer></script>
+</body>
+</html>

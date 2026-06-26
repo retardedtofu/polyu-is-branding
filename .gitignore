@@ -1,0 +1,12 @@
+# Local tooling / environments
+.venv/
+.claude/
+
+# OS junk
+.DS_Store
+**/.DS_Store
+
+# Large / internal source materials (not for publishing)
+*.pptx
+*.pdf
+OneDrive_1_6-10-2026/

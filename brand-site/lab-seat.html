@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>The Open Seat — BDSIS Brand Guidelines</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;600;700&family=Inter:wght@400;500;600&family=Source+Serif+4:ital,opsz,wght@1,8..60,400;1,8..60,500&family=Noto+Sans+TC:wght@400;500;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="style.css">
+<link rel="stylesheet" href="lab.css">
+</head>
+<body>
+
+<nav class="site-nav">
+  <div class="nav-inner">
+    <a class="nav-brand" href="index.html"><img src="assets/logo-original.png" alt="BDSIS"> BDSIS BRAND</a>
+    <div class="nav-links">
+      <a href="index.html">Core</a>
+      <a href="story.html">Story</a>
+      <a href="voice.html">Voice</a>
+      <a href="logo.html">Logo</a>
+      <a href="color.html">Colour</a>
+      <a href="typography.html">Type</a>
+      <a href="graphics.html">Graphics</a>
+      <a href="applications.html">Applications</a>
+      <a href="explorations.html">Explorations</a>
+      <a href="mockups.html">Mockups</a>
+      <a href="themes.html">Themes</a>
+      <a href="lab.html" class="active">Lab</a>
+    </div>
+  </div>
+</nav>
+
+<header class="block" style="padding-bottom:2rem;">
+  <div class="wrap">
+    <div class="kicker" style="--accent: var(--is-purple);">The Lab · Exhibit 6 of 8</div>
+    <h1>The Open Seat</h1>
+    <p class="lede">The founding cohort as a grid: nineteen cells filled — hover any one for that student's real study focus — and eleven still breathing. Built as a recruitment module: the brand's “one cell different” idea, pointed at the applicant.</p>
+    <div class="switcher" id="dir-switch">
+      <button data-d="d1" class="on">01 Ink &amp; Paper</button>
+      <button data-d="d2">02 Midnight Scholar</button>
+      <button data-d="d3">03 Daylight Campus</button>
+      <button data-d="d4">04 Precision Spectrum</button>
+    </div>
+  </div>
+</header>
+
+<div id="labstage" data-theme="d1">
+<section class="block" style="padding-top:2rem;">
+  <div class="wrap">
+    <div class="exhibit">
+      <div id="seats" role="group" aria-label="Cohort grid: 19 seats taken, 11 open"></div>
+      <div id="seat-msg"><span class="hint">Hover a filled cell · choose an open one</span></div>
+    </div>
+  </div>
+</section>
+</div>
+
+<div id="seat-tip" role="status" aria-live="polite"></div>
+
+<div class="wrap pageturn">
+  <a href="lab-mark.html">← Your Mark</a>
+  <a href="lab-bin.html">The Toy Bin →</a>
+</div>
+
+<footer>
+  <div class="wrap">
+    <span>BDSIS · Bachelor's Degree Scheme in Interdisciplinary Studies · 跨學科組合學士課程 · JS3000</span>
+    <span>College of Undergraduate Studies, The Hong Kong Polytechnic University</span>
+  </div>
+</footer>
+
+<script src="lab.js" defer></script>
+</body>
+</html>

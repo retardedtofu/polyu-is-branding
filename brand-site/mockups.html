@@ -1,0 +1,430 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Mockups — BDSIS Brand Guidelines</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;600;700&family=Inter:wght@400;500;600&family=Source+Serif+4:ital,opsz,wght@1,8..60,400;1,8..60,500&family=Noto+Sans+TC:wght@400;500;700&family=Fraunces:ital,opsz,wght@0,9..144,500;0,9..144,600;0,9..144,700;1,9..144,400;1,9..144,500&family=Newsreader:ital,opsz,wght@0,6..72,500;0,6..72,600;1,6..72,400;1,6..72,500&family=Source+Sans+3:wght@400;600&family=Figtree:wght@400;600&family=Schibsted+Grotesk:wght@500;700&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="style.css">
+<style>
+/* ================= direction themes ================= */
+.stage {
+  --m-dark:#11151C; --m-paper:#FBFAF7; --m-ink:#11151C; --m-mut:#6B6E72; --m-line:#E4E1DA;
+  --m-acc:#ED174B;
+  --s1a:#634093; --s1b:#A4346B;            /* purple   */
+  --s2a:#ED174B; --s2b:#F0584A;            /* crimson  */
+  --s3a:#F7941E; --s3b:#ED174B;            /* orange   */
+  --s4a:#8CC75F; --s4b:#2DB44A;            /* green    */
+  --s5a:#2E9FD6; --s5b:#0A65A2;            /* blue     */
+  --m-disp:'Space Grotesk',sans-serif; --m-voice:'Source Serif 4',serif;
+  --m-body:'Inter',sans-serif; --m-label:'Space Grotesk',sans-serif;
+  --m-logo:url('assets/logo-original.svg');
+}
+.stage[data-theme="d2"] {
+  --m-dark:#1E1B36; --m-paper:#F6F1E6; --m-ink:#231F40; --m-mut:#837D6F; --m-line:#E2DAC8;
+  --m-acc:#BD2956;
+  --s1a:#4A4178; --s1b:#8E3A5A; --s2a:#BD2956; --s2b:#A02447;
+  --s3a:#D9A53C; --s3b:#BD2956; --s4a:#7BA796; --s4b:#3F7878; --s5a:#2F6BA4; --s5b:#143A6B;
+  --m-disp:'Fraunces',serif; --m-voice:'Fraunces',serif;
+  --m-body:'Source Sans 3',sans-serif; --m-label:'Source Sans 3',sans-serif;
+  --m-logo:url('assets/logo-scholar.svg');
+}
+.stage[data-theme="d3"] {
+  --m-dark:#2E2722; --m-paper:#F8F2E7; --m-ink:#2E2722; --m-mut:#6E6356; --m-line:#E5DAC4;
+  --m-acc:#E14729;
+  --s1a:#894E73; --s1b:#D24B43; --s2a:#E14729; --s2b:#C73A20;
+  --s3a:#F4A640; --s3b:#E14729; --s4a:#B0BC72; --s4b:#7E9A4D; --s5a:#54ABBB; --s5b:#26707F;
+  --m-disp:'Newsreader',serif; --m-voice:'Newsreader',serif;
+  --m-body:'Figtree',sans-serif; --m-label:'Figtree',sans-serif;
+  --m-logo:url('assets/logo-daylight.svg');
+}
+.stage[data-theme="d4"] {
+  --m-dark:#0B1521; --m-paper:#F4F9FC; --m-ink:#0B1521; --m-mut:#5B6B7A; --m-line:#D7E4ED;
+  --m-acc:#1370AB;
+  --s1a:#3E4AA6; --s1b:#2C6FC0; --s2a:#E1227C; --s2b:#B62E86;
+  --s3a:#34C6C3; --s3b:#1565A8; --s4a:#5FBA8E; --s4b:#2F8E62; --s5a:#2E9FD6; --s5b:#04568C;
+  --m-disp:'Schibsted Grotesk',sans-serif; --m-voice:'Source Serif 4',serif;
+  --m-body:'Inter',sans-serif; --m-label:'IBM Plex Mono',monospace;
+  --m-logo:url('assets/logo-precision.svg');
+}
+
+/* ================= the cell toolkit ================= */
+.q   { background:linear-gradient(135deg,var(--qa,var(--s2a)),var(--qb,var(--s2b))); }
+.q.tl{ border-radius:100% 0 0 0; } .q.tr{ border-radius:0 100% 0 0; }
+.q.bl{ border-radius:0 0 0 100%; } .q.br{ border-radius:0 0 100% 0; }
+.dsq { background:linear-gradient(to top right, var(--qb,var(--s3a)) 49.8%, var(--qa,var(--s2a)) 50.2%); }
+.ghost { border:1.5px solid var(--m-line); }
+.ghost.on-dark { border-color:rgba(255,255,255,0.22); }
+.cellline { display:inline-flex; gap:4px; }
+.cellline i { width:9px; height:9px; display:block; }
+.cellline i:nth-child(1){background:var(--s1a);} .cellline i:nth-child(2){background:var(--s2a);}
+.cellline i:nth-child(3){background:var(--s3a);} .cellline i:nth-child(4){background:var(--s4a);}
+.cellline i:nth-child(5){background:var(--s5a);}
+
+/* ================= switcher / shells ================= */
+.switcher { display:flex; gap:0.5rem; flex-wrap:wrap; margin:1.5rem 0 0; }
+.switcher button {
+  font-family:var(--font-display); font-size:0.85rem; font-weight:600;
+  padding:0.55rem 1.1rem; border-radius:999px; cursor:pointer;
+  border:1px solid var(--line); background:#fff; color:var(--grey);
+}
+.switcher button.on { background:var(--ink); color:#fff; border-color:var(--ink); }
+.mrow { display:grid; gap:1.75rem; grid-template-columns:repeat(auto-fit,minmax(280px,1fr)); align-items:start; margin-top:1.5rem; }
+.mock-shell { text-align:center; }
+.mock-shell .cap { font-size:0.78rem; color:var(--grey); margin-top:0.8rem; }
+.fr { box-shadow:0 22px 60px rgba(17,21,28,0.18); overflow:hidden; margin:0 auto; text-align:left; position:relative; }
+.fr.c-bl { border-radius:2px 2px 2px var(--cr,36px); } .fr.c-tr { border-radius:2px var(--cr,36px) 2px 2px; }
+.fr.c-tl { border-radius:var(--cr,36px) 2px 2px 2px; } .fr.c-br { border-radius:2px 2px var(--cr,36px) 2px; }
+.m-logo { background-image:var(--m-logo); background-repeat:no-repeat; background-size:contain; background-position:left center; }
+.greek { background:repeating-linear-gradient(to bottom, #C9CBCE 0 5px, transparent 5px 13px); opacity:0.5; }
+.lbl { font-family:var(--m-label); letter-spacing:0.18em; text-transform:uppercase; }
+</style>
+</head>
+<body>
+
+<nav class="site-nav">
+  <div class="nav-inner">
+    <a class="nav-brand" href="index.html"><img src="assets/logo-original.png" alt="BDSIS"> BDSIS BRAND</a>
+    <div class="nav-links">
+      <a href="index.html">Core</a>
+      <a href="story.html">Story</a>
+      <a href="voice.html">Voice</a>
+      <a href="logo.html">Logo</a>
+      <a href="color.html">Colour</a>
+      <a href="typography.html">Type</a>
+      <a href="graphics.html">Graphics</a>
+      <a href="applications.html">Applications</a>
+      <a href="explorations.html">Explorations</a>
+      <a href="mockups.html" class="active">Mockups</a>
+      <a href="themes.html">Themes</a>
+      <a href="lab.html">Lab</a>
+    </div>
+  </div>
+</nav>
+
+<header class="block" style="padding-bottom:2.5rem;">
+  <div class="wrap">
+    <div class="kicker" style="--accent: var(--is-orange);">Appendix · The Cell System, applied</div>
+    <h1>Built from the<br>logo's own grid</h1>
+    <p class="lede">The monogram is a 3×3 grid: <strong>eight quarter-circle slices and one square split into two triangles</strong>. The Cell System turns that construction into the layout language for everything else — same cells, same primitives, same discipline. Pick a direction; every mockup re-themes live.</p>
+    <div class="switcher" id="switcher">
+      <button data-t="d1" class="on">01 Ink &amp; Paper</button>
+      <button data-t="d2">02 Midnight Scholar</button>
+      <button data-t="d3">03 Daylight Campus</button>
+      <button data-t="d4">04 Precision Spectrum</button>
+    </div>
+  </div>
+</header>
+
+<div class="stage" data-theme="d1" id="stage">
+
+<!-- ============ SYSTEM RULES ============ -->
+<section class="block" style="padding-top:2.5rem;">
+  <div class="wrap">
+    <div class="kicker" style="--accent: var(--is-purple);">The four rules</div>
+    <div class="grid cols-4" style="margin-top:1.5rem;">
+      <div class="card">
+        <span class="tag">Rule 1 · The cell</span>
+        <div style="display:grid; grid-template-columns:repeat(4,1fr); aspect-ratio:2; margin:0.8rem 0;">
+          <div class="ghost"></div><div class="q tr" style="--qa:var(--s2a);--qb:var(--s2b);"></div><div class="ghost"></div><div class="ghost"></div>
+          <div class="dsq" style="--qa:var(--s2a);--qb:var(--s3a);"></div><div class="ghost"></div><div class="ghost"></div><div class="q bl" style="--qa:var(--s2b);--qb:var(--s2a);"></div>
+        </div>
+        <p style="font-size:0.85rem;">Every layout sits on a square module grid. Shapes, text blocks and images all snap to it.</p>
+      </div>
+      <div class="card">
+        <span class="tag">Rule 2 · The vocabulary</span>
+        <div style="display:grid; grid-template-columns:repeat(5,1fr); gap:6px; aspect-ratio:5.4; margin:0.8rem 0;">
+          <div class="q tl" style="--qa:var(--s2a);--qb:var(--s2b);"></div>
+          <div class="dsq" style="--qa:var(--s2a);--qb:var(--s3a);"></div>
+          <div class="q tl" style="--qa:var(--s2a);--qb:var(--s2b); border-radius:50%;"></div>
+          <div class="q tl" style="--qa:var(--s2b);--qb:var(--s2a); border-radius:0;"></div>
+          <div class="ghost"></div>
+        </div>
+        <p style="font-size:0.85rem;">Five primitives, all of the grid: quarter-disc, split square, circle, square, ghost cell. Nothing else.</p>
+      </div>
+      <div class="card">
+        <span class="tag">Rule 3 · One corner</span>
+        <div style="aspect-ratio:3.2; margin:0.8rem 0; background:var(--paper-deep); border-radius:2px 2px 2px 32px; display:flex; align-items:center; justify-content:center; font-family:var(--font-display); font-weight:600; font-size:0.8rem; color:var(--grey);">container</div>
+        <p style="font-size:0.85rem;">Every container — card, photo, slide block — takes exactly one quarter-circle corner. Never two, never four.</p>
+      </div>
+      <div class="card">
+        <span class="tag">Rule 4 · One family</span>
+        <div style="display:flex; gap:8px; aspect-ratio:3.2; align-items:stretch; margin:0.8rem 0;">
+          <div style="flex:3; background:linear-gradient(135deg,var(--s2a),var(--s2b)); border-radius:2px 2px 2px 18px;"></div>
+          <div style="flex:1;" class="ghost"></div><div style="flex:1;" class="ghost"></div>
+        </div>
+        <p style="font-size:0.85rem;">One colour family per piece. The full spectrum appears only in the logo and in monogram fragments.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ SOCIAL ============ -->
+<section class="block">
+  <div class="wrap">
+    <div class="kicker" style="--accent: var(--is-crimson);">Social media</div>
+    <div class="mrow">
+
+      <!-- IG testimonial 1:1 — crimson family -->
+      <div class="mock-shell">
+        <div class="fr c-bl" style="width:min(420px,100%); aspect-ratio:1; background:var(--m-paper); display:flex; flex-direction:column;">
+          <div style="display:grid; grid-template-columns:repeat(4,1fr); height:25%;">
+            <div class="q bl" style="--qa:var(--s2b);--qb:var(--s2a);"></div>
+            <div class="ghost" style="border-width:0 0 1.5px 0;"></div>
+            <div class="dsq" style="--qa:var(--s2a);--qb:var(--s3a);"></div>
+            <div class="q tr" style="--qa:var(--s2a);--qb:var(--s2b);"></div>
+          </div>
+          <div style="flex:1; padding:7% 8% 0; display:flex; flex-direction:column; justify-content:space-between;">
+            <div>
+              <p style="font-family:var(--m-voice); font-style:italic; font-size:clamp(1rem,3.2vw,1.4rem); line-height:1.35; color:var(--m-ink); margin:0;">"I combined Hospitality and Psychology — my mentor is the Dean of the hotel school."</p>
+              <p class="lbl" style="font-size:0.6rem; color:var(--m-acc); margin:1.4em 0 0;">LYRA · YEAR 1 · HOSPITALITY + PSYCHOLOGY</p>
+            </div>
+            <div style="display:flex; justify-content:space-between; align-items:center; padding-bottom:8%;">
+              <div class="m-logo" style="width:14%; aspect-ratio:1;"></div>
+              <span style="font-family:var(--m-body); font-size:0.62rem; color:var(--m-mut);">@bdsis.polyu</span>
+            </div>
+          </div>
+        </div>
+        <div class="cap">Instagram post · 1080 × 1080 · cell band + one family</div>
+      </div>
+
+      <!-- IG story 9:16 — blue family -->
+      <div class="mock-shell">
+        <div class="fr c-tr" style="width:min(240px,80%); aspect-ratio:9/16; background:var(--m-dark); display:flex; flex-direction:column;">
+          <div style="padding:10% 10% 0; flex:1;">
+            <img src="assets/logo-white.png" alt="" style="width:24%;">
+            <p class="lbl" style="font-size:0.52rem; color:rgba(255,255,255,0.5); margin:14% 0 0.6em;">HKDSE BEST 5 REQUIREMENT</p>
+            <p style="font-family:var(--m-disp); font-weight:700; font-size:2.9rem; line-height:1; color:#fff; margin:0;">34.5</p>
+            <p style="font-family:var(--m-voice); font-style:italic; font-size:0.82rem; color:rgba(255,255,255,0.72); margin:0.9em 0 0; max-width:14ch;">The highest bar in PolyU. On purpose.</p>
+          </div>
+          <div style="display:grid; grid-template-columns:repeat(3,1fr); aspect-ratio:3;">
+            <div class="ghost on-dark" style="border-width:1.5px 0 0 0; display:flex; align-items:center; justify-content:center;"><span style="font-family:var(--m-body); font-size:0.5rem; color:rgba(255,255,255,0.55);">JS3000</span></div>
+            <div class="dsq" style="--qa:var(--s5a);--qb:var(--s5b);"></div>
+            <div class="q br" style="--qa:var(--s5a);--qb:var(--s5b);"></div>
+          </div>
+        </div>
+        <div class="cap">Instagram story · 1080 × 1920 · cell footer</div>
+      </div>
+
+      <!-- 1 of 19 — green family -->
+      <div class="mock-shell">
+        <div class="fr c-tl" style="width:min(420px,100%); aspect-ratio:1; background:var(--m-paper); padding:8%; display:flex; flex-direction:column; justify-content:space-between;">
+          <div style="display:grid; grid-template-columns:repeat(5,1fr); gap:0; aspect-ratio:5/2;">
+            <div class="ghost"></div><div class="ghost"></div><div class="ghost"></div><div class="ghost"></div><div class="ghost"></div>
+            <div class="ghost"></div><div class="ghost"></div><div class="q tl" style="--qa:var(--s4a);--qb:var(--s4b);"></div><div class="ghost"></div><div class="ghost"></div>
+          </div>
+          <div>
+            <p style="font-family:var(--m-disp); font-weight:700; font-size:clamp(1.15rem,3.6vw,1.65rem); line-height:1.16; color:var(--m-ink); margin:0;">Nineteen students.<br>Nineteen degrees.<br>No two alike.</p>
+            <p style="font-family:var(--m-body); font-size:0.7rem; color:var(--m-mut); margin:1em 0 0; max-width:34ch;">Your focus, printed in your degree title — designed one-on-one with a Dean-level mentor.</p>
+          </div>
+          <div style="display:flex; justify-content:space-between; align-items:center;">
+            <div class="m-logo" style="width:13%; aspect-ratio:1;"></div>
+            <span class="lbl" style="font-size:0.58rem; color:var(--m-mut);">BDSISPOLYU</span>
+          </div>
+        </div>
+        <div class="cap">LinkedIn / 小红书 · "one cell different" motif</div>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<!-- ============ STATIONERY ============ -->
+<section class="block">
+  <div class="wrap">
+    <div class="kicker" style="--accent: var(--is-green);">Stationery</div>
+    <div class="mrow">
+
+      <!-- letterhead -->
+      <div class="mock-shell">
+        <div class="fr c-bl" style="--cr:28px; width:min(380px,100%); aspect-ratio:210/297; background:#fff; display:flex; flex-direction:column;">
+          <div style="display:flex; justify-content:space-between; align-items:stretch;">
+            <div style="padding:7% 0 0 9%; display:flex; gap:5%; align-items:center; width:58%;">
+              <div class="m-logo" style="width:22%; aspect-ratio:1; flex:none;"></div>
+              <div>
+                <p style="font-family:var(--m-disp); font-weight:600; font-size:0.6rem; line-height:1.35; color:var(--m-ink); margin:0;">BACHELOR'S DEGREE SCHEME IN<br>INTERDISCIPLINARY STUDIES</p>
+                <p style="font-family:var(--m-body); font-size:0.48rem; color:var(--m-mut); margin:0.35em 0 0;">跨學科組合學士課程 · BDSIS</p>
+              </div>
+            </div>
+            <div style="width:13%; aspect-ratio:1;" class="q bl" data-fam="2"></div>
+          </div>
+          <div style="padding:10% 9% 0; flex:1;">
+            <div class="greek" style="height:5%; width:36%; margin-bottom:7%;"></div>
+            <div class="greek" style="height:34%;"></div>
+            <div style="height:5%;"></div>
+            <div class="greek" style="height:16%; width:62%;"></div>
+          </div>
+          <div style="padding:0 9% 7%;">
+            <p style="font-family:var(--m-body); font-size:0.45rem; color:var(--m-mut); margin:0 0 0.9em; display:flex; justify-content:space-between;"><span>cus.bdsis@polyu.edu.hk</span><span>+852 3400 8203</span><span>polyu.edu.hk/cus</span></p>
+            <span class="cellline"><i></i><i></i><i></i><i></i><i></i></span>
+          </div>
+        </div>
+        <div class="cap">Letterhead · A4 · one shape, one corner</div>
+      </div>
+
+      <!-- business card -->
+      <div class="mock-shell">
+        <div class="fr c-tl" style="--cr:30px; width:min(340px,100%); aspect-ratio:1.585; background:var(--m-dark); display:flex; justify-content:space-between;">
+          <div style="padding:7% 0 7% 8%; display:flex; flex-direction:column; justify-content:space-between;">
+            <img src="assets/logo-white.png" alt="" style="width:21%;">
+            <div>
+              <p style="font-family:var(--m-disp); font-weight:600; font-size:1rem; color:#fff; margin:0;">Prof. Alan Pak Tao Lau</p>
+              <p style="font-family:var(--m-body); font-size:0.6rem; color:rgba(255,255,255,0.6); margin:0.4em 0 0;">Programme Director, BDSIS<br>Associate Dean, CUS</p>
+            </div>
+          </div>
+          <div style="display:grid; grid-template-rows:repeat(3,1fr); width:21%;">
+            <div class="q tl" style="--qa:var(--s1a);--qb:var(--s1b);"></div>
+            <div class="dsq" style="--qa:var(--s2a);--qb:var(--s3a);"></div>
+            <div class="q br" style="--qa:var(--s5a);--qb:var(--s5b);"></div>
+          </div>
+        </div>
+        <div style="height:14px;"></div>
+        <div class="fr c-br" style="--cr:30px; width:min(340px,100%); aspect-ratio:1.585; background:#fff; padding:7% 8%; display:flex; flex-direction:column; justify-content:space-between;">
+          <div class="m-logo" style="width:13%; aspect-ratio:1;"></div>
+          <div>
+            <p style="font-family:var(--m-body); font-size:0.58rem; line-height:1.75; color:var(--m-mut); margin:0;">cus.bdsis@polyu.edu.hk · +852 3400 8203<br>College of Undergraduate Studies, PolyU · JS3000</p>
+          </div>
+        </div>
+        <div class="cap">Business card · 90 × 54 mm · monogram fragment on the edge</div>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<!-- ============ PRESENTATION ============ -->
+<section class="block">
+  <div class="wrap">
+    <div class="kicker" style="--accent: var(--is-blue);">Presentation template</div>
+    <div class="mrow" style="grid-template-columns:repeat(auto-fit,minmax(320px,1fr));">
+
+      <!-- title slide -->
+      <div class="mock-shell">
+        <div class="fr c-bl" style="--cr:30px; width:100%; aspect-ratio:16/9; background:var(--m-dark); display:flex;">
+          <div style="flex:1; padding:6% 0 6% 7%; display:flex; flex-direction:column; justify-content:space-between;">
+            <p class="lbl" style="font-size:0.58rem; color:rgba(255,255,255,0.5); margin:0;">POLYU · COLLEGE OF UNDERGRADUATE STUDIES</p>
+            <div>
+              <p style="font-family:var(--m-disp); font-weight:700; font-size:clamp(1.3rem,3.2vw,1.9rem); line-height:1.12; color:#fff; margin:0;">BDSIS Information<br>Session 2026</p>
+              <p style="font-family:var(--m-voice); font-style:italic; font-size:0.85rem; color:rgba(255,255,255,0.68); margin:1em 0 0;">Breaking barriers, empowering future leaders.</p>
+            </div>
+            <p style="font-family:var(--m-body); font-size:0.62rem; color:rgba(255,255,255,0.55); margin:0;">Prof. Alan P.T. Lau · Programme Director</p>
+          </div>
+          <div style="display:grid; grid-template-rows:repeat(3,1fr); width:17%;">
+            <div class="ghost on-dark" style="border-width:0 0 0 1.5px;"></div>
+            <div class="q tl" style="--qa:var(--s5a);--qb:var(--s5b);"></div>
+            <div class="dsq" style="--qa:var(--s5b);--qb:var(--s5a);"></div>
+          </div>
+        </div>
+        <div class="cap">Slide · title · cell column, blue family</div>
+      </div>
+
+      <!-- content slide -->
+      <div class="mock-shell">
+        <div class="fr c-tr" style="--cr:30px; width:100%; aspect-ratio:16/9; background:#fff; padding:5.5% 6.5%; display:flex; flex-direction:column;">
+          <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:4.5%;">
+            <p style="font-family:var(--m-disp); font-weight:700; font-size:1rem; color:var(--m-ink); margin:0;">Why BDSIS</p>
+            <div class="m-logo" style="width:6.5%; aspect-ratio:1;"></div>
+          </div>
+          <div style="display:grid; grid-template-columns:1fr 1fr 1fr; gap:3.5%; flex:1;">
+            <div style="background:var(--m-paper); border-radius:2px 2px 2px 22px; padding:6% 7%; display:flex; flex-direction:column;">
+              <div class="q tr" style="width:24%; aspect-ratio:1; --qa:var(--s5a);--qb:var(--s5b); margin-bottom:8%;"></div>
+              <p style="font-family:var(--m-disp); font-weight:700; font-size:1.25rem; color:var(--m-ink); margin:0;">1 : 1</p>
+              <p style="font-family:var(--m-body); font-size:0.58rem; color:var(--m-mut); margin:0.5em 0 0;">Dean-level Personal Academic Mentor for every student</p>
+            </div>
+            <div style="background:var(--m-paper); border-radius:2px 2px 22px 2px; padding:6% 7%; display:flex; flex-direction:column;">
+              <div class="dsq" style="width:24%; aspect-ratio:1; --qa:var(--s5a);--qb:var(--s5b); margin-bottom:8%;"></div>
+              <p style="font-family:var(--m-disp); font-weight:700; font-size:1.25rem; color:var(--m-ink); margin:0;">19 / 19</p>
+              <p style="font-family:var(--m-body); font-size:0.58rem; color:var(--m-mut); margin:0.5em 0 0;">Founding students, each with a unique degree focus</p>
+            </div>
+            <div style="background:var(--m-paper); border-radius:22px 2px 2px 2px; padding:6% 7%; display:flex; flex-direction:column;">
+              <div class="q bl" style="width:24%; aspect-ratio:1; --qa:var(--s5b);--qb:var(--s5a); margin-bottom:8%;"></div>
+              <p style="font-family:var(--m-disp); font-weight:700; font-size:1.25rem; color:var(--m-ink); margin:0;">10</p>
+              <p style="font-family:var(--m-body); font-size:0.58rem; color:var(--m-mut); margin:0.5em 0 0;">Faculties and schools open to your curriculum</p>
+            </div>
+          </div>
+          <p style="font-family:var(--m-body); font-size:0.5rem; color:var(--m-mut); margin:4% 0 0; display:flex; justify-content:space-between;"><span>BDSIS · JS3000</span><span>12</span></p>
+        </div>
+        <div class="cap">Slide · content · quadrant cards, rotating corners</div>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<!-- ============ POSTER ============ -->
+<section class="block">
+  <div class="wrap">
+    <div class="kicker" style="--accent: var(--is-purple);">Poster</div>
+    <div class="mrow" style="grid-template-columns:repeat(auto-fit,minmax(300px,1fr)); align-items:start;">
+      <div class="mock-shell">
+        <div class="fr c-br" style="--cr:34px; width:min(400px,100%); aspect-ratio:297/420; background:var(--m-paper); display:flex; flex-direction:column;">
+          <!-- monogram-fragment band -->
+          <div style="display:grid; grid-template-columns:repeat(4,1fr); aspect-ratio:2;">
+            <div class="q tl" style="--qa:var(--s1a);--qb:var(--s1b);"></div>
+            <div class="ghost" style="border-width:0 0 1.5px 1.5px;"></div>
+            <div class="q tr" style="--qa:var(--s4a);--qb:var(--s4b);"></div>
+            <div class="q bl" style="--qa:var(--s5a);--qb:var(--s5b);"></div>
+            <div class="dsq" style="--qa:var(--s2a);--qb:var(--s3a);"></div>
+            <div class="q br" style="--qa:var(--s2a);--qb:var(--s2b);"></div>
+            <div class="ghost" style="border-width:1.5px 1.5px 0 0;"></div>
+            <div class="q tl" style="--qa:var(--s5b);--qb:var(--s5a);"></div>
+          </div>
+          <div style="flex:1; padding:7% 9%; display:flex; flex-direction:column; justify-content:space-between;">
+            <div>
+              <p style="font-family:var(--m-disp); font-weight:700; font-size:clamp(1.4rem,4.6vw,2rem); line-height:1.14; color:var(--m-ink); margin:0;">BREAKING<br>BARRIERS,<br>EMPOWERING<br>FUTURE<br>LEADERS.</p>
+              <p style="font-family:var(--m-voice); font-style:italic; font-size:0.82rem; color:var(--m-mut); margin:1.2em 0 0;">PolyU's elite programme. Your curriculum, your degree, your mentor.</p>
+            </div>
+            <div style="display:flex; justify-content:space-between; align-items:flex-end;">
+              <div>
+                <p class="lbl" style="font-size:0.55rem; color:var(--m-acc); margin:0 0 0.7em;">INFO DAY · 11 OCT 2026 · JUPAS JS3000</p>
+                <p style="font-family:var(--m-body); font-size:0.55rem; line-height:1.7; color:var(--m-mut); margin:0;">polyu.edu.hk/cus · @bdsis.polyu</p>
+              </div>
+              <div style="display:flex; align-items:flex-end; gap:8%;">
+                <div class="m-logo" style="width:44px; aspect-ratio:1;"></div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="cap">Recruitment poster · A3 · monogram fragment + grid</div>
+      </div>
+      <div>
+        <h3 style="margin-top:0.5rem;">Why this works better</h3>
+        <p style="font-size:0.95rem; max-width:48ch;">The earlier comps decorated layouts with a gradient hairline; this system <strong>composes</strong> layouts from the monogram's own construction:</p>
+        <ul style="font-size:0.92rem; line-height:1.8; padding-left:1.2rem; max-width:48ch;">
+          <li><strong>Cell bands and columns</strong> replace decorative bars — every shape sits in a real grid cell.</li>
+          <li><strong>Ghost cells</strong> make the grid visible and give shapes room to breathe.</li>
+          <li><strong>One rounded corner per container</strong> repeats the quarter-circle at every scale — cards, slides, the page itself.</li>
+          <li><strong>Monogram fragments</strong> (multi-family cell clusters) are the only full-spectrum moments, reserved for hero surfaces like the poster band and card edge.</li>
+          <li><strong>The "one cell different" motif</strong> — a lone vivid cell in a field of ghosts — is the brand idea itself: one student, one unique path.</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</section>
+
+</div><!-- /stage -->
+
+<div class="wrap pageturn">
+  <a href="explorations.html">← Explorations (rationale &amp; palettes)</a>
+  <a href="index.html">Core →</a>
+</div>
+
+<footer>
+  <div class="wrap">
+    <span>BDSIS · Bachelor's Degree Scheme in Interdisciplinary Studies · 跨學科組合學士課程 · JS3000</span>
+    <span>College of Undergraduate Studies, The Hong Kong Polytechnic University</span>
+  </div>
+</footer>
+
+<script>
+const stage = document.getElementById('stage');
+document.querySelectorAll('#switcher button').forEach(b => {
+  b.addEventListener('click', () => {
+    stage.dataset.theme = b.dataset.t;
+    document.querySelectorAll('#switcher button').forEach(x => x.classList.toggle('on', x === b));
+  });
+});
+</script>
+</body>
+</html>

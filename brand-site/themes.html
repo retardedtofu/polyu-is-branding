@@ -1,0 +1,266 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Themes — BDSIS Brand Guidelines</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;600;700&family=Inter:wght@400;500;600&family=Source+Serif+4:ital,opsz,wght@1,8..60,400;1,8..60,500&family=Noto+Sans+TC:wght@400;500;700&family=Fraunces:ital,opsz,wght@0,9..144,500;0,9..144,600;0,9..144,700;1,9..144,400;1,9..144,500&family=Source+Sans+3:wght@400;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="style.css">
+<style>
+/* local tokens — demos shown in Midnight Scholar; the system works in any direction */
+.tt {
+  --t-dark:#1E1B36; --t-paper:#F6F1E6; --t-ink:#231F40; --t-mut:#837D6F; --t-line:#E2DAC8;
+  --wineA:#BD2956; --wineB:#A02447; --champA:#E3B863; --champB:#C9913A;
+  --sageA:#8FB3A2; --sageB:#5A918E; --indA:#4A4178; --indB:#332D5E; --oxA:#2F6BA4; --oxB:#143A6B;
+}
+.tt .q   { background:linear-gradient(135deg,var(--qa),var(--qb)); }
+.tt .q.tl{ border-radius:100% 0 0 0; } .tt .q.tr{ border-radius:0 100% 0 0; }
+.tt .q.bl{ border-radius:0 0 0 100%; } .tt .q.br{ border-radius:0 0 100% 0; }
+.tt .dsq { background:linear-gradient(to top right, var(--qb) 49.8%, var(--qa) 50.2%); }
+.tt .ghost { border:1.5px solid var(--t-line); }
+.tt .ghost.on-dark { border-color:rgba(255,255,255,0.2); }
+.motif { background:#fff; border:1px solid var(--line); border-radius:2px 2px 2px 26px; padding:1.5rem; }
+.motif .demo { margin:0.9rem 0 1rem; }
+.motif h3 { margin-top:0; display:flex; align-items:center; gap:0.6rem; flex-wrap:wrap; }
+.motif .ttag { font-size:0.62rem; font-weight:600; letter-spacing:0.1em; text-transform:uppercase; padding:0.2rem 0.55rem; border-radius:999px; }
+.ttag.elite { background:#1E1B36; color:#E3B863; }
+.ttag.stew  { background:#EAF0EC; color:#3F7878; }
+.ttag.both  { background:var(--paper-deep); color:var(--grey); }
+.motif p { font-size:0.88rem; }
+.regposter { aspect-ratio:3/4; border-radius:2px 2px 2px 30px; overflow:hidden; display:flex; flex-direction:column; box-shadow:0 18px 50px rgba(17,21,28,0.15); }
+</style>
+</head>
+<body>
+
+<nav class="site-nav">
+  <div class="nav-inner">
+    <a class="nav-brand" href="index.html"><img src="assets/logo-original.png" alt="BDSIS"> BDSIS BRAND</a>
+    <div class="nav-links">
+      <a href="index.html">Core</a>
+      <a href="story.html">Story</a>
+      <a href="voice.html">Voice</a>
+      <a href="logo.html">Logo</a>
+      <a href="color.html">Colour</a>
+      <a href="typography.html">Type</a>
+      <a href="graphics.html">Graphics</a>
+      <a href="applications.html">Applications</a>
+      <a href="explorations.html">Explorations</a>
+      <a href="mockups.html">Mockups</a>
+      <a href="themes.html" class="active">Themes</a>
+      <a href="lab.html">Lab</a>
+    </div>
+  </div>
+</nav>
+
+<header class="block">
+  <div class="wrap tt">
+    <div class="kicker" style="--accent: var(--is-crimson);">Leadership brief · Two complementary themes</div>
+    <h1>Elite is the duty,<br>not the reward</h1>
+    <p class="lede">Leadership's brief: hold two themes at once — <strong>elite &amp; prestigious</strong>, and <strong>nurturing leaders society can depend on</strong>. These aren't competing messages to balance; they're one sentence: <em>selection is where obligation begins</em>. The bar proves the talent; the programme builds the character that makes talent trustworthy.</p>
+  </div>
+</header>
+
+<section class="block dark">
+  <div class="wrap">
+    <div class="kicker">The synthesis</div>
+    <div class="grid cols-3" style="margin-top:1.5rem;">
+      <div class="card" style="background:var(--ink-soft); border:none;">
+        <span class="tag" style="color:#E3B863;">Prestige alone</span>
+        <p style="font-size:0.92rem; color:#C9C7C1;">Brilliant, hungry, unaccountable. Power that society has to hope behaves. This is the failure mode the brief warns against.</p>
+      </div>
+      <div class="card" style="background:var(--ink-soft); border:none;">
+        <span class="tag" style="color:#8FB3A2;">Care alone</span>
+        <p style="font-size:0.92rem; color:#C9C7C1;">Worthy, kind — and without the bar, indistinguishable from every values statement in higher education. Admirable, not magnetic.</p>
+      </div>
+      <div class="card" style="background:#fff; border:none;">
+        <span class="tag" style="--accent: var(--is-crimson);">BDSIS — both</span>
+        <p style="font-size:0.92rem;"><strong>Trustworthy power.</strong> The hardest programme to enter, pointed entirely outward: every capstone serves a real societal issue. The few, for the many.</p>
+      </div>
+    </div>
+    <p style="margin-top:1.8rem; font-size:0.95rem;">This was already latent in the brand core — <a href="index.html" style="color:#8FB3A2;">Humans × Technology</a> — and in the deck's own argument that <em>judgement is the most valuable skill</em>. The brief makes it a first-class brand axis. Nothing needs replacing; the stewardship half needs equal volume.</p>
+  </div>
+</section>
+
+<section class="block">
+  <div class="wrap">
+    <div class="kicker" style="--accent: var(--is-orange);">Verbal system</div>
+    <h2>The pairing principle</h2>
+    <p>Every prestige claim travels with its stewardship counterpart. Never one without the other — the pairing <em>is</em> the brand.</p>
+    <table>
+      <tr><th style="width:42%;">Prestige claim</th><th>Stewardship counterpart</th></tr>
+      <tr><td style="font-weight:600;">Highest entry bar in PolyU — 34.5 / IB 40 / top 2%</td><td style="font-weight:400;">…and the duty that follows: every capstone addresses a real local, national or global issue, with inter-sector partners.</td></tr>
+      <tr><td style="font-weight:600;">Dean-level mentor, one-on-one</td><td style="font-weight:400;">…not access for advantage — wisdom passed down. Mentorship as lineage: what you receive, you owe forward.</td></tr>
+      <tr><td style="font-weight:600;">19 students, 19 unique degrees</td><td style="font-weight:400;">…each pointed at a problem the world actually has (Pathway C is literally "solving world problems" — UNESCO SDGs).</td></tr>
+      <tr><td style="font-weight:600;">~30 places, global recruitment</td><td style="font-weight:400;">…selected for judgement and character, not scores alone.</td></tr>
+    </table>
+
+    <h3>Candidate stewardship lines</h3>
+    <p style="font-size:0.92rem;">Sub-lines that carry theme two alongside the existing tagline — for leadership to react to:</p>
+    <div class="grid cols-2" style="margin-top:1rem;">
+      <div class="card flat"><p class="voice" style="font-size:1.3rem; margin:0;">"The few, for the many."</p><p style="font-size:0.82rem; color:var(--grey); margin:0.7rem 0 0;">Recommended — holds both themes in five words. Campaign-grade.</p></div>
+      <div class="card flat"><p class="voice" style="font-size:1.3rem; margin:0;">"Brilliance is the entry. Character is the degree."</p><p style="font-size:0.82rem; color:var(--grey); margin:0.7rem 0 0;">Admissions-facing; sets expectations at the door.</p></div>
+      <div class="card flat"><p class="voice" style="font-size:1.3rem; margin:0;">"Power, kept human."</p><p style="font-size:0.82rem; color:var(--grey); margin:0.7rem 0 0;">Ties directly to the human-centric mission; edgier.</p></div>
+      <div class="card flat"><p class="voice" style="font-size:1.3rem; margin:0;">"Leaders the future can depend on."</p><p style="font-size:0.82rem; color:var(--grey); margin:0.7rem 0 0;">Safest; parent- and principal-friendly.</p></div>
+    </div>
+
+    <h3>Vocabulary discipline</h3>
+    <div class="dodont">
+      <div class="do"><h4>Say</h4><ul>
+        <li>judgement, character, stewardship, responsibility, trust, depth, duty, service</li>
+        <li>"the highest bar", "the most demanding curriculum" — superlatives about the <em>bar</em></li>
+        <li>"elite programme" (the thing), never "elite students" (the people)</li>
+      </ul></div>
+      <div class="dont"><h4>Avoid</h4><ul>
+        <li>win, beat, dominate, outperform, genius, gifted, cream of the crop</li>
+        <li>exclusivity as a benefit ("most exclusive") — exclusivity is a means, contribution is the end</li>
+        <li>ranking students against each other in any public copy</li>
+      </ul></div>
+    </div>
+    <p style="font-size:0.9rem; color:var(--grey);">New voice rule for the <a href="voice.html">Voice</a> chapter: <strong>"Elite about the bar, humble about the person."</strong></p>
+  </div>
+</section>
+
+<section class="block">
+  <div class="wrap tt">
+    <div class="kicker" style="--accent: var(--is-green);">Visual system</div>
+    <h2>The motif library — cells as Lego</h2>
+    <p>Six named compositions built from the three primitives. Each carries a meaning, so designers stop decorating and start <em>saying things</em> with the grid. Shown in Midnight Scholar; every motif works in any direction's palette.</p>
+    <div class="grid cols-3" style="margin-top:1.5rem;">
+
+      <div class="motif">
+        <h3>The Spark <span class="ttag elite">Prestige</span></h3>
+        <div class="demo" style="display:grid; grid-template-columns:repeat(5,1fr); aspect-ratio:5/2;">
+          <div class="ghost"></div><div class="ghost"></div><div class="ghost"></div><div class="ghost"></div><div class="ghost"></div>
+          <div class="ghost"></div><div class="ghost"></div><div class="q tl" style="--qa:var(--wineA);--qb:var(--wineB);"></div><div class="ghost"></div><div class="ghost"></div>
+        </div>
+        <p>One vivid cell in a field of ghosts. Selection, rarity, the one-in-many. <em>Use:</em> admissions stats, "one of 30" messages.</p>
+      </div>
+
+      <div class="motif">
+        <h3>The Mentor <span class="ttag stew">Stewardship</span></h3>
+        <div class="demo" style="display:grid; grid-template-columns:repeat(4,1fr); aspect-ratio:2;">
+          <div class="ghost"></div><div class="q tl" style="--qa:var(--indA);--qb:var(--indB);"></div><div class="q tr" style="--qa:var(--indA);--qb:var(--oxA);"></div><div class="ghost"></div>
+          <div class="ghost"></div><div class="ghost"></div><div class="dsq" style="--qa:var(--champA);--qb:var(--champB);"></div><div class="ghost"></div>
+        </div>
+        <p>The logo's own dome sheltering a smaller cell — wisdom over the one who's growing. <em>Use:</em> PAM stories, advising content.</p>
+      </div>
+
+      <div class="motif">
+        <h3>The Foundation <span class="ttag stew">Stewardship</span></h3>
+        <div class="demo" style="display:grid; grid-template-columns:repeat(3,1fr); aspect-ratio:3/2;">
+          <div class="ghost"></div><div class="ghost"></div><div class="ghost"></div>
+          <div></div><div class="q bl" style="--qa:var(--sageA);--qb:var(--sageB);"></div><div></div>
+        </div>
+        <p>One vivid cell carrying the row above. Dependability — the leader others rest on. <em>Use:</em> outcomes, alumni-in-society stories.</p>
+      </div>
+
+      <div class="motif">
+        <h3>The Ascent <span class="ttag both">Both</span></h3>
+        <div class="demo" style="display:grid; grid-template-columns:repeat(4,1fr); aspect-ratio:2;">
+          <div class="ghost"></div><div class="ghost"></div><div class="q tr" style="--qa:var(--champA);--qb:var(--champB);"></div><div class="ghost"></div>
+          <div class="ghost"></div><div class="q tr" style="--qa:var(--wineA);--qb:var(--wineB);"></div><div class="ghost"></div><div class="ghost"></div>
+        </div>
+        <p>Cells climbing the diagonal — the split square's own line. Growth with direction. <em>Use:</em> curriculum journey, year-by-year pathway.</p>
+      </div>
+
+      <div class="motif">
+        <h3>The Cohort <span class="ttag both">Both</span></h3>
+        <div class="demo" style="display:grid; grid-template-columns:repeat(5,1fr); aspect-ratio:5/2; gap:4px;">
+          <div class="q tl" style="--qa:var(--indA);--qb:var(--indB);"></div><div class="q br" style="--qa:var(--wineA);--qb:var(--wineB);"></div><div class="dsq" style="--qa:var(--champA);--qb:var(--champB);"></div><div class="q bl" style="--qa:var(--sageA);--qb:var(--sageB);"></div><div class="q tr" style="--qa:var(--oxA);--qb:var(--oxB);"></div>
+          <div class="q br" style="--qa:var(--sageB);--qb:var(--sageA);"></div><div class="q tl" style="--qa:var(--oxA);--qb:var(--oxB);"></div><div class="q tr" style="--qa:var(--wineB);--qb:var(--wineA);"></div><div class="ghost"></div><div class="q bl" style="--qa:var(--champB);--qb:var(--champA);"></div>
+        </div>
+        <p>Every cell a different family and rotation — 19 students, 19 degrees — with one ghost: <em>the open seat</em>. Use: recruitment.</p>
+      </div>
+
+      <div class="motif">
+        <h3>The Horizon <span class="ttag elite">Prestige</span></h3>
+        <div class="demo" style="aspect-ratio:3/1; background:var(--t-dark); border-radius:2px; display:grid; grid-template-columns:repeat(6,1fr);">
+          <div></div><div></div><div></div><div></div><div class="ghost on-dark"></div><div class="q tl" style="--qa:var(--champA);--qb:var(--champB);"></div>
+        </div>
+        <p>Midnight field, one champagne cell rising at the edge. Ceremony, aspiration, the dawn metaphor without the cliché. <em>Use:</em> formal invitations, award materials.</p>
+      </div>
+
+    </div>
+    <p style="font-size:0.9rem; color:var(--grey); margin-top:1.5rem;">Grammar rules for play: motifs compose on the same module grid; one motif per surface; prestige motifs favour dark grounds and wine/champagne, stewardship motifs favour paper grounds and sage/champagne. The full spectrum still belongs to the logo and monogram fragments only.</p>
+  </div>
+</section>
+
+<section class="block">
+  <div class="wrap tt">
+    <div class="kicker" style="--accent: var(--is-purple);">Two registers, one brand</div>
+    <h2>Ceremonial &amp; Daylight</h2>
+    <p>The themes become two <strong>registers</strong> of the same identity — not two looks. Same palette, same type, same cells; what flips is ground, motif and voice. Every campaign should show both within a sequence.</p>
+    <div class="grid cols-2" style="margin-top:1.5rem; max-width:860px;">
+
+      <div>
+        <div class="regposter" style="background:var(--t-dark);">
+          <div style="display:grid; grid-template-columns:repeat(4,1fr); aspect-ratio:4;">
+            <div></div><div></div><div class="ghost on-dark"></div><div class="q tl" style="--qa:var(--champA);--qb:var(--champB);"></div>
+          </div>
+          <div style="flex:1; padding:9%; display:flex; flex-direction:column; justify-content:flex-end;">
+            <p style="font-family:'Fraunces'; font-weight:600; font-size:clamp(1.3rem,3.4vw,1.9rem); line-height:1.15; color:#F6F1E6; margin:0;">The few,<br>for the many.</p>
+            <p style="font-family:'Source Sans 3'; font-size:0.62rem; letter-spacing:0.16em; color:rgba(246,241,230,0.55); margin:1.6em 0 0;">BDSIS · ADMISSION BY MERIT · JUPAS JS3000</p>
+          </div>
+          <div style="padding:0 9% 8%; display:flex; justify-content:space-between; align-items:flex-end;">
+            <img src="assets/logo-white.png" alt="" style="width:13%;">
+            <span style="font-family:'Source Sans 3'; font-size:0.55rem; color:rgba(246,241,230,0.5);">polyu.edu.hk/cus</span>
+          </div>
+        </div>
+        <p style="font-size:0.85rem; color:var(--grey); margin-top:0.9rem;"><strong>Ceremonial register</strong> — midnight ground, champagne accent, Horizon motif, declarative voice. For: admissions bar, ceremonies, invitations, JUPAS-facing prestige.</p>
+      </div>
+
+      <div>
+        <div class="regposter" style="background:var(--t-paper);">
+          <div style="display:grid; grid-template-columns:repeat(4,1fr); aspect-ratio:4;">
+            <div></div><div class="q tl" style="--qa:var(--indA);--qb:var(--indB);"></div><div class="q tr" style="--qa:var(--indA);--qb:var(--oxA);"></div><div></div>
+          </div>
+          <div style="display:grid; grid-template-columns:repeat(4,1fr); aspect-ratio:4;">
+            <div></div><div></div><div class="dsq" style="--qa:var(--champA);--qb:var(--champB);"></div><div></div>
+          </div>
+          <div style="flex:1; padding:6% 9%; display:flex; flex-direction:column; justify-content:flex-end;">
+            <p style="font-family:'Fraunces'; font-style:italic; font-size:clamp(0.95rem,2.6vw,1.25rem); line-height:1.4; color:var(--t-ink); margin:0;">"What you receive from your mentor, you owe the world forward."</p>
+            <p style="font-family:'Source Sans 3'; font-size:0.6rem; letter-spacing:0.14em; color:var(--t-mut); margin:1.5em 0 0;">PERSONAL ACADEMIC MENTORSHIP · BDSIS</p>
+          </div>
+          <div style="padding:0 9% 8%; display:flex; justify-content:space-between; align-items:flex-end;">
+            <div style="width:13%; aspect-ratio:1; background-image:url('assets/logo-scholar.svg'); background-size:contain; background-repeat:no-repeat;"></div>
+            <span style="font-family:'Source Sans 3'; font-size:0.55rem; color:var(--t-mut);">@bdsis.polyu</span>
+          </div>
+        </div>
+        <p style="font-size:0.85rem; color:var(--grey); margin-top:0.9rem;"><strong>Daylight register</strong> — paper ground, Mentor motif, first-person voice. For: mentorship, student stories, service, community and society-facing content.</p>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<section class="block">
+  <div class="wrap">
+    <div class="kicker" style="--accent: var(--is-blue);">Beyond looks</div>
+    <h2>Behaviours that make it true</h2>
+    <p>"Dependable" can't be claimed, only evidenced. The curriculum already supplies most of the proof — these are suggestions for leadership to make the proof louder, plus one new idea:</p>
+    <table>
+      <tr><th style="width:34%;">Proof</th><th>Status</th></tr>
+      <tr><td>Capstone requires inter-sector partnership on a real societal issue</td><td style="font-weight:400;">✅ Exists (CUS401) — promote it as the headline of the curriculum, not a detail</td></tr>
+      <tr><td>Pathway C: curricula built around UNESCO SDG-scale problems</td><td style="font-weight:400;">✅ Exists — name student projects publicly each year</td></tr>
+      <tr><td>Service-learning, reflections on contemporary issues</td><td style="font-weight:400;">✅ Exists (GUR + CUS201/301) — frame as character curriculum, not requirements</td></tr>
+      <tr><td><strong>The BDSIS Compact</strong> — each cohort drafts and signs a public commitment about how they'll use what they're given; read at orientation, revisited at graduation</td><td style="font-weight:400;">💡 New — cheap to run, generates an annual ritual, a story and an artefact; makes "Amodei-not-Altman" a practice, not a poster</td></tr>
+      <tr><td>Character signals in selection (interview rubric on judgement/responsibility)</td><td style="font-weight:400;">💡 Suggest — lets copy honestly say "selected for character as much as scores"</td></tr>
+    </table>
+  </div>
+</section>
+
+<div class="wrap pageturn">
+  <a href="mockups.html">← Mockups (Cell System)</a>
+  <a href="index.html">Core →</a>
+</div>
+
+<footer>
+  <div class="wrap">
+    <span>BDSIS · Bachelor's Degree Scheme in Interdisciplinary Studies · 跨學科組合學士課程 · JS3000</span>
+    <span>College of Undergraduate Studies, The Hong Kong Polytechnic University</span>
+  </div>
+</footer>
+
+</body>
+</html>
