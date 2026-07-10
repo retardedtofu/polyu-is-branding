@@ -1,6 +1,7 @@
 # Local tooling / environments
 .venv/
 .claude/
+__pycache__/
 
 # OS junk
 .DS_Store

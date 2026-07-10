@@ -1,0 +1,684 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Geist Pixel · Shape Studio</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Geist:wght@300;400;500&family=Geist+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --paper:#f3f2ee; --panel:#fbfaf7; --ink:#1a1a17; --ink-2:#6f6e67; --ink-3:#a3a299;
+    --line:#e4e2db; --line-2:#d6d4cc; --accent:#e0533b;
+    --sans:"Geist",-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;
+    --mono:"Geist Mono",ui-monospace,SFMono-Regular,Menlo,monospace;
+  }
+  *{box-sizing:border-box;-webkit-font-smoothing:antialiased}
+  html,body{margin:0;height:100%}
+  body{background:var(--paper);color:var(--ink);font-family:var(--sans);font-weight:400;
+    display:flex;overflow:hidden;font-feature-settings:"tnum" 1}
+
+  #panel{width:300px;min-width:300px;height:100vh;overflow-y:auto;background:var(--panel);
+    border-right:1px solid var(--line);padding:24px 22px 60px}
+  #panel::-webkit-scrollbar{width:8px}#panel::-webkit-scrollbar-thumb{background:var(--line-2);border-radius:4px}
+  .brand{display:flex;align-items:baseline;justify-content:space-between;margin-bottom:18px}
+  .brand h1{font-size:14px;font-weight:500;margin:0;letter-spacing:-.01em}
+  .brand .v{font-family:var(--mono);font-size:10px;color:var(--ink-3);letter-spacing:.04em}
+
+  .search{position:relative;margin-bottom:8px}
+  .search input{width:100%;background:transparent;color:var(--ink);border:1px solid var(--line-2);border-radius:3px;
+    padding:9px 10px 9px 30px;font-family:var(--sans);font-size:12px}
+  .search input:focus{outline:none;border-color:var(--ink)}
+  .search svg{position:absolute;left:10px;top:50%;transform:translateY(-50%);width:13px;height:13px;color:var(--ink-3)}
+  .noresult{font-size:12px;color:var(--ink-3);padding:18px 2px;display:none}
+
+  .sec{border-top:1px solid var(--line)}
+  .lab{width:100%;display:flex;align-items:center;justify-content:space-between;background:none;border:none;
+    cursor:pointer;padding:15px 0 13px;font-family:var(--sans);font-size:10px;font-weight:500;letter-spacing:.14em;
+    text-transform:uppercase;color:var(--ink-3)}
+  .lab:hover{color:var(--ink-2)}
+  .lab .chev{width:11px;height:11px;transition:transform .18s;color:var(--ink-3)}
+  .sec.collapsed .chev{transform:rotate(-90deg)}
+  .body{padding-bottom:18px}
+  .sec.collapsed .body{display:none}
+
+  textarea{width:100%;min-height:60px;resize:vertical;background:transparent;color:var(--ink);
+    border:1px solid var(--line-2);border-radius:3px;padding:9px 10px;font-family:var(--mono);
+    font-size:13px;line-height:1.55;letter-spacing:-.01em}
+  textarea:focus{outline:none;border-color:var(--ink)}
+
+  .ctrl{margin-bottom:15px}.ctrl:last-child{margin-bottom:0}
+  .ctrl .top{display:flex;justify-content:space-between;align-items:baseline;margin-bottom:7px}
+  .ctrl .top label{font-size:12px;color:var(--ink-2)}
+  .ctrl .top .val{font-family:var(--mono);font-size:11px;color:var(--ink);letter-spacing:.02em}
+  input[type=range]{-webkit-appearance:none;appearance:none;width:100%;height:1px;background:var(--line-2);outline:none;margin:7px 0}
+  input[type=range]::-webkit-slider-thumb{-webkit-appearance:none;width:12px;height:12px;border-radius:50%;
+    background:var(--panel);border:1px solid var(--ink);cursor:pointer;transition:transform .1s}
+  input[type=range]::-webkit-slider-thumb:hover{transform:scale(1.18)}
+
+  .hide{display:none}
+  .dd{position:relative}
+  .dd-btn{width:100%;text-align:left;background:transparent;color:var(--ink);border:1px solid var(--line-2);border-radius:3px;
+    padding:8px 26px 8px 10px;font-family:var(--sans);font-size:12px;cursor:pointer;
+    background-image:url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='10' height='6' viewBox='0 0 10 6'><path d='M1 1l4 4 4-4' stroke='%236f6e67' fill='none' stroke-width='1.2'/></svg>");
+    background-repeat:no-repeat;background-position:right 10px center}
+  .dd-btn:hover{border-color:var(--ink)}
+  .dd-list{position:absolute;top:calc(100% + 4px);left:0;right:0;z-index:50;background:var(--panel);border:1px solid var(--line-2);
+    border-radius:3px;overflow:hidden;box-shadow:0 6px 20px rgba(0,0,0,.10);display:none}
+  .dd-list.open{display:block}
+  .dd-list button{display:block;width:100%;text-align:left;background:transparent;border:none;padding:8px 10px;
+    font-family:var(--sans);font-size:12px;color:var(--ink-2);cursor:pointer}
+  .dd-list button:hover{background:#f0efea;color:var(--ink)}
+  .dd-list button.sel{color:var(--ink);font-weight:500}
+  .seg{display:grid;grid-template-columns:repeat(4,1fr);border:1px solid var(--line-2);border-radius:3px;overflow:hidden}
+  .seg button{background:transparent;border:none;border-right:1px solid var(--line-2);padding:11px 0;cursor:pointer;
+    display:flex;align-items:center;justify-content:center;color:var(--ink-3);transition:.12s}
+  .seg button:last-child{border-right:none}
+  .seg button:hover{color:var(--ink);background:#f0efea}
+  .seg button.on{background:var(--ink);color:var(--panel)}
+  .seg button svg{width:16px;height:16px}
+
+  select{width:100%;background:transparent;color:var(--ink);border:1px solid var(--line-2);border-radius:3px;
+    padding:8px 10px;font-family:var(--sans);font-size:12px;cursor:pointer;-webkit-appearance:none;appearance:none;
+    background-image:url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='10' height='6' viewBox='0 0 10 6'><path d='M1 1l4 4 4-4' stroke='%236f6e67' fill='none' stroke-width='1.2'/></svg>");
+    background-repeat:no-repeat;background-position:right 10px center}
+  select:focus{outline:none;border-color:var(--ink)}
+
+  .toggle{display:flex;align-items:center;justify-content:space-between;padding:7px 0;cursor:pointer;user-select:none}
+  .toggle span{font-size:12px;color:var(--ink-2)}
+  .sw{width:30px;height:16px;border-radius:8px;border:1px solid var(--line-2);background:var(--panel);position:relative;transition:.15s;flex:none}
+  .sw::after{content:"";position:absolute;width:10px;height:10px;border-radius:50%;background:var(--ink-3);top:2px;left:2px;transition:.15s}
+  .sw.on{background:var(--ink);border-color:var(--ink)}.sw.on::after{left:16px;background:var(--panel)}
+
+  .btn{width:100%;background:transparent;color:var(--ink);border:1px solid var(--ink);border-radius:3px;
+    padding:11px;font-family:var(--sans);font-size:12px;font-weight:500;cursor:pointer;display:flex;
+    align-items:center;justify-content:center;gap:8px;transition:.12s;letter-spacing:.01em}
+  .btn:hover{background:var(--ink);color:var(--panel)}
+  .btn svg{width:14px;height:14px}
+  .btn.primary{background:var(--accent);border-color:var(--accent);color:#fff}
+  .btn.primary:hover{background:#c9472f;border-color:#c9472f}
+  .btn.ghost{border-color:var(--line-2);color:var(--ink-2);font-weight:400}
+  .btn.ghost:hover{background:#f0efea;color:var(--ink);border-color:var(--line-2)}
+  .btnrow{display:grid;grid-template-columns:1fr 1fr;gap:8px}.btnrow.mb{margin-bottom:8px}
+
+  .colors{display:flex;gap:12px}.colors .c{flex:1}
+  .colors .c .top{display:flex;justify-content:space-between;align-items:baseline;margin-bottom:6px}
+  .colors label{font-size:11px;color:var(--ink-2)}
+  .colors .hex{font-family:var(--mono);font-size:10px;color:var(--ink-3)}
+  .swatch{width:100%;height:26px;border:1px solid var(--line-2);border-radius:3px;cursor:pointer;position:relative;overflow:hidden}
+  .swatch input{position:absolute;inset:-4px;width:140%;height:160%;cursor:pointer;border:none;padding:0;background:none}
+
+  #stage{flex:1;height:100vh;position:relative;overflow:hidden;cursor:grab}
+  #stage.drag{cursor:grabbing}
+  canvas{display:block;position:absolute;inset:0}
+  .hud{position:absolute;left:16px;bottom:14px;font-family:var(--mono);font-size:10px;letter-spacing:.04em;
+    color:var(--ink-3);mix-blend-mode:difference;pointer-events:none}
+  .viewbtns{position:absolute;right:16px;bottom:14px;display:flex;gap:6px}
+  .viewbtns button{width:28px;height:28px;border:1px solid rgba(255,255,255,.22);background:rgba(255,255,255,.06);
+    color:#fff;border-radius:3px;cursor:pointer;display:flex;align-items:center;justify-content:center;
+    font-family:var(--mono);font-size:13px;backdrop-filter:blur(4px);transition:.12s}
+  .viewbtns button:hover{background:rgba(255,255,255,.16)}
+  .viewbtns button svg{width:14px;height:14px}
+</style>
+</head>
+<body>
+  <aside id="panel">
+    <div class="brand"><h1>Pixel Shape Studio</h1><span class="v">GEIST</span></div>
+    <div class="search">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="7"/><path d="M21 21l-4-4" stroke-linecap="round"/></svg>
+      <input id="q" placeholder="Search settings" spellcheck="false" />
+    </div>
+    <div class="noresult" id="noresult">No matching settings.</div>
+
+    <section class="sec" data-title="text content">
+      <button class="lab" aria-expanded="true">Text<svg class="chev" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 9l6 6 6-6" stroke-linecap="round" stroke-linejoin="round"/></svg></button>
+      <div class="body"><textarea id="text" spellcheck="false" data-kw="text content words">Pixel</textarea></div>
+    </section>
+
+    <section class="sec" data-title="grid size pixel">
+      <button class="lab" aria-expanded="true">Grid<svg class="chev" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 9l6 6 6-6" stroke-linecap="round" stroke-linejoin="round"/></svg></button>
+      <div class="body">
+        <div class="ctrl" data-kw="container size cell"><div class="top"><label>Container size</label><span class="val" id="cellv">22</span></div>
+          <input type="range" id="cell" min="3" max="64" step="1" value="22" /></div>
+        <div class="ctrl" data-kw="child size shape"><div class="top"><label>Child size</label><span class="val" id="childv">100%</span></div>
+          <input type="range" id="child" min="8" max="140" step="1" value="100" /></div>
+      </div>
+    </section>
+
+    <section class="sec" data-title="final shape settled circle square triangle quarter">
+      <button class="lab" aria-expanded="true">Final shape<svg class="chev" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 9l6 6 6-6" stroke-linecap="round" stroke-linejoin="round"/></svg></button>
+      <div class="body">
+        <div class="seg" id="shapes" data-kw="shape circle square triangle quarter" style="margin-bottom:13px">
+          <button data-shape="circle" class="on" title="Circle"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="9" fill="currentColor"/></svg></button>
+          <button data-shape="square" title="Square"><svg viewBox="0 0 24 24"><rect x="3.5" y="3.5" width="17" height="17" fill="currentColor"/></svg></button>
+          <button data-shape="triangle" title="Triangle"><svg viewBox="0 0 24 24"><path d="M12 3.5 L20.5 20.5 L3.5 20.5 Z" fill="currentColor"/></svg></button>
+          <button data-shape="quarter" title="Quarter circle"><svg viewBox="0 0 24 24"><path d="M4 20 L4 4 A16 16 0 0 1 20 20 Z" fill="currentColor"/></svg></button>
+        </div>
+        <div class="toggle" id="randT" data-kw="randomize per pixel shape"><span>Randomize per pixel</span><div class="sw" id="randSw"></div></div>
+        <div class="toggle" id="rotT" data-kw="random rotation"><span>Random rotation</span><div class="sw" id="rotSw"></div></div>
+      </div>
+    </section>
+
+    <section class="sec" data-title="animation play fade reveal">
+      <button class="lab" aria-expanded="true">Animation<svg class="chev" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 9l6 6 6-6" stroke-linecap="round" stroke-linejoin="round"/></svg></button>
+      <div class="body">
+        <div class="ctrl" data-kw="duration speed time"><div class="top"><label>Duration</label><span class="val" id="durv">1600ms</span></div>
+          <input type="range" id="dur" min="200" max="6000" step="50" value="1600" /></div>
+        <div class="ctrl" data-kw="direction load from"><div class="top"><label>Direction</label></div>
+          <select id="dir">
+            <option value="lr">Left → right</option><option value="rl">Right → left</option>
+            <option value="tb">Top → bottom</option><option value="bt">Bottom → top</option>
+            <option value="center">Center → out</option><option value="edges">Edges → in</option>
+            <option value="random">Random</option>
+          </select></div>
+        <div class="ctrl" data-kw="load randomness scatter order"><div class="top"><label>Load randomness</label><span class="val" id="lrandv">35%</span></div>
+          <input type="range" id="lrand" min="0" max="100" step="1" value="35" /></div>
+        <div class="ctrl" data-kw="shuffle steps shapes cycle"><div class="top"><label>Shuffle steps</label><span class="val" id="shufv">5</span></div>
+          <input type="range" id="shuf" min="0" max="24" step="1" value="5" /></div>
+        <div class="ctrl" data-kw="easing curve ease timing speed custom"><div class="top"><label>Easing</label></div>
+          <div class="dd" id="easeDD">
+            <button type="button" class="dd-btn" id="easeBtn">Ease out</button>
+            <div class="dd-list" id="easeList">
+              <button type="button" data-v="linear">Linear</button>
+              <button type="button" data-v="in">Ease in</button>
+              <button type="button" data-v="out">Ease out</button>
+              <button type="button" data-v="inout">Ease in-out</button>
+              <button type="button" data-v="inmidout">Ease in-mid-out</button>
+              <button type="button" data-v="expo">Expo out</button>
+              <button type="button" data-v="custom">Custom curve</button>
+            </div>
+          </div></div>
+        <div class="ctrl" id="bezWrap" data-kw="curve chart easing bezier handle drag">
+          <div class="top"><label>Curve</label><span class="val" id="bezval"></span></div>
+          <svg id="bez" viewBox="0 0 100 100" style="width:100%;display:block;border:1px solid var(--line-2);border-radius:3px;touch-action:none;cursor:crosshair"></svg>
+        </div>
+        <div class="ctrl" data-kw="start opacity fade materialize"><div class="top"><label>Start opacity</label><span class="val" id="startopv">20%</span></div>
+          <input type="range" id="startop" min="0" max="100" step="1" value="20" /></div>
+        <div class="ctrl" data-kw="travel distance fly in move motion"><div class="top"><label>Travel distance</label><span class="val" id="travelv">8</span></div>
+          <input type="range" id="travel" min="0" max="30" step="1" value="8" /></div>
+        <button class="btn primary" id="play" data-kw="play reveal animate" style="width:100%;margin-bottom:8px"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M7 5l12 7-12 7z"/></svg>Play</button>
+        <div class="btnrow mb" data-kw="fade out explode burst collapse">
+          <button class="btn" id="fade"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 4v6m0 4v6" stroke-linecap="round"/><circle cx="12" cy="12" r="1.4" fill="currentColor" stroke="none"/></svg>Fade out</button>
+          <button class="btn" id="burst"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M8 3H3v5M16 3h5v5M8 21H3v-5M16 21h5v-5"/></svg>Explode</button>
+        </div>
+        <button class="btn ghost" id="shuffle" data-kw="reseed randomness shuffle"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M4 7h4l8 10h4M4 17h4l2.5-3M16 7h4M16 17l2-2 2 2M16 7l2 2 2-2" stroke-linecap="round" stroke-linejoin="round"/></svg>Reseed randomness</button>
+      </div>
+    </section>
+
+    <section class="sec" data-title="noise artifacts cloud outline radiation">
+      <button class="lab" aria-expanded="true">Noise<svg class="chev" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 9l6 6 6-6" stroke-linecap="round" stroke-linejoin="round"/></svg></button>
+      <div class="body">
+        <p style="font-size:11px;color:var(--ink-3);line-height:1.5;margin:0 0 13px" data-kw="noise outline cloud converge">Cloud that radiates from the text outline and converges into the shape — visible only while animating.</p>
+        <div class="ctrl" data-kw="amount density artifacts"><div class="top"><label>Amount</label><span class="val" id="noisev">0%</span></div>
+          <input type="range" id="noise" min="0" max="100" step="1" value="0" /></div>
+        <div class="ctrl" data-kw="reach radiation margin distance"><div class="top"><label>Reach</label><span class="val" id="nmargv">6</span></div>
+          <input type="range" id="nmarg" min="1" max="30" step="1" value="6" /></div>
+      </div>
+    </section>
+
+    <section class="sec" data-title="appearance color kerning">
+      <button class="lab" aria-expanded="true">Appearance<svg class="chev" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 9l6 6 6-6" stroke-linecap="round" stroke-linejoin="round"/></svg></button>
+      <div class="body">
+        <div class="colors" data-kw="color pixel canvas background" style="margin-bottom:14px">
+          <div class="c"><div class="top"><label>Pixel</label><span class="hex" id="fghex">#1A1A17</span></div>
+            <div class="swatch"><input type="color" id="fg" value="#1a1a17" /></div></div>
+          <div class="c"><div class="top"><label>Canvas</label><span class="hex" id="bghex">#F3F2EE</span></div>
+            <div class="swatch"><input type="color" id="bg" value="#f3f2ee" /></div></div>
+        </div>
+        <div class="toggle" id="kernT" data-kw="kerning spacing"><span>Apply kerning</span><div class="sw on" id="kernSw"></div></div>
+      </div>
+    </section>
+
+    <section class="sec" data-title="export png download">
+      <button class="lab" aria-expanded="true">Export<svg class="chev" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 9l6 6 6-6" stroke-linecap="round" stroke-linejoin="round"/></svg></button>
+      <div class="body">
+        <button class="btn ghost" id="dl" data-kw="export png download save"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M12 4v11m0 0l-4-4m4 4l4-4M5 20h14" stroke-linecap="round" stroke-linejoin="round"/></svg>Export PNG</button>
+      </div>
+    </section>
+  </aside>
+
+  <main id="stage">
+    <canvas id="cv"></canvas>
+    <div class="hud" id="hud"></div>
+    <div class="viewbtns">
+      <button id="zoomout" title="Zoom out">−</button>
+      <button id="zoomin" title="Zoom in">+</button>
+      <button id="fit" title="Fit to view"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M4 9V4h5M20 9V4h-5M4 15v5h5M20 15v5h-5" stroke-linecap="round"/></svg></button>
+    </div>
+  </main>
+
+<script src="fontdata.js"></script>
+<script>
+const F = window.FONTDATA;
+const C2G = F.char2glyph, G = F.glyphs, KERN = F.kern;
+const SHAPES = ["circle","square","triangle","quarter"];
+
+const S = {
+  text:"Pixel", cell:22, child:100, shape:"circle", random:false, rot:false,
+  kern:true, fg:"#1a1a17", bg:"#f3f2ee",
+  dur:1600, dir:"lr", lrand:0.35, shuf:5, ease:"out", startop:0.2, travel:8,
+  bez:[0.25,0.10,0.25,1.00],   // custom easing: cubic-bezier control points (x1,y1,x2,y2)
+  noise:0, nmarg:6, seed:1
+};
+
+// easing curves remap the animation's progress, so they govern how fast pixels
+// change shape AND how fast the cloud converges into the final text.
+const eInOut = t=> t<0.5 ? 4*t*t*t : 1-Math.pow(-2*t+2,3)/2;
+const EASES = {
+  linear:   t=>t,
+  in:       t=>t*t*t,
+  out:      t=>1-Math.pow(1-t,3),
+  inout:    eInOut,
+  expo:     t=> t>=1 ? 1 : 1-Math.pow(2,-10*t),
+  // eases at the start, the middle, AND the end (two stacked ease-in-outs, settling at 0.5)
+  inmidout: t=> t<0.5 ? 0.5*eInOut(2*t) : 0.5+0.5*eInOut(2*t-1)
+};
+// custom easing: evaluate a cubic bezier (endpoints fixed at 0,0 & 1,1) — given time t (x),
+// solve for the parameter u where Bx(u)=t, then return By(u) = the position.
+function bezAxis(u,a,b){ const m=1-u; return 3*m*m*u*a + 3*m*u*u*b + u*u*u; }
+function bezY(t,bez){
+  if(t<=0) return 0; if(t>=1) return 1;
+  const x1=bez[0],y1=bez[1],x2=bez[2],y2=bez[3];
+  let lo=0,hi=1,u=t;
+  for(let i=0;i<26;i++){ const x=bezAxis(u,x1,x2); if(Math.abs(x-t)<1e-4) break; if(x<t) lo=u; else hi=u; u=(lo+hi)/2; }
+  return bezAxis(u,y1,y2);
+}
+
+function h32(x){ x|=0; x=(x^61)^(x>>>16); x=x+(x<<3)|0; x=x^(x>>>4); x=Math.imul(x,0x27d4eb2d); x=x^(x>>>15); return x>>>0; }
+function hash(a,b,c){ return h32(Math.imul(a|0,374761393) ^ Math.imul(b|0,668265263) ^ Math.imul((c|0)+1,2246822519) ^ Math.imul(S.seed|0,2654435761)); }
+function hash01(a,b,c){ return hash(a,b,c)/4294967296; }
+
+// ---------- build text cells + radiating noise field ----------
+let TEXTC=[], NOISEC=[], BBT={minGX:0,maxGX:0,minGY:0,maxGY:0,w:1,h:1};
+function buildCells(){
+  const lines = S.text.split("\n");
+  const spaceAdv = (G[C2G[" "]]||{a:7}).a;
+  let maxRow=-1e9, minRow=1e9; const perLine=[];
+  lines.forEach((line)=>{
+    let pen=0; const out=[]; const chars=[...line];
+    chars.forEach((ch,ci)=>{
+      const gn=C2G[ch];
+      if(gn===undefined){ pen+=spaceAdv; return; }
+      const g=G[gn];
+      for(const [c,r] of g.c){ out.push([pen+c, r]); if(r>maxRow)maxRow=r; if(r<minRow)minRow=r; }
+      pen+=g.a;
+      if(S.kern && ci<chars.length-1){ const gn2=C2G[chars[ci+1]]; if(gn2!==undefined){ const k=KERN[gn+"|"+gn2]; if(k) pen+=k; } }
+    });
+    perLine.push(out);
+  });
+  if(maxRow<minRow){maxRow=18;minRow=0;}
+  const span=maxRow-minRow+1, gap=2;
+  TEXTC=[]; const occ=new Set();
+  perLine.forEach((out,li)=>{
+    for(const [x,r] of out){ const gx=Math.round(x), gy=li*(span+gap)+(maxRow-r);
+      TEXTC.push({gx,gy}); occ.add(gx+","+gy); }
+  });
+  let a=1e9,b=-1e9,c=1e9,d=-1e9;
+  for(const t of TEXTC){ if(t.gx<a)a=t.gx; if(t.gx>b)b=t.gx; if(t.gy<c)c=t.gy; if(t.gy>d)d=t.gy; }
+  if(TEXTC.length===0){a=0;b=0;c=0;d=0;}
+  BBT={minGX:a,maxGX:b,minGY:c,maxGY:d,w:Math.max(1,b-a),h:Math.max(1,d-c)};
+  buildNoise(occ);     // build the field first; computeOrders then orders text + noise together
+  computeOrders();
+}
+
+// directional key for a grid cell (direction blended with per-cell randomness)
+function dirKey(gx,gy){
+  const {minGX,minGY,w,h}=BBT, dir=S.dir, R=S.lrand;
+  const nx=(gx-minGX)/w, ny=(gy-minGY)/h; let dd;
+  switch(dir){
+    case "lr": dd=nx; break; case "rl": dd=1-nx; break;
+    case "tb": dd=ny; break; case "bt": dd=1-ny; break;
+    case "center": dd=Math.min(1,Math.hypot(nx-0.5,ny-0.5)/0.7071); break;
+    case "edges": dd=1-Math.min(1,Math.hypot(nx-0.5,ny-0.5)/0.7071); break;
+    default: dd=hash01(gx,gy,55);
+  }
+  const rnd=hash01(gx,gy,55);
+  return dir==="random" ? rnd : (1-R)*dd + R*rnd;
+}
+function rankNorm(arr, assign){ const n=arr.length; if(!n) return;
+  const idx=arr.map((_,i)=>i).sort((p,q)=>arr[p]._key-arr[q]._key||p-q);
+  const denom=Math.max(1,n-1); idx.forEach((ci,rank)=>assign(arr[ci], rank/denom)); }
+
+// Reveal order per text cell, AND the directional lifespan of each noise cell.
+// Noise shares the same directional key as text, so the cloud sweeps with the
+// chosen direction: the cloud over a region dies right as the text there forms.
+// `df` (distance-to-outline factor) gives a small local inward stagger on top.
+function computeOrders(){
+  for(const t of TEXTC) t._key=dirKey(t.gx,t.gy);
+  rankNorm(TEXTC,(c,o)=>{ c.order=o; });
+  for(const c of NOISEC) c._key=dirKey(c.gx,c.gy);
+  rankNorm(NOISEC,(c,o)=>{ c.ord=o;
+    const start=o*(1-LF), end=start+LF, d=(c.df-0.5)*0.1;   // near-outline lingers a touch
+    c.din =Math.min(0.985, end+d);          // play-in: alive until the sweep-front passes & text settles
+    c.bout=start;                           // fade-out: born exactly as its text begins dissolving
+    c.dout=Math.min(0.985, end+d);          // ...then disperses; near-outline lingers, all clear by the end
+  });
+}
+
+// noise field: multi-source BFS outward from the glyph silhouette, so each empty
+// cell knows its distance to the outline. Density falls off with distance (the
+// cloud radiates from the edge). Each cell stores `df` = distance factor (1 at the
+// outline -> 0 at reach); computeOrders turns it + the directional order into the
+// cell's lifespan so the cloud sweeps with the animation and collapses inward.
+function buildNoise(occ){
+  NOISEC=[];
+  if(S.noise<=0 || S.nmarg<=0 || TEXTC.length===0) return;
+  const M=S.nmarg, amt=(S.noise/100)*0.9;
+  const dist=new Map(); let frontier=[];
+  for(const t of TEXTC){ const k=t.gx+","+t.gy; if(!dist.has(k)){ dist.set(k,0); frontier.push([t.gx,t.gy]); } }
+  let guard=0; const MAXV=350000;
+  for(let dd=1; dd<=M && frontier.length && guard<MAXV; dd++){
+    const next=[];
+    for(const [x,y] of frontier){
+      for(let oy=-1;oy<=1;oy++) for(let ox=-1;ox<=1;ox++){
+        if(!ox&&!oy) continue;
+        const nx=x+ox, ny=y+oy, k=nx+","+ny;
+        if(dist.has(k)) continue;
+        dist.set(k,dd); next.push([nx,ny]);
+        if(++guard>=MAXV) break;
+      }
+      if(guard>=MAXV) break;
+    }
+    frontier=next;
+  }
+  for(const [k,dd] of dist){
+    if(dd===0) continue;
+    const parts=k.split(","), gx=+parts[0], gy=+parts[1];
+    const t=(dd-1)/M;                       // 0 at outline .. ~1 at reach
+    const fall=Math.pow(1-t,1.6);           // denser near outline
+    if(hash01(gx,gy,909) >= amt*fall) continue;
+    NOISEC.push({gx,gy,df:1-t});            // distance factor: 1 near outline -> 0 at reach
+  }
+}
+
+// ---------- view ----------
+const stage=document.getElementById("stage"), cv=document.getElementById("cv"), ctx=cv.getContext("2d");
+const hud=document.getElementById("hud");
+let view={x:0,y:0,scale:1}, VW=0, VH=0, dpr=1;
+function sizeCanvas(){ const r=stage.getBoundingClientRect(); VW=r.width; VH=r.height; dpr=window.devicePixelRatio||1;
+  cv.width=Math.round(VW*dpr); cv.height=Math.round(VH*dpr); cv.style.width=VW+"px"; cv.style.height=VH+"px"; }
+function contentPxBox(){
+  const pad=(S.noise>0?S.nmarg:0)+S.travel;   // noise reach and fly-in travel stack
+  const x0=(BBT.minGX-pad)*S.cell, x1=(BBT.maxGX+1+pad)*S.cell, y0=(BBT.minGY-pad)*S.cell, y1=(BBT.maxGY+1+pad)*S.cell;
+  return {x0,y0,cx:(x0+x1)/2,cy:(y0+y1)/2,w:x1-x0,h:y1-y0};
+}
+function fitView(){ const b=contentPxBox();
+  view.scale=Math.max(0.05,Math.min(40, Math.min(VW/(b.w||1),VH/(b.h||1))*0.86));
+  view.x=VW/2-b.cx*view.scale; view.y=VH/2-b.cy*view.scale; draw(); }
+function zoomAt(mx,my,factor){ const ns=Math.max(0.05,Math.min(40,view.scale*factor));
+  const wx=(mx-view.x)/view.scale, wy=(my-view.y)/view.scale; view.scale=ns; view.x=mx-wx*ns; view.y=my-wy*ns; draw(); }
+
+// ---------- animation ----------
+let anim={active:false, mode:null, start:0, raf:0, dur:1600, shuf:5, ease:"out", startop:0.2, travel:8, easeMod:false};
+let revealed=true, easeMod=false;   // easeMod: the curve has been dragged away from the selected preset
+const LF=0.42;   // per-pixel reveal window as a fraction of total progress
+function play(mode){
+  if((mode==="out"||mode==="burst") && !revealed) return;   // both need existing text to act on
+  cancelAnimationFrame(anim.raf);
+  buildCells();   // commit current settings (direction/randomness/noise/reach) for this run
+  anim.active=true; anim.mode=mode; anim.start=performance.now(); anim.dur=S.dur; anim.shuf=S.shuf;
+  anim.ease=S.ease; anim.startop=S.startop; anim.travel=S.travel; anim.bez=S.bez.slice(); anim.easeMod=easeMod;   // snapshot so mid-flight changes don't glitch
+  const tick=(now)=>{ const t=now-anim.start; draw(t,mode);
+    if(t<anim.dur+60){ anim.raf=requestAnimationFrame(tick); }
+    else { anim.active=false; anim.mode=null; revealed=(mode!=="out"); draw(); } };   // in & burst end with text shown
+  anim.raf=requestAnimationFrame(tick);
+}
+
+// ---------- draw (pure shape changes — no opacity or scale animation) ----------
+function drawShape(shape,cx,cy,s,rot){ if(s<=0) return; const h=s/2;
+  ctx.save(); ctx.translate(cx,cy); if(rot) ctx.rotate(rot); ctx.beginPath();
+  if(shape==="circle"){ ctx.arc(0,0,h,0,Math.PI*2); }
+  else if(shape==="square"){ ctx.rect(-h,-h,s,s); }
+  else if(shape==="triangle"){ ctx.moveTo(0,-h); ctx.lineTo(h,h); ctx.lineTo(-h,h); ctx.closePath(); }
+  else { ctx.moveTo(-h,-h); ctx.arc(-h,-h,s,0,Math.PI/2); ctx.closePath(); }
+  ctx.fill(); ctx.restore();
+}
+// per-pixel travel offset (grid units): a random direction + magnitude, so pixels
+// start scattered out in the cloud and glide to their home cell as they settle.
+function offOf(gx,gy,travel){
+  const a=hash01(gx,gy,201)*6.2831853, m=travel*(0.4+0.6*hash01(gx,gy,202));
+  return [Math.cos(a)*m, Math.sin(a)*m];
+}
+function paintCell(gx,gy,useFinal,slot,base,cell,rox,roy){
+  let shape,rot=0;
+  if(useFinal){ shape = S.random ? SHAPES[hash(gx,gy,11)&3] : S.shape; rot = S.rot ? (hash(gx,gy,12)&3)*(Math.PI/2) : 0; }
+  else { shape = SHAPES[hash(gx,gy,1000+slot)&3]; rot = (hash(gx,gy,2000+slot)&3)*(Math.PI/2); }
+  drawShape(shape,(gx+0.5+(rox||0))*cell,(gy+0.5+(roy||0))*cell, base, rot);
+}
+function draw(t=null, mode=null){
+  if(mode===null && anim.active){ mode=anim.mode; t=performance.now()-anim.start; }
+  ctx.setTransform(dpr,0,0,dpr,0,0); ctx.fillStyle=S.bg; ctx.fillRect(0,0,VW,VH);
+  ctx.setTransform(dpr*view.scale,0,0,dpr*view.scale, dpr*view.x, dpr*view.y);
+
+  const animating=mode!==null, cell=S.cell, base=(S.child/100)*cell;
+  const D=animating?anim.dur:S.dur, NS=animating?anim.shuf:S.shuf;
+  const g=animating?Math.max(0,Math.min(1,t/D)):1;
+  const easeName=animating?anim.ease:S.ease, bez=animating?anim.bez:S.bez;
+  const useBez = easeName==="custom" || (animating?anim.easeMod:easeMod);   // exact preset fn until dragged
+  const ez = useBez ? (u=>bezY(u,bez)) : (EASES[easeName]||EASES.linear);
+  const ge=animating?ez(g):1;                 // eased progress drives everything below
+  const SO=animating?anim.startop:1;          // start-opacity floor (1 = no fade)
+  const rate=NS>0?NS/LF:0;                     // shape-shift cadence (matches text & cloud)
+  const TR=animating?anim.travel:0;            // fly-in distance (grid cells; 0 = appear in place)
+  ctx.fillStyle=S.fg; ctx.globalAlpha=1;
+  let drawn=0;
+
+  // "burst": explode outward then collapse back — a per-pixel round-trip out-fraction
+  // (0 = home/clean, 1 = fully scattered). Each pixel's window is STAGGERED by its
+  // directional order, so the blast ripples across in the chosen direction. (1-W) is the
+  // directional spread; W=1 would be a single synchronized blast. Endpoints stay clean:
+  // every pixel is home before/after its window, and folding raw g keeps it grid-snapped.
+  let bSlot=0, bOutOf=()=>0;
+  if(mode==="burst"){
+    const bstep=rate>0?Math.max(2,Math.round(rate)):0;
+    const gq=bstep>0?Math.round(g*bstep)/bstep:g;   // stepped RAW progress (endpoint-safe)
+    const W=0.65;
+    bSlot=Math.floor(ge*rate);
+    bOutOf=o=>{ const start=o*(1-W), p=(gq-start)/W; return (p<=0||p>=1)?0:ez(1-Math.abs(2*p-1)); };
+  }
+
+  for(const c of TEXTC){
+    let useFinal=true, slot=0, alpha=1, sf=1;    // sf = settle fraction (0 = out in cloud, 1 = home cell)
+    if(!animating){ if(!revealed) continue; }
+    else if(mode==="burst"){ const bo=bOutOf(c.order); sf=1-bo; useFinal=bo<=0?true:(NS<=0); slot=bSlot; alpha=SO+(1-SO)*(1-bo); }
+    else {
+      const start=c.order*(1-LF), end=start+LF, p=(ge-start)/LF;
+      if(mode==="in"){
+        if(ge<start) continue;
+        else if(ge>=end){ useFinal=true; }               // settled -> full opacity, in place
+        else { useFinal=(NS<=0); slot=Math.floor(p*NS);
+               const m=NS<=0?1:Math.min(1,(slot+1)/NS);   // steps up toward full as it settles
+               alpha=SO+(1-SO)*m; sf=NS<=0?p:slot/NS; }    // travels home (grid-snapped); works even w/o shuffle
+      } else {
+        if(ge<=start){ useFinal=true; }                     // clean & final until dissolve begins
+        else if(ge>=end) continue;
+        else { useFinal=(NS<=0); slot=Math.floor(p*NS);
+               const m=NS<=0?0:Math.max(0,1-(slot+1)/NS);  // steps down as it dissolves
+               alpha=SO+(1-SO)*m; sf=NS<=0?1-p:1-slot/NS; }  // travels back out (grid-snapped)
+      }
+    }
+    let rox=0,roy=0;
+    if(sf<1 && TR>0){ const o=offOf(c.gx,c.gy,TR); rox=Math.round(o[0]*(1-sf)); roy=Math.round(o[1]*(1-sf)); }
+    ctx.globalAlpha=alpha;
+    paintCell(c.gx,c.gy,useFinal,slot,base,cell,rox,roy); drawn++;
+  }
+
+  // noise: animation only, never in the settled state. Lifespan is keyed to the
+  // directional order, so the cloud sweeps with the animation (in: present until
+  // the sweep-front passes; out: born as text dissolves, cleared by the end).
+  // Shape shuffles at the SAME cadence as the text reveal, and opacity steps with
+  // each shift — faint far from resolving, opaque as it nears the final text pixel.
+  if(animating && NOISEC.length){
+    for(const c of NOISEC){
+      let alive=false, mOp=1, cf=1;                       // mOp = opacity materialization, cf = travel fraction
+      if(mode==="burst"){ const bo=bOutOf(c.ord); alive=bo>0.02; mOp=bo; cf=1-bo; }   // debris ripples with the directional blast
+      else {
+        alive = mode==="in" ? (ge < c.din) : (ge > c.bout && ge < c.dout);
+        if(alive){
+          const prog = mode==="in" ? Math.min(1, ge/c.din)   // continuous progress toward resolution
+                                   : Math.max(0, 1-(ge-c.bout)/Math.max(1e-6, c.dout-c.bout));
+          mOp=prog; cf=prog;
+          if(rate>0){ const q=Math.floor(ge*rate)/rate;      // with shuffle: opacity + travel step per shift
+            mOp = mode==="in" ? Math.min(1, q/c.din)
+                              : Math.max(0, 1-(q-c.bout)/Math.max(1e-6, c.dout-c.bout));
+            cf=mOp; }
+        }
+      }
+      if(!alive) continue;
+      const sl=Math.floor(ge*rate) + (hash(c.gx,c.gy,77)&7);
+      ctx.globalAlpha=SO+(1-SO)*mOp;
+      let rox=0,roy=0;                                   // travels in snapped grid steps
+      if(cf<1 && TR>0){ const o=offOf(c.gx,c.gy,TR); rox=Math.round(o[0]*(1-cf)); roy=Math.round(o[1]*(1-cf)); }
+      const shape=SHAPES[hash(c.gx,c.gy,1000+sl)&3], rot=(hash(c.gx,c.gy,2000+sl)&3)*(Math.PI/2);
+      drawShape(shape,(c.gx+0.5+rox)*cell,(c.gy+0.5+roy)*cell, base, rot); drawn++;
+    }
+  }
+  ctx.globalAlpha=1; ctx.setTransform(1,0,0,1,0,0);
+  hud.textContent=`${drawn} px · zoom ${Math.round(view.scale*100)}% · ${TEXTC.length}+${NOISEC.length}`;
+}
+
+function rebuild(refit){ revealed=true; buildCells(); if(refit) fitView(); else draw(); }
+
+// ---------- controls ----------
+function range(id,key,fmt,scale){
+  const el=document.getElementById(id), out=document.getElementById(id+"v");
+  const upd=()=>{ out.textContent=fmt(el.value); };
+  el.addEventListener("input",()=>{ S[key]=scale?scale(+el.value):+el.value; upd(); revealed=true;
+    if(["cell","child","shuf","startop","travel"].includes(id)){ draw(); }
+    else if(id==="dur"){ /* affects next play() */ }
+    else if(id==="lrand"){ if(!anim.active){ computeOrders(); draw(); } }   // don't re-order mid-animation
+    else { if(!anim.active) rebuild(false); }   // noise/reach: don't rebuild mid-animation (both apply next play)
+  });
+  upd();
+}
+range("cell","cell",v=>v); range("child","child",v=>v+"%"); range("dur","dur",v=>v+"ms");
+range("lrand","lrand",v=>v+"%",v=>v/100); range("shuf","shuf",v=>v);
+range("startop","startop",v=>v+"%",v=>v/100); range("travel","travel",v=>v);
+range("noise","noise",v=>v+"%"); range("nmarg","nmarg",v=>v);
+
+document.getElementById("dir").addEventListener("change",e=>{ S.dir=e.target.value; revealed=true; if(!anim.active){ computeOrders(); draw(); } });
+// ---------- easing dropdown + persistent curve chart ----------
+const EASE_LABELS={linear:"Linear",in:"Ease in",out:"Ease out",inout:"Ease in-out",inmidout:"Ease in-mid-out",expo:"Expo out",custom:"Custom curve"};
+// per-preset control points that position the two handles (exact for the cubic eases,
+// close approximations for expo/in-mid-out). Until dragged, the chart & animation use the
+// exact preset function; dragging switches to the editable cubic bezier from these points.
+const PRESET_BEZ={linear:[.33,.33,.67,.67],in:[.42,0,1,1],out:[0,0,.58,1],inout:[.42,0,.58,1],inmidout:[.5,0,.5,1],expo:[.16,1,.3,1],custom:[.25,.1,.25,1]};
+const easeBtn=document.getElementById("easeBtn"), easeList=document.getElementById("easeList");
+function refreshEaseLabels(){
+  easeBtn.textContent=EASE_LABELS[S.ease]+(easeMod?" *":"");
+  [...easeList.children].forEach(b=>{ const on=b.dataset.v===S.ease;
+    b.classList.toggle("sel",on); b.textContent=EASE_LABELS[b.dataset.v]+((on&&easeMod)?" *":""); });
+}
+function applyEase(name){ S.ease=name; S.bez=PRESET_BEZ[name].slice(); easeMod=false; refreshEaseLabels(); bezUpdate(); }
+easeBtn.addEventListener("click",()=>easeList.classList.toggle("open"));
+easeList.addEventListener("click",e=>{ const b=e.target.closest("button[data-v]"); if(!b) return;
+  applyEase(b.dataset.v); easeList.classList.remove("open"); });   // re-selecting resets (asterisk cleared)
+document.addEventListener("click",e=>{ if(!document.getElementById("easeDD").contains(e.target)) easeList.classList.remove("open"); });
+
+const bezSvg=document.getElementById("bez"), BP=12, BIN=100-2*BP;
+const bSX=x=>BP+x*BIN, bSY=y=>BP+(1-Math.max(0,Math.min(1,y)))*BIN;
+function bezInit(){
+  bezSvg.innerHTML=
+    '<rect x="'+BP+'" y="'+BP+'" width="'+BIN+'" height="'+BIN+'" fill="none" stroke="var(--line-2)" stroke-width="0.6"/>'+
+    '<line x1="'+bSX(0)+'" y1="'+bSY(0)+'" x2="'+bSX(1)+'" y2="'+bSY(1)+'" stroke="var(--line-2)" stroke-width="0.5" stroke-dasharray="2 2"/>'+
+    '<line id="bezL1" stroke="var(--ink-3)" stroke-width="0.7"/><line id="bezL2" stroke="var(--ink-3)" stroke-width="0.7"/>'+
+    '<path id="bezCurve" fill="none" stroke="var(--accent)" stroke-width="1.6"/>'+
+    '<circle id="bezH1" r="3.6" fill="var(--accent)" stroke="var(--panel)" stroke-width="1"/>'+
+    '<circle id="bezH2" r="3.6" fill="var(--accent)" stroke="var(--panel)" stroke-width="1"/>';
+  bezUpdate();
+}
+function bezUpdate(){
+  const [x1,y1,x2,y2]=S.bez;
+  // draw the ACTIVE easing (exact preset fn until dragged; bezier once modified/custom) so chart == animation
+  const fn = (easeMod||S.ease==="custom") ? (u=>bezY(u,S.bez)) : (EASES[S.ease]||EASES.linear);
+  let d="M "+bSX(0)+" "+bSY(0);
+  for(let i=1;i<=48;i++){ const t=i/48; d+=" L "+bSX(t)+" "+bSY(fn(t)); }
+  document.getElementById("bezCurve").setAttribute("d",d);
+  const set=(id,a,b,c,dd)=>{const el=document.getElementById(id);el.setAttribute("x1",a);el.setAttribute("y1",b);el.setAttribute("x2",c);el.setAttribute("y2",dd);};
+  set("bezL1",bSX(0),bSY(0),bSX(x1),bSY(y1)); set("bezL2",bSX(1),bSY(1),bSX(x2),bSY(y2));
+  const h=(id,cx,cy)=>{const el=document.getElementById(id);el.setAttribute("cx",cx);el.setAttribute("cy",cy);};
+  h("bezH1",bSX(x1),bSY(y1)); h("bezH2",bSX(x2),bSY(y2));
+  document.getElementById("bezval").textContent=S.bez.map(v=>v.toFixed(2)).join(", ");
+}
+let bezDrag=null;
+function bezAt(e){ const r=bezSvg.getBoundingClientRect();
+  const x=(e.clientX-r.left)/r.width*100, y=(e.clientY-r.top)/r.height*100;
+  return [Math.max(0,Math.min(1,(x-BP)/BIN)), Math.max(0,Math.min(1,1-(y-BP)/BIN)), x, y]; }
+bezSvg.addEventListener("pointerdown",e=>{ const [,,x,y]=bezAt(e);
+  const d1=Math.hypot(x-bSX(S.bez[0]),y-bSY(S.bez[1])), d2=Math.hypot(x-bSX(S.bez[2]),y-bSY(S.bez[3]));
+  bezDrag=d1<=d2?0:2; bezSvg.setPointerCapture(e.pointerId); bezMove(e); });
+function bezMove(e){ if(bezDrag===null)return; const [ux,uy]=bezAt(e);
+  S.bez[bezDrag]=+ux.toFixed(3); S.bez[bezDrag+1]=+uy.toFixed(3);
+  if(!easeMod){ easeMod=true; refreshEaseLabels(); }   // first drag marks the preset as modified (asterisk)
+  bezUpdate(); }
+bezSvg.addEventListener("pointermove",bezMove);
+bezSvg.addEventListener("pointerup",()=>bezDrag=null);
+bezSvg.addEventListener("pointercancel",()=>bezDrag=null);
+bezInit(); applyEase(S.ease);   // sync chart + handles + dropdown label to the initial preset
+document.getElementById("text").addEventListener("input",e=>{ S.text=e.target.value; rebuild(false); });
+document.querySelectorAll("#shapes button").forEach(b=>{
+  b.addEventListener("click",()=>{ document.querySelectorAll("#shapes button").forEach(x=>x.classList.remove("on"));
+    b.classList.add("on"); S.shape=b.dataset.shape; revealed=true; draw(); }); });
+function toggle(tId,swId,key,after){ const tg=document.getElementById(tId), sw=document.getElementById(swId);
+  tg.addEventListener("click",()=>{ S[key]=!S[key]; sw.classList.toggle("on",S[key]); revealed=true; (after||draw)(); }); }
+toggle("randT","randSw","random"); toggle("rotT","rotSw","rot"); toggle("kernT","kernSw","kern",()=>rebuild(false));
+
+document.getElementById("play").addEventListener("click",()=>play("in"));
+document.getElementById("fade").addEventListener("click",()=>play("out"));
+document.getElementById("burst").addEventListener("click",()=>play("burst"));
+document.getElementById("shuffle").addEventListener("click",()=>{ S.seed=h32(S.seed*1664525+1013904223); rebuild(false); });
+
+function hexup(id,h){ document.getElementById(id).textContent=h.toUpperCase(); }
+document.getElementById("fg").addEventListener("input",e=>{ S.fg=e.target.value; hexup("fghex",e.target.value); revealed=true; draw(); });
+document.getElementById("bg").addEventListener("input",e=>{ S.bg=e.target.value; hexup("bghex",e.target.value); draw(); });
+document.getElementById("dl").addEventListener("click",()=>{ const a=document.createElement("a"); a.download="geist-pixel.png"; a.href=cv.toDataURL("image/png"); a.click(); });
+
+// view buttons + interactions
+document.getElementById("zoomin").addEventListener("click",()=>zoomAt(VW/2,VH/2,1.25));
+document.getElementById("zoomout").addEventListener("click",()=>zoomAt(VW/2,VH/2,0.8));
+document.getElementById("fit").addEventListener("click",fitView);
+stage.addEventListener("wheel",e=>{ e.preventDefault(); const r=stage.getBoundingClientRect();
+  zoomAt(e.clientX-r.left,e.clientY-r.top, Math.exp(-e.deltaY*0.0015)); },{passive:false});
+let drag=null;
+stage.addEventListener("pointerdown",e=>{ drag={x:e.clientX,y:e.clientY}; stage.classList.add("drag"); stage.setPointerCapture(e.pointerId); });
+stage.addEventListener("pointermove",e=>{ if(!drag)return; view.x+=e.clientX-drag.x; view.y+=e.clientY-drag.y; drag={x:e.clientX,y:e.clientY}; if(!anim.active) draw(); });
+stage.addEventListener("pointerup",()=>{ drag=null; stage.classList.remove("drag"); });
+stage.addEventListener("pointercancel",()=>{ drag=null; stage.classList.remove("drag"); });
+stage.addEventListener("dblclick",fitView);
+window.addEventListener("resize",()=>{ const wx=(VW/2-view.x)/view.scale, wy=(VH/2-view.y)/view.scale;
+  sizeCanvas(); view.x=VW/2-wx*view.scale; view.y=VH/2-wy*view.scale; draw(); });
+
+// ---------- collapsible sections + search ----------
+const secs=[...document.querySelectorAll(".sec")];
+const collapsed=new Set();
+secs.forEach(s=>{ const lab=s.querySelector(".lab");
+  lab.addEventListener("click",()=>{
+    s.classList.toggle("collapsed"); const on=s.classList.contains("collapsed");
+    if(on)collapsed.add(s); else collapsed.delete(s); lab.setAttribute("aria-expanded", String(!on)); });
+});
+const noresult=document.getElementById("noresult");
+document.getElementById("q").addEventListener("input",e=>{
+  const q=e.target.value.trim().toLowerCase();
+  if(!q){ secs.forEach(s=>{ s.style.display=""; s.querySelectorAll(".body > *").forEach(el=>el.style.display="");
+      const c=collapsed.has(s); s.classList.toggle("collapsed",c);
+      s.querySelector(".lab").setAttribute("aria-expanded",String(!c)); }); noresult.style.display="none"; return; }
+  let anyVisible=false;
+  secs.forEach(s=>{
+    const titleMatch=(s.dataset.title||"").toLowerCase().includes(q);
+    let any=false;
+    s.querySelectorAll(".body > *").forEach(el=>{
+      const kw=((el.dataset.kw||"")+" "+el.textContent).toLowerCase();
+      const m=titleMatch||kw.includes(q); el.style.display=m?"":"none"; if(m)any=true;
+    });
+    s.style.display=any?"":"none"; if(any){ s.classList.remove("collapsed"); s.querySelector(".lab").setAttribute("aria-expanded","true"); anyVisible=true; }
+  });
+  noresult.style.display=anyVisible?"none":"block";
+});
+
+// ---------- boot ----------
+function boot(){ sizeCanvas(); buildCells(); fitView(); }
+boot();
+</script>
+</body>
+</html>
