@@ -68,6 +68,9 @@
   .search svg{position:absolute;left:10px;top:50%;transform:translateY(-50%);width:13px;height:13px;color:var(--ink-3)}
   .noresult{font-size:12px;color:var(--ink-3);padding:18px 2px;display:none}
   #selHint{font-size:11.5px;color:var(--ink-3);line-height:1.55;padding:14px 2px 12px;margin:0}
+  #selInfo{display:none;align-items:baseline;justify-content:space-between;gap:8px;padding:12px 2px 10px}
+  #selInfo .n{font-size:12.5px;font-weight:500;color:var(--ink);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+  #selInfo .t{font-family:var(--mono);font-size:9px;letter-spacing:.08em;color:var(--ink-3);flex:none}
 
   .sec{border-top:1px solid var(--line)}
   .lab{width:100%;display:flex;align-items:center;justify-content:space-between;background:none;border:none;
@@ -204,23 +207,29 @@
       <input id="q" placeholder="Search settings" spellcheck="false" />
     </div>
     <div class="noresult" id="noresult">No matching settings.</div>
-    <p id="selHint">No layer selected. Click a layer to select it, drag to move (snapped to the cell grid), double-click text to edit it in place. Press T then click the canvas to type new text. Arrows nudge, ⌘D duplicates, Delete removes.</p>
+    <p id="selHint">Nothing selected. Click or drag-select layers on the canvas, drag to move (snapped to the cell grid), double-click text to edit it in place. Press T then click the canvas to type new text. Arrows nudge, ⌘D duplicates, Delete removes.</p>
+    <div id="selInfo"></div>
 
-    <section class="sec lsec" id="secText" data-title="text content">
-      <button class="lab" aria-expanded="true">Text<svg class="chev" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 9l6 6 6-6" stroke-linecap="round" stroke-linejoin="round"/></svg></button>
+    <section class="sec lsec" data-title="layout position x y size width kerning">
+      <button class="lab" aria-expanded="true">Layout<svg class="chev" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 9l6 6 6-6" stroke-linecap="round" stroke-linejoin="round"/></svg></button>
       <div class="body">
-        <textarea id="text" spellcheck="false" data-kw="text content words" style="margin-bottom:8px">Pixel</textarea>
-        <div class="toggle" id="kernT" data-kw="kerning spacing"><span>Apply kerning</span><div class="sw on" id="kernSw"></div></div>
+        <div class="ctrl posrow" data-kw="position x y top left corner move">
+          <div class="pf"><span>X</span><input type="number" id="posx" step="1" value="0" /></div>
+          <div class="pf"><span>Y</span><input type="number" id="posy" step="1" value="0" /></div>
+        </div>
+        <div class="ctrl" id="imgwWrap" data-kw="width resize cells size scale"><div class="top"><label>Width</label><span class="val" id="imgwv">48 cells</span></div>
+          <input type="range" id="imgw" min="8" max="200" step="1" value="48" /></div>
+        <div class="ctrl" data-kw="child size shape"><div class="top"><label>Child size</label><span class="val" id="childv">100%</span></div>
+          <input type="range" id="child" min="8" max="140" step="1" value="100" /></div>
+        <div class="toggle" id="kernT" data-kw="kerning spacing text"><span>Apply kerning</span><div class="sw on" id="kernSw"></div></div>
       </div>
     </section>
 
-    <section class="sec lsec" id="secImage" data-title="image import resize color brand palette">
+    <section class="sec lsec" id="secImage" data-title="image import color brand palette">
       <button class="lab" aria-expanded="true">Image<svg class="chev" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 9l6 6 6-6" stroke-linecap="round" stroke-linejoin="round"/></svg></button>
       <div class="body">
         <p class="imgnote" id="imgName" data-kw="image file name">No image</p>
         <button class="btn ghost" id="imgReplace" data-kw="replace image import file" style="margin-bottom:14px"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M4 12a8 8 0 0 1 13.6-5.7L20 8.5M20 12a8 8 0 0 1-13.6 5.7L4 15.5M20 4v4.5h-4.5M4 20v-4.5h4.5" stroke-linecap="round" stroke-linejoin="round"/></svg>Replace image</button>
-        <div class="ctrl" data-kw="width resize cells size scale"><div class="top"><label>Width</label><span class="val" id="imgwv">48 cells</span></div>
-          <input type="range" id="imgw" min="8" max="200" step="1" value="48" /></div>
         <div class="ctrl" data-kw="color mode monotone brand direction palette ink scholar daylight precision">
           <div class="top"><label>Colour</label></div>
           <select id="imgcolor">
@@ -233,18 +242,6 @@
         <div class="ctrl" id="threshWrap" data-kw="threshold darkness luminance stencil"><div class="top"><label>Threshold</label><span class="val" id="threshv">60%</span></div>
           <input type="range" id="thresh" min="0" max="100" step="1" value="60" /></div>
         <div class="toggle" id="invT" data-kw="invert light dark"><span>Invert (keep light pixels)</span><div class="sw" id="invSw"></div></div>
-      </div>
-    </section>
-
-    <section class="sec lsec" data-title="layout position x y size">
-      <button class="lab" aria-expanded="true">Layout<svg class="chev" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 9l6 6 6-6" stroke-linecap="round" stroke-linejoin="round"/></svg></button>
-      <div class="body">
-        <div class="ctrl posrow" data-kw="position x y top left corner move">
-          <div class="pf"><span>X</span><input type="number" id="posx" step="1" value="0" /></div>
-          <div class="pf"><span>Y</span><input type="number" id="posy" step="1" value="0" /></div>
-        </div>
-        <div class="ctrl" data-kw="child size shape"><div class="top"><label>Child size</label><span class="val" id="childv">100%</span></div>
-          <input type="range" id="child" min="8" max="140" step="1" value="100" /></div>
       </div>
     </section>
 
@@ -401,10 +398,14 @@ function h32(x){ x|=0; x=(x^61)^(x>>>16); x=x+(x<<3)|0; x=x^(x>>>4); x=Math.imul
 function hash(a,b,c){ return h32(Math.imul(a|0,374761393) ^ Math.imul(b|0,668265263) ^ Math.imul((c|0)+1,2246822519) ^ Math.imul(SEED|0,2654435761)); }
 function hash01(a,b,c){ return hash(a,b,c)/4294967296; }
 
-// ---------- layers ----------
+// ---------- layers + selection ----------
 const GLOB = { bg:"#f3f2ee" };
-let LAYERS=[], activeId=null, hoverId=null, layerN={text:0,image:0};
-function A(){ return LAYERS.find(l=>l.id===activeId) || null; }
+let LAYERS=[], SEL=[], hoverId=null, layerN={text:0,image:0};
+function selLayers(){ return SEL.map(id=>LAYERS.find(l=>l.id===id)).filter(Boolean); }
+function A(){ return selLayers()[0] || null; }
+function isSel(id){ return SEL.includes(id); }
+function setSel(ids){ SEL=[...new Set(ids)]; refreshPanel(); }
+function eachSel(fn){ for(const L of selLayers()) fn(L); }
 function newLayer(type){
   layerN[type]++;
   return {
@@ -742,10 +743,19 @@ function drawChrome(L,color,lw,withHandles,label){
 function drawOverlay(){
   ctx.setTransform(dpr,0,0,dpr,0,0); ctx.globalAlpha=1;
   const hov=LAYERS.find(l=>l.id===hoverId);
-  if(hov && hov.id!==activeId && hov.visible && hov.cells.length) drawChrome(hov,"rgba(224,83,59,.5)",1,false,true);
-  const L=A();
-  // resize handles only for image layers — text is fixed to the cell grid
-  if(L && L.visible && L.cells.length) drawChrome(L,ACCENT,1.4,L.type==="image",true);
+  if(hov && !isSel(hov.id) && hov.visible && hov.cells.length) drawChrome(hov,"rgba(224,83,59,.5)",1,false,true);
+  // resize handles only when a single image layer is selected — text is fixed to the grid
+  const single=SEL.length===1;
+  for(const L of selLayers()){
+    if(!L.visible||!L.cells.length) continue;
+    drawChrome(L,ACCENT,1.4,single&&L.type==="image",true);
+  }
+  if(gesture && gesture.mode==="marquee"){
+    const x=Math.min(gesture.x0,gesture.x1), y=Math.min(gesture.y0,gesture.y1);
+    const w=Math.abs(gesture.x1-gesture.x0), h=Math.abs(gesture.y1-gesture.y0);
+    ctx.fillStyle="rgba(224,83,59,.07)"; ctx.fillRect(x,y,w,h);
+    ctx.strokeStyle=ACCENT; ctx.lineWidth=1; ctx.strokeRect(x,y,w,h);
+  }
 }
 function draw(now){
   if(now===undefined) now=performance.now();
@@ -775,7 +785,7 @@ function renderLayerList(){
   // topmost layer first in the list (last drawn = on top)
   [...LAYERS].reverse().forEach(L=>{
     const row=document.createElement("div");
-    row.className="lrow"+(L.id===activeId?" active":"")+(L.visible?"":" hiddenL");
+    row.className="lrow"+(isSel(L.id)?" active":"")+(L.visible?"":" hiddenL");
     row.dataset.id=L.id;
     row.innerHTML=
       '<span class="lico">'+(L.type==="text"?TXTI:IMGI)+'</span>'+
@@ -798,10 +808,11 @@ function renderLayerList(){
     row.querySelector(".leye").addEventListener("click",e=>{ e.stopPropagation(); L.visible=!L.visible; renderLayerList(); draw(); });
     row.querySelector(".lplay").addEventListener("click",e=>{ e.stopPropagation(); play(L,"in"); });
     row.querySelector(".ldel").addEventListener("click",e=>{ e.stopPropagation(); deleteLayer(L.id); });
-    // select on press; drag vertically to reorder (Figma-style)
+    // select on press (shift toggles into the selection); drag vertically to reorder
     row.addEventListener("pointerdown",e=>{
       if(e.target.closest(".lbtn") || e.target.isContentEditable) return;
-      if(activeId!==L.id){ activeId=L.id; refreshPanel(); draw(); }
+      if(e.shiftKey){ setSel(isSel(L.id) ? SEL.filter(id=>id!==L.id) : [...SEL,L.id]); draw(); }
+      else if(!isSel(L.id) || SEL.length>1){ setSel([L.id]); draw(); }
       rowDrag={id:L.id,startY:e.clientY,started:false,toIdx:null};
     });
     layerList.appendChild(row);
@@ -836,16 +847,22 @@ document.addEventListener("pointerup",()=>{
 });
 
 function addLayer(L,fit){
-  LAYERS.push(L); activeId=L.id;
-  buildLayer(L); refreshPanel();
+  LAYERS.push(L); buildLayer(L); setSel([L.id]);
   if(fit) fitView(); else draw();
 }
 function deleteLayer(id){
   const i=LAYERS.findIndex(l=>l.id===id); if(i<0) return;
   LAYERS.splice(i,1);
-  if(activeId===id) activeId=LAYERS.length?LAYERS[Math.min(i,LAYERS.length-1)].id:null;
+  let sel=SEL.filter(s=>s!==id);
+  if(!sel.length && LAYERS.length) sel=[LAYERS[Math.min(i,LAYERS.length-1)].id];
   if(hoverId===id) hoverId=null;
-  refreshPanel(); draw();
+  setSel(sel); draw();
+}
+function deleteSel(){
+  const ids=[...SEL];
+  for(const id of ids){ const i=LAYERS.findIndex(l=>l.id===id); if(i>=0) LAYERS.splice(i,1); }
+  if(hoverId && !LAYERS.some(l=>l.id===hoverId)) hoverId=null;
+  setSel([]); draw();
 }
 function belowPrev(L){
   const prev=LAYERS[LAYERS.length-1];
@@ -880,25 +897,28 @@ imgFile.addEventListener("change",()=>{
 function setVal(id,v){ const el=document.getElementById(id); if(el.value!==String(v)) el.value=v; }
 function range(id,key,fmt,scale,onchange){
   const el=document.getElementById(id), out=document.getElementById(id+"v");
-  el.addEventListener("input",()=>{ const L=A(); if(!L) return;
-    L[key]=scale?scale(+el.value):+el.value; out.textContent=fmt(el.value); L.revealed=true;
-    (onchange||(()=>draw()))(L);
+  el.addEventListener("input",()=>{ const ls=selLayers(); if(!ls.length) return;
+    for(const L of ls){ L[key]=scale?scale(+el.value):+el.value; L.revealed=true;
+      (onchange||(()=>{}))(L); }
+    out.textContent=fmt(el.value); draw();
   });
   return {sync:L=>{ const raw=scale?Math.round(L[key]*(id==="lrand"||id==="startop"?100:1)):L[key];
     setVal(id,raw); out.textContent=fmt(raw); }};
 }
-const reorder=L=>{ if(!L.anim.active){ computeOrders(L); } draw(); };
-const rebuildL=L=>{ if(!L.anim.active){ buildLayer(L); } draw(); };
+const reorder=L=>{ if(!L.anim.active){ computeOrders(L); } };
+const rebuildL=L=>{ if(!L.anim.active){ buildLayer(L); } };
 const SYNCS=[];
 SYNCS.push(range("child","child",v=>v+"%"));
 // X/Y position fields: top-left corner of the layer's bounds, in grid cells
 const posX=document.getElementById("posx"), posY=document.getElementById("posy");
 function syncPos(L){ posX.value=L.bb.minGX+L.ox; posY.value=L.bb.minGY+L.oy; }
 SYNCS.push({sync:syncPos});
-posX.addEventListener("change",()=>{ const L=A(); if(!L) return;
-  L.ox=Math.round(+posX.value||0)-L.bb.minGX; L.revealed=true; syncPos(L); draw(); });
-posY.addEventListener("change",()=>{ const L=A(); if(!L) return;
-  L.oy=Math.round(+posY.value||0)-L.bb.minGY; L.revealed=true; syncPos(L); draw(); });
+posX.addEventListener("change",()=>{ const ls=selLayers(); if(!ls.length) return;
+  for(const L of ls){ L.ox=Math.round(+posX.value||0)-L.bb.minGX; L.revealed=true; }
+  syncPos(A()); draw(); });
+posY.addEventListener("change",()=>{ const ls=selLayers(); if(!ls.length) return;
+  for(const L of ls){ L.oy=Math.round(+posY.value||0)-L.bb.minGY; L.revealed=true; }
+  syncPos(A()); draw(); });
 SYNCS.push(range("dur","dur",v=>v+"ms",null,()=>{}));
 SYNCS.push(range("lrand","lrand",v=>v+"%",v=>v/100,reorder));
 SYNCS.push(range("shuf","shuf",v=>v));
@@ -910,12 +930,11 @@ SYNCS.push(range("imgw","imgW",v=>v+" cells",null,rebuildL));
 SYNCS.push(range("thresh","thresh",v=>v+"%",null,rebuildL));
 function syncSliders(L){ for(const s of SYNCS) s.sync(L); }
 
-document.getElementById("dir").addEventListener("change",e=>{ const L=A(); if(!L) return;
-  L.dir=e.target.value; L.revealed=true; reorder(L); });
-document.getElementById("imgcolor").addEventListener("change",e=>{ const L=A(); if(!L) return;
-  L.colorMode=e.target.value; L.revealed=true; syncImgUI(L); rebuildL(L); });
-document.getElementById("text").addEventListener("input",e=>{ const L=A(); if(!L||L.type!=="text") return;
-  L.text=e.target.value; L.revealed=true; buildLayer(L); draw(); });
+document.getElementById("dir").addEventListener("change",e=>{ if(!SEL.length) return;
+  eachSel(L=>{ L.dir=e.target.value; L.revealed=true; reorder(L); }); draw(); });
+document.getElementById("imgcolor").addEventListener("change",e=>{ if(!SEL.length) return;
+  eachSel(L=>{ if(L.type!=="image") return; L.colorMode=e.target.value; L.revealed=true; rebuildL(L); });
+  if(A()) syncImgUI(A()); draw(); });
 
 // ---------- easing dropdown + curve chart (per layer) ----------
 const EASE_LABELS={linear:"Linear",in:"Ease in",out:"Ease out",inout:"Ease in-out",inmidout:"Ease in-mid-out",expo:"Expo out",custom:"Custom curve"};
@@ -926,8 +945,9 @@ function refreshEaseLabels(){ const L=A(); if(!L) return;
   [...easeList.children].forEach(b=>{ const on=b.dataset.v===L.ease;
     b.classList.toggle("sel",on); b.textContent=EASE_LABELS[b.dataset.v]+((on&&L.easeMod)?" *":""); });
 }
-function applyEase(name){ const L=A(); if(!L) return;
-  L.ease=name; L.bez=PRESET_BEZ[name].slice(); L.easeMod=false; refreshEaseLabels(); bezUpdate(); }
+function applyEase(name){ if(!SEL.length) return;
+  eachSel(L=>{ L.ease=name; L.bez=PRESET_BEZ[name].slice(); L.easeMod=false; });
+  refreshEaseLabels(); bezUpdate(); }
 easeBtn.addEventListener("click",()=>easeList.classList.toggle("open"));
 easeList.addEventListener("click",e=>{ const b=e.target.closest("button[data-v]"); if(!b) return;
   applyEase(b.dataset.v); easeList.classList.remove("open"); });
@@ -965,7 +985,8 @@ bezSvg.addEventListener("pointerdown",e=>{ const L=A(); if(!L) return; const [,,
   bezDrag=d1<=d2?0:2; try{ bezSvg.setPointerCapture(e.pointerId); }catch(_){} bezMove(e); });
 function bezMove(e){ const L=A(); if(bezDrag===null||!L)return; const [ux,uy]=bezAt(e);
   L.bez[bezDrag]=+ux.toFixed(3); L.bez[bezDrag+1]=+uy.toFixed(3);
-  if(!L.easeMod){ L.easeMod=true; refreshEaseLabels(); }
+  eachSel(l=>{ l.bez=L.bez.slice(); l.ease=L.ease; l.easeMod=true; });   // dragged curve applies to the whole selection
+  refreshEaseLabels();
   bezUpdate(); }
 bezSvg.addEventListener("pointermove",bezMove);
 bezSvg.addEventListener("pointerup",()=>bezDrag=null);
@@ -974,51 +995,65 @@ bezInit();
 
 // ---------- shape seg, toggles, colours, buttons ----------
 document.querySelectorAll("#shapes button").forEach(b=>{
-  b.addEventListener("click",()=>{ const L=A(); if(!L) return;
+  b.addEventListener("click",()=>{ if(!SEL.length) return;
     document.querySelectorAll("#shapes button").forEach(x=>x.classList.remove("on"));
-    b.classList.add("on"); L.shape=b.dataset.shape; L.revealed=true; draw(); }); });
+    b.classList.add("on"); eachSel(L=>{ L.shape=b.dataset.shape; L.revealed=true; }); draw(); }); });
 function toggle(tId,swId,key,after){ const tg=document.getElementById(tId), sw=document.getElementById(swId);
-  tg.addEventListener("click",()=>{ const L=A(); if(!L) return;
-    L[key]=!L[key]; sw.classList.toggle("on",L[key]); L.revealed=true; (after||(()=>draw()))(L); }); }
+  tg.addEventListener("click",()=>{ const P=A(); if(!P) return;
+    const v=!P[key];
+    eachSel(L=>{ L[key]=v; L.revealed=true; (after||(()=>{}))(L); });
+    sw.classList.toggle("on",v); draw(); }); }
 toggle("randT","randSw","random"); toggle("rotT","rotSw","rot");
-toggle("kernT","kernSw","kern",L=>{ if(L.type==="text"){ buildLayer(L); } draw(); });
-toggle("invT","invSw","invert",rebuildL);
+toggle("kernT","kernSw","kern",L=>{ if(L.type==="text") buildLayer(L); });
+toggle("invT","invSw","invert",L=>{ if(L.type==="image") rebuildL(L); });
 
-document.getElementById("play").addEventListener("click",()=>play(A(),"in"));
-document.getElementById("fade").addEventListener("click",()=>play(A(),"out"));
-document.getElementById("burst").addEventListener("click",()=>play(A(),"burst"));
+function playSel(mode){ eachSel(L=>play(L,mode)); }
+document.getElementById("play").addEventListener("click",()=>playSel("in"));
+document.getElementById("fade").addEventListener("click",()=>playSel("out"));
+document.getElementById("burst").addEventListener("click",()=>playSel("burst"));
 document.getElementById("playAll").addEventListener("click",()=>{ for(const L of LAYERS) if(L.visible) play(L,"in"); });
-document.getElementById("shuffle").addEventListener("click",()=>{ const L=A(); if(!L) return;
-  L.seed=h32(L.seed*1664525+1013904223); L.revealed=true; buildLayer(L); draw(); });
+document.getElementById("shuffle").addEventListener("click",()=>{ if(!SEL.length) return;
+  eachSel(L=>{ L.seed=h32(L.seed*1664525+1013904223); L.revealed=true; buildLayer(L); }); draw(); });
 
 function hexup(id,h){ document.getElementById(id).textContent=h.toUpperCase(); }
-document.getElementById("fg").addEventListener("input",e=>{ const L=A(); if(!L) return;
-  L.fg=e.target.value; hexup("fghex",e.target.value); L.revealed=true; draw(); });
+document.getElementById("fg").addEventListener("input",e=>{ if(!SEL.length) return;
+  eachSel(L=>{ L.fg=e.target.value; L.revealed=true; }); hexup("fghex",e.target.value); draw(); });
 document.getElementById("bg").addEventListener("input",e=>{ GLOB.bg=e.target.value; hexup("bghex",e.target.value); draw(); });
 document.getElementById("dl").addEventListener("click",()=>{ const a=document.createElement("a"); a.download="geist-pixel.png"; a.href=cv.toDataURL("image/png"); a.click(); });
 
 // ---------- panel sync ----------
-const secText=document.getElementById("secText"), secImage=document.getElementById("secImage");
-const selHint=document.getElementById("selHint");
+const secImage=document.getElementById("secImage");
+const selHint=document.getElementById("selHint"), selInfo=document.getElementById("selInfo");
+function allType(t){ const ls=selLayers(); return ls.length>0 && ls.every(l=>l.type===t); }
 function syncImgUI(L){
   const mono=L.colorMode==="mono";
   document.getElementById("threshWrap").style.display=mono?"":"none";
   document.getElementById("invT").style.display=mono?"":"none";
 }
-function typeAllowed(s){ const L=A();
-  if(s===secText) return !!L&&L.type==="text";
-  if(s===secImage) return !!L&&L.type==="image";
-  if(s.classList.contains("lsec")) return !!L;
+// element-level visibility that depends on the selection's layer types
+function syncCtlVis(){
+  document.getElementById("imgwWrap").style.display=allType("image")?"":"none";
+  document.getElementById("kernT").style.display=allType("text")?"":"none";
+}
+function typeAllowed(s){
+  if(s===secImage) return allType("image");
+  if(s.classList.contains("lsec")) return SEL.length>0;
   return true; }
 function applySecVis(){ for(const s of secs){ s.style.display=typeAllowed(s)?"":"none"; } }
 function refreshPanel(){
   renderLayerList();
   const L=A();
   selHint.style.display=L?"none":"";
+  if(L){
+    selInfo.style.display="flex";
+    selInfo.innerHTML='<span class="n"></span><span class="t"></span>';
+    selInfo.querySelector(".n").textContent=SEL.length>1?SEL.length+" layers selected":L.name;
+    selInfo.querySelector(".t").textContent=SEL.length>1?"BATCH":(L.type==="text"?"TEXT":"IMAGE");
+  } else selInfo.style.display="none";
   const q=document.getElementById("q");
   if(q.value.trim()) applyFilter(q.value); else applySecVis();
   if(!L) return;
-  if(L.type==="text") document.getElementById("text").value=L.text;
+  syncCtlVis();
   if(L.type==="image"){
     document.getElementById("imgName").textContent=L.imgName||"No image";
     setVal("imgcolor",L.colorMode); syncImgUI(L);
@@ -1046,6 +1081,7 @@ function hitLayer(px,py){
   return null;
 }
 function hitHandle(px,py){
+  if(SEL.length!==1) return null;
   const L=A(); if(!L||L.type!=="image"||!L.visible||!L.cells.length) return null;
   const hs=selHandles(L);
   for(let i=0;i<4;i++){ if(Math.abs(px-hs[i][0])<=6&&Math.abs(py-hs[i][1])<=6) return {L,corner:i}; }
@@ -1060,10 +1096,14 @@ stage.addEventListener("pointerdown",e=>{
     const wx=(px-view.x)/view.scale, wy=(py-view.y)/view.scale;
     const L=newLayer("text"); L.text="";
     L.ox=Math.round(wx/CELL); L.oy=Math.round(wy/CELL);
-    LAYERS.push(L); activeId=L.id; buildLayer(L); refreshPanel(); draw();
+    LAYERS.push(L); buildLayer(L); setSel([L.id]); draw();
     setTool("select");
     setTimeout(()=>startEdit(L),0);   // focus after the click settles
     return;
+  }
+  if(spaceDown || e.button===1){   // space+drag or middle mouse pans
+    gesture={mode:"pan",x:e.clientX,y:e.clientY,moved:false};
+    stage.classList.add("pan"); return;
   }
   const h=(e.button===0)?hitHandle(px,py):null;
   if(h){
@@ -1075,12 +1115,15 @@ stage.addEventListener("pointerdown",e=>{
   }
   const hit=(e.button===0)?hitLayer(px,py):null;
   if(hit){
-    if(activeId!==hit.id){ activeId=hit.id; refreshPanel(); }
-    gesture={mode:"move",L:hit,startX:e.clientX,startY:e.clientY,startOx:hit.ox,startOy:hit.oy};
+    if(e.shiftKey) setSel(isSel(hit.id) ? SEL.filter(id=>id!==hit.id) : [...SEL,hit.id]);
+    else if(!isSel(hit.id)) setSel([hit.id]);
+    // dragging any selected layer moves the whole selection together
+    gesture={mode:"move",startX:e.clientX,startY:e.clientY,
+      starts:selLayers().map(L=>({L,ox:L.ox,oy:L.oy}))};
     stage.classList.add("movel"); draw(); return;
   }
-  gesture={mode:"pan",x:e.clientX,y:e.clientY,moved:false};
-  stage.classList.add("pan");
+  // empty canvas: drag = marquee select (Figma); a plain click deselects on pointerup
+  gesture={mode:"marquee",x0:px,y0:py,x1:px,y1:py,moved:false,additive:e.shiftKey,base:e.shiftKey?[...SEL]:[]};
 });
 stage.addEventListener("pointermove",e=>{
   if(!gesture){
@@ -1094,11 +1137,27 @@ stage.addEventListener("pointermove",e=>{
     userView=true; gesture.moved=gesture.moved||Math.hypot(e.clientX-gesture.x,e.clientY-gesture.y)>3;
     view.x+=e.clientX-gesture.x; view.y+=e.clientY-gesture.y; gesture.x=e.clientX; gesture.y=e.clientY;
     if(!rafOn) draw();
+  } else if(gesture.mode==="marquee"){
+    const [px,py]=stagePt(e);
+    gesture.x1=px; gesture.y1=py;
+    gesture.moved=gesture.moved||Math.hypot(px-gesture.x0,py-gesture.y0)>3;
+    if(gesture.moved){
+      const mx0=Math.min(gesture.x0,px), mx1=Math.max(gesture.x0,px);
+      const my0=Math.min(gesture.y0,py), my1=Math.max(gesture.y0,py);
+      const ids=[];
+      for(let i=LAYERS.length-1;i>=0;i--){ const L=LAYERS[i];
+        if(!L.visible||!L.cells.length) continue;
+        const r=layerScreenRect(L);
+        if(r.x<mx1 && r.x+r.w>mx0 && r.y<my1 && r.y+r.h>my0) ids.push(L.id);
+      }
+      SEL=[...new Set([...gesture.base,...ids])];   // live update; panel refreshes on release
+    }
+    if(!rafOn) draw();
   } else if(gesture.mode==="move"){
-    const L=gesture.L;
-    L.ox=gesture.startOx+Math.round((e.clientX-gesture.startX)/view.scale/CELL);
-    L.oy=gesture.startOy+Math.round((e.clientY-gesture.startY)/view.scale/CELL);
-    syncSliders(L);
+    const dx=Math.round((e.clientX-gesture.startX)/view.scale/CELL);
+    const dy=Math.round((e.clientY-gesture.startY)/view.scale/CELL);
+    for(const s of gesture.starts){ s.L.ox=s.ox+dx; s.L.oy=s.oy+dy; }
+    if(A()) syncSliders(A());
     if(!rafOn) draw();
   } else if(gesture.mode==="resize"){
     const [px,py]=stagePt(e), g=gesture, L=g.L;
@@ -1120,8 +1179,10 @@ stage.addEventListener("pointermove",e=>{
 });
 function endGesture(e){
   if(!gesture) return;
-  if(gesture.mode==="pan" && !gesture.moved && e && e.type==="pointerup"){
-    if(activeId!==null){ activeId=null; refreshPanel(); }   // click empty canvas = deselect
+  if(gesture.mode==="marquee" && e && e.type==="pointerup"){
+    if(!gesture.moved && !gesture.additive && SEL.length){ gesture=null; setSel([]); stage.classList.remove("pan","movel","resz"); draw(); return; }
+    const keep=[...SEL]; gesture=null; setSel(keep);   // finalize live selection into the panel
+    stage.classList.remove("pan","movel","resz"); draw(); return;
   }
   gesture=null;
   stage.classList.remove("pan","movel","resz");
@@ -1133,7 +1194,7 @@ stage.addEventListener("pointerleave",()=>{ if(!gesture && hoverId!==null){ hove
 stage.addEventListener("dblclick",e=>{
   const [px,py]=stagePt(e);
   const hit=hitLayer(px,py);
-  if(hit && hit.type==="text"){ if(activeId!==hit.id){ activeId=hit.id; refreshPanel(); } startEdit(hit); }
+  if(hit && hit.type==="text"){ setSel([hit.id]); startEdit(hit); }
   else if(!hit) fitView();
 });
 // Figma trackpad semantics: two-finger scroll pans; pinch (browsers report it as
@@ -1150,8 +1211,8 @@ stage.addEventListener("wheel",e=>{ e.preventDefault();
 },{passive:false});
 
 // ---------- tools ----------
-let tool="select";
-function setTool(t){ tool=t; stage.style.cursor = t==="text" ? "text" : ""; }
+let tool="select", spaceDown=false;
+function setTool(t){ tool=t; stage.style.cursor = t==="text" ? "text" : (spaceDown ? "grab" : ""); }
 
 // ---------- inline text editing on the canvas ----------
 const inlineEd=document.getElementById("inlineEdit");
@@ -1184,7 +1245,6 @@ inlineEd.addEventListener("input",()=>{
   if(!editLayer) return;
   editLayer.text=inlineEd.value; editLayer.revealed=true;
   buildLayer(editLayer);
-  if(editLayer.id===activeId) document.getElementById("text").value=editLayer.text;
   positionEd(); draw();
 });
 inlineEd.addEventListener("keydown",e=>{
@@ -1208,26 +1268,32 @@ function editing(){ const el=document.activeElement;
   return el && (el.tagName==="INPUT"||el.tagName==="TEXTAREA"||el.tagName==="SELECT"||el.isContentEditable); }
 document.addEventListener("keydown",e=>{
   if(editing()) return;
+  if(e.key===" " && !spaceDown){ e.preventDefault(); spaceDown=true; setTool(tool); return; }
   const L=A();
   if((e.key==="t"||e.key==="T") && !e.metaKey && !e.ctrlKey){ setTool("text"); return; }
   if((e.key==="v"||e.key==="V") && !e.metaKey && !e.ctrlKey){ setTool("select"); return; }
   if(e.key==="Escape" && tool!=="select"){ setTool("select"); return; }
-  if((e.key==="Delete"||e.key==="Backspace") && L){ e.preventDefault(); deleteLayer(L.id); return; }
-  if(e.key==="Escape" && L){ activeId=null; refreshPanel(); draw(); return; }
+  if((e.key==="Delete"||e.key==="Backspace") && L){ e.preventDefault(); deleteSel(); return; }
+  if(e.key==="Escape" && L){ setSel([]); draw(); return; }
   if((e.metaKey||e.ctrlKey) && (e.key==="d"||e.key==="D")){ if(L){ e.preventDefault();
-    const i=LAYERS.indexOf(L); const c=cloneLayer(L); LAYERS.splice(i+1,0,c); activeId=c.id;
-    buildLayer(c); refreshPanel(); draw(); } return; }
+    const copies=selLayers().map(cloneLayer);
+    for(const c of copies){ LAYERS.push(c); buildLayer(c); }
+    setSel(copies.map(c=>c.id)); draw(); } return; }
   if(e.shiftKey && e.key==="!"){ e.preventDefault(); fitView(); return; }   // Shift+1 = fit
   if(e.key==="+"||e.key==="="){ zoomAt(VW/2,VH/2,1.25); return; }
   if(e.key==="-"){ zoomAt(VW/2,VH/2,0.8); return; }
   if(L && ["ArrowLeft","ArrowRight","ArrowUp","ArrowDown"].includes(e.key)){
     e.preventDefault();
     const step=e.shiftKey?10:1;
-    if(e.key==="ArrowLeft")L.ox-=step; if(e.key==="ArrowRight")L.ox+=step;
-    if(e.key==="ArrowUp")L.oy-=step; if(e.key==="ArrowDown")L.oy+=step;
-    L.revealed=true; syncSliders(L); draw();
+    eachSel(l=>{
+      if(e.key==="ArrowLeft")l.ox-=step; if(e.key==="ArrowRight")l.ox+=step;
+      if(e.key==="ArrowUp")l.oy-=step; if(e.key==="ArrowDown")l.oy+=step;
+      l.revealed=true;
+    });
+    syncSliders(L); draw();
   }
 });
+document.addEventListener("keyup",e=>{ if(e.key===" "){ spaceDown=false; setTool(tool); } });
 
 // ---------- collapsible sections + search ----------
 const secs=[...document.querySelectorAll("#rightP .sec")];
@@ -1244,7 +1310,8 @@ function applyFilter(qraw){
       const c=collapsed.has(s); s.classList.toggle("collapsed",c);
       s.querySelector(".lab").setAttribute("aria-expanded",String(!c)); });
     applySecVis();
-    const L=A(); if(L&&L.type==="image") syncImgUI(L);
+    const L=A();
+    if(L){ syncCtlVis(); if(L.type==="image") syncImgUI(L); }
     noresult.style.display="none"; return; }
   let anyVisible=false;
   secs.forEach(s=>{
@@ -1265,8 +1332,7 @@ document.getElementById("q").addEventListener("input",e=>applyFilter(e.target.va
 function boot(){
   sizeCanvas();
   const L=newLayer("text");
-  LAYERS.push(L); activeId=L.id;
-  buildLayer(L); refreshPanel(); fitView();
+  LAYERS.push(L); buildLayer(L); setSel([L.id]); fitView();
 }
 boot();
 </script>
