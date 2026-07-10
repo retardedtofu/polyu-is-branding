@@ -146,6 +146,18 @@
   .swatch input{position:absolute;inset:-4px;width:140%;height:160%;cursor:pointer;border:none;padding:0;background:none}
   .imgnote{font-size:11px;color:var(--ink-3);margin:0 0 12px;line-height:1.5;font-family:var(--mono);
     white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+  .posrow{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+  .posrow .pf{display:flex;align-items:center;gap:7px;border:1px solid var(--line-2);border-radius:3px;padding:0 9px}
+  .posrow .pf:focus-within{border-color:var(--ink)}
+  .posrow .pf span{font-size:10px;color:var(--ink-3);flex:none}
+  .posrow input{width:100%;min-width:0;border:none;background:transparent;font-family:var(--mono);font-size:12px;
+    padding:8px 0;color:var(--ink);-moz-appearance:textfield}
+  .posrow input::-webkit-outer-spin-button,.posrow input::-webkit-inner-spin-button{-webkit-appearance:none;margin:0}
+  .posrow input:focus{outline:none}
+  #inlineEdit{position:absolute;display:none;z-index:20;width:200px;min-height:40px;background:var(--panel);
+    border:1px solid var(--accent);border-radius:3px;padding:8px 10px;font-family:var(--mono);font-size:13px;
+    line-height:1.5;color:var(--ink);resize:none;box-shadow:0 6px 20px rgba(0,0,0,.12)}
+  #inlineEdit:focus{outline:none}
 
   /* ---------- stage ---------- */
   #stage{flex:1;height:100vh;position:relative;overflow:hidden;cursor:default;min-width:0}
@@ -177,6 +189,7 @@
 
   <main id="stage">
     <canvas id="cv"></canvas>
+    <textarea id="inlineEdit" spellcheck="false" placeholder="Type…"></textarea>
     <div class="hud" id="hud"></div>
     <div class="viewbtns">
       <button id="zoomout" title="Zoom out (−)">−</button>
@@ -191,7 +204,7 @@
       <input id="q" placeholder="Search settings" spellcheck="false" />
     </div>
     <div class="noresult" id="noresult">No matching settings.</div>
-    <p id="selHint">No layer selected. Click a layer on the canvas or in the list — drag to move it, use the corner handles to resize. Arrows nudge, ⌘D duplicates, Delete removes.</p>
+    <p id="selHint">No layer selected. Click a layer to select it, drag to move (snapped to the cell grid), double-click text to edit it in place. Press T then click the canvas to type new text. Arrows nudge, ⌘D duplicates, Delete removes.</p>
 
     <section class="sec lsec" id="secText" data-title="text content">
       <button class="lab" aria-expanded="true">Text<svg class="chev" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 9l6 6 6-6" stroke-linecap="round" stroke-linejoin="round"/></svg></button>
@@ -223,17 +236,15 @@
       </div>
     </section>
 
-    <section class="sec lsec" data-title="grid size pixel position offset">
-      <button class="lab" aria-expanded="true">Grid<svg class="chev" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 9l6 6 6-6" stroke-linecap="round" stroke-linejoin="round"/></svg></button>
+    <section class="sec lsec" data-title="layout position x y size">
+      <button class="lab" aria-expanded="true">Layout<svg class="chev" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 9l6 6 6-6" stroke-linecap="round" stroke-linejoin="round"/></svg></button>
       <div class="body">
-        <div class="ctrl" data-kw="container size cell"><div class="top"><label>Container size</label><span class="val" id="cellv">22</span></div>
-          <input type="range" id="cell" min="3" max="64" step="1" value="22" /></div>
+        <div class="ctrl posrow" data-kw="position x y top left corner move">
+          <div class="pf"><span>X</span><input type="number" id="posx" step="1" value="0" /></div>
+          <div class="pf"><span>Y</span><input type="number" id="posy" step="1" value="0" /></div>
+        </div>
         <div class="ctrl" data-kw="child size shape"><div class="top"><label>Child size</label><span class="val" id="childv">100%</span></div>
           <input type="range" id="child" min="8" max="140" step="1" value="100" /></div>
-        <div class="ctrl" data-kw="offset x position move horizontal"><div class="top"><label>Offset X</label><span class="val" id="oxv">0</span></div>
-          <input type="range" id="ox" min="-120" max="120" step="1" value="0" /></div>
-        <div class="ctrl" data-kw="offset y position move vertical"><div class="top"><label>Offset Y</label><span class="val" id="oyv">0</span></div>
-          <input type="range" id="oy" min="-120" max="120" step="1" value="0" /></div>
       </div>
     </section>
 
@@ -338,6 +349,7 @@ const C2G = F.char2glyph, G = F.glyphs, KERN = F.kern;
 const SHAPES = ["circle","square","triangle","quarter"];
 const LF = 0.42;   // per-pixel reveal window as a fraction of total progress
 const ACCENT = "#e0533b";
+const CELL = 22;   // shared grid pitch in world px — every layer sits on this one grid
 
 // brand direction palettes, lifted from the lab site (lab.js PAL). `cols` are the
 // family colours an image is quantised to; `paper` is the background reference —
@@ -402,8 +414,8 @@ function newLayer(type){
     // content
     text:"Pixel", kern:true,
     img:null, imgName:"", imgW:48, colorMode:"mono", thresh:60, invert:false,
-    // grid & position (offsets are in this layer's grid cells)
-    cell:22, child:100, ox:0, oy:0,
+    // position (grid-cell offsets on the shared grid) + child scale
+    child:100, ox:0, oy:0,
     // final shape + colour
     shape:"circle", random:false, rot:false, fg:"#1a1a17",
     // animation
@@ -412,13 +424,13 @@ function newLayer(type){
     // noise
     noise:0, nmarg:6,
     // caches + per-layer animation state
-    cells:[], noiseCells:[], occ:new Set(), bb:{minGX:0,maxGX:0,minGY:0,maxGY:0,w:1,h:1},
+    cells:[], noiseCells:[], bb:{minGX:0,maxGX:0,minGY:0,maxGY:0,w:1,h:1},
     anim:{active:false, mode:null, start:0}
   };
 }
 function cloneLayer(L){
   const c=newLayer(L.type);
-  for(const k of ["text","kern","img","imgName","imgW","colorMode","thresh","invert","cell","child",
+  for(const k of ["text","kern","img","imgName","imgW","colorMode","thresh","invert","child",
     "shape","random","rot","fg","dur","dir","lrand","shuf","ease","easeMod","startop","travel","noise","nmarg"]) c[k]=L[k];
   c.bez=L.bez.slice(); c.ox=L.ox+2; c.oy=L.oy+2;
   c.name=(L.name+" copy").slice(0,40);
@@ -430,9 +442,7 @@ function buildLayer(L){
   SEED=L.seed;
   if(L.type==="text") buildTextCells(L); else buildImageCells(L);
   let a=1e9,b=-1e9,c=1e9,d=-1e9;
-  L.occ=new Set();
-  for(const t of L.cells){ if(t.gx<a)a=t.gx; if(t.gx>b)b=t.gx; if(t.gy<c)c=t.gy; if(t.gy>d)d=t.gy;
-    L.occ.add(t.gx+","+t.gy); }
+  for(const t of L.cells){ if(t.gx<a)a=t.gx; if(t.gx>b)b=t.gx; if(t.gy<c)c=t.gy; if(t.gy>d)d=t.gy; }
   if(L.cells.length===0){a=0;b=0;c=0;d=0;}
   L.bb={minGX:a,maxGX:b,minGY:c,maxGY:d,w:Math.max(1,b-a),h:Math.max(1,d-c)};
   buildNoise(L);
@@ -559,8 +569,8 @@ function sizeCanvas(){ const r=stage.getBoundingClientRect(); VW=r.width; VH=r.h
   cv.width=Math.round(VW*dpr); cv.height=Math.round(VH*dpr); cv.style.width=VW+"px"; cv.style.height=VH+"px"; }
 function layerPxBox(L){
   const pad=(L.noise>0?L.nmarg:0)+L.travel;
-  const x0=(L.bb.minGX+L.ox-pad)*L.cell, x1=(L.bb.maxGX+L.ox+1+pad)*L.cell;
-  const y0=(L.bb.minGY+L.oy-pad)*L.cell, y1=(L.bb.maxGY+L.oy+1+pad)*L.cell;
+  const x0=(L.bb.minGX+L.ox-pad)*CELL, x1=(L.bb.maxGX+L.ox+1+pad)*CELL;
+  const y0=(L.bb.minGY+L.oy-pad)*CELL, y1=(L.bb.maxGY+L.oy+1+pad)*CELL;
   return {x0,y0,x1,y1};
 }
 function contentPxBox(){
@@ -617,7 +627,7 @@ function drawLayer(L,now){
   SEED=L.seed;
   const a=L.anim, animating=a.active, mode=a.mode;
   const t=animating? now-a.start : 0;
-  const cell=L.cell, base=(L.child/100)*cell, OX=L.ox, OY=L.oy;
+  const cell=CELL, base=(L.child/100)*cell, OX=L.ox, OY=L.oy;
   const D=animating?a.dur:L.dur, NS=animating?a.shuf:L.shuf;
   const g=animating?Math.max(0,Math.min(1,t/D)):1;
   const easeName=animating?a.ease:L.ease, bez=animating?a.bez:L.bez;
@@ -706,8 +716,8 @@ function drawLayer(L,now){
 }
 // selection / hover chrome, drawn in screen space so line weights stay constant
 function layerWorldRect(L){
-  return {x:(L.bb.minGX+L.ox)*L.cell, y:(L.bb.minGY+L.oy)*L.cell,
-          w:(L.bb.maxGX-L.bb.minGX+1)*L.cell, h:(L.bb.maxGY-L.bb.minGY+1)*L.cell};
+  return {x:(L.bb.minGX+L.ox)*CELL, y:(L.bb.minGY+L.oy)*CELL,
+          w:(L.bb.maxGX-L.bb.minGX+1)*CELL, h:(L.bb.maxGY-L.bb.minGY+1)*CELL};
 }
 function layerScreenRect(L){
   const r=layerWorldRect(L);
@@ -734,7 +744,8 @@ function drawOverlay(){
   const hov=LAYERS.find(l=>l.id===hoverId);
   if(hov && hov.id!==activeId && hov.visible && hov.cells.length) drawChrome(hov,"rgba(224,83,59,.5)",1,false,true);
   const L=A();
-  if(L && L.visible && L.cells.length) drawChrome(L,ACCENT,1.4,true,true);
+  // resize handles only for image layers — text is fixed to the cell grid
+  if(L && L.visible && L.cells.length) drawChrome(L,ACCENT,1.4,L.type==="image",true);
 }
 function draw(now){
   if(now===undefined) now=performance.now();
@@ -745,6 +756,7 @@ function draw(now){
   ctx.globalAlpha=1;
   drawOverlay();
   ctx.setTransform(1,0,0,1,0,0);
+  if(typeof editLayer!=="undefined" && editLayer) positionEd();
   hud.textContent=`${drawn} px · zoom ${Math.round(view.scale*100)}% · ${LAYERS.length} layer${LAYERS.length===1?"":"s"} · ${cells} cells`;
 }
 
@@ -837,7 +849,7 @@ function deleteLayer(id){
 }
 function belowPrev(L){
   const prev=LAYERS[LAYERS.length-1];
-  if(prev) L.oy=Math.round(prev.oy+((prev.bb.maxGY-prev.bb.minGY)+8)*prev.cell/L.cell);
+  if(prev) L.oy=prev.oy+(prev.bb.maxGY-prev.bb.minGY)+8;
 }
 document.getElementById("addText").addEventListener("click",()=>{
   const L=newLayer("text"); belowPrev(L); addLayer(L,true);
@@ -878,10 +890,15 @@ function range(id,key,fmt,scale,onchange){
 const reorder=L=>{ if(!L.anim.active){ computeOrders(L); } draw(); };
 const rebuildL=L=>{ if(!L.anim.active){ buildLayer(L); } draw(); };
 const SYNCS=[];
-SYNCS.push(range("cell","cell",v=>v));
 SYNCS.push(range("child","child",v=>v+"%"));
-SYNCS.push(range("ox","ox",v=>v));
-SYNCS.push(range("oy","oy",v=>v));
+// X/Y position fields: top-left corner of the layer's bounds, in grid cells
+const posX=document.getElementById("posx"), posY=document.getElementById("posy");
+function syncPos(L){ posX.value=L.bb.minGX+L.ox; posY.value=L.bb.minGY+L.oy; }
+SYNCS.push({sync:syncPos});
+posX.addEventListener("change",()=>{ const L=A(); if(!L) return;
+  L.ox=Math.round(+posX.value||0)-L.bb.minGX; L.revealed=true; syncPos(L); draw(); });
+posY.addEventListener("change",()=>{ const L=A(); if(!L) return;
+  L.oy=Math.round(+posY.value||0)-L.bb.minGY; L.revealed=true; syncPos(L); draw(); });
 SYNCS.push(range("dur","dur",v=>v+"ms",null,()=>{}));
 SYNCS.push(range("lrand","lrand",v=>v+"%",v=>v/100,reorder));
 SYNCS.push(range("shuf","shuf",v=>v));
@@ -1023,14 +1040,13 @@ function hitLayer(px,py){
   const wx=(px-view.x)/view.scale, wy=(py-view.y)/view.scale;
   for(let i=LAYERS.length-1;i>=0;i--){ const L=LAYERS[i];
     if(!L.visible||!L.cells.length||!L.revealed) continue;
-    const cx=Math.floor(wx/L.cell-L.ox), cy=Math.floor(wy/L.cell-L.oy);
-    if(cx<L.bb.minGX||cx>L.bb.maxGX||cy<L.bb.minGY||cy>L.bb.maxGY) continue;
-    if(L.occ.has(cx+","+cy)) return L;
+    const cx=wx/CELL-L.ox, cy=wy/CELL-L.oy;   // anywhere inside the bounds counts
+    if(cx>=L.bb.minGX&&cx<L.bb.maxGX+1&&cy>=L.bb.minGY&&cy<L.bb.maxGY+1) return L;
   }
   return null;
 }
 function hitHandle(px,py){
-  const L=A(); if(!L||!L.visible||!L.cells.length) return null;
+  const L=A(); if(!L||L.type!=="image"||!L.visible||!L.cells.length) return null;
   const hs=selHandles(L);
   for(let i=0;i<4;i++){ if(Math.abs(px-hs[i][0])<=6&&Math.abs(py-hs[i][1])<=6) return {L,corner:i}; }
   return null;
@@ -1039,12 +1055,21 @@ let gesture=null;   // {mode:"pan"|"move"|"resize", ...}
 stage.addEventListener("pointerdown",e=>{
   const [px,py]=stagePt(e);
   try{ stage.setPointerCapture(e.pointerId); }catch(_){}
+  if(tool==="text" && e.button===0){
+    // Figma-style text tool: click plants an empty text layer and starts typing
+    const wx=(px-view.x)/view.scale, wy=(py-view.y)/view.scale;
+    const L=newLayer("text"); L.text="";
+    L.ox=Math.round(wx/CELL); L.oy=Math.round(wy/CELL);
+    LAYERS.push(L); activeId=L.id; buildLayer(L); refreshPanel(); draw();
+    setTool("select");
+    setTimeout(()=>startEdit(L),0);   // focus after the click settles
+    return;
+  }
   const h=(e.button===0)?hitHandle(px,py):null;
   if(h){
-    const L=h.L, r=layerScreenRect(L), hs=selHandles(L);
+    const L=h.L, hs=selHandles(L);
     const anchor=hs[3-h.corner];   // opposite corner stays put
-    gesture={mode:"resize",L,anchor,startCorner:hs[h.corner],
-      startImgW:L.imgW,startCell:L.cell,
+    gesture={mode:"resize",L,anchor,startCorner:hs[h.corner],startImgW:L.imgW,
       anchorWorld:[(anchor[0]-view.x)/view.scale,(anchor[1]-view.y)/view.scale]};
     stage.classList.add("resz"); return;
   }
@@ -1071,8 +1096,8 @@ stage.addEventListener("pointermove",e=>{
     if(!rafOn) draw();
   } else if(gesture.mode==="move"){
     const L=gesture.L;
-    L.ox=gesture.startOx+Math.round((e.clientX-gesture.startX)/view.scale/L.cell);
-    L.oy=gesture.startOy+Math.round((e.clientY-gesture.startY)/view.scale/L.cell);
+    L.ox=gesture.startOx+Math.round((e.clientX-gesture.startX)/view.scale/CELL);
+    L.oy=gesture.startOy+Math.round((e.clientY-gesture.startY)/view.scale/CELL);
     syncSliders(L);
     if(!rafOn) draw();
   } else if(gesture.mode==="resize"){
@@ -1082,18 +1107,13 @@ stage.addEventListener("pointermove",e=>{
     const num=Math.abs(g.startCorner[0]-g.anchor[0])>Math.abs(g.startCorner[1]-g.anchor[1])
       ? (px-g.anchor[0]) : (py-g.anchor[1]);
     const f=Math.max(0.05,Math.min(20,den!==0?num/den:1));
-    if(L.type==="image"){
-      const w=Math.max(8,Math.min(200,Math.round(g.startImgW*f)));
-      if(w!==L.imgW){ L.imgW=w; buildLayer(L); }
-    } else {
-      const c=Math.max(3,Math.min(64,Math.round(g.startCell*f)));
-      if(c!==L.cell) L.cell=c;
-    }
+    const w=Math.max(8,Math.min(200,Math.round(g.startImgW*f)));
+    if(w!==L.imgW){ L.imgW=w; buildLayer(L); }
     // keep the anchor corner fixed: solve ox so the anchor's world position is preserved
     const abbx=(gesture.anchor[0]<g.startCorner[0]) ? L.bb.minGX : L.bb.maxGX+1;
     const abby=(gesture.anchor[1]<g.startCorner[1]) ? L.bb.minGY : L.bb.maxGY+1;
-    L.ox=Math.round(g.anchorWorld[0]/L.cell-abbx);
-    L.oy=Math.round(g.anchorWorld[1]/L.cell-abby);
+    L.ox=Math.round(g.anchorWorld[0]/CELL-abbx);
+    L.oy=Math.round(g.anchorWorld[1]/CELL-abby);
     L.revealed=true; syncSliders(L);
     if(!rafOn) draw();
   }
@@ -1110,9 +1130,69 @@ function endGesture(e){
 stage.addEventListener("pointerup",endGesture);
 stage.addEventListener("pointercancel",endGesture);
 stage.addEventListener("pointerleave",()=>{ if(!gesture && hoverId!==null){ hoverId=null; if(!rafOn) draw(); } });
-stage.addEventListener("dblclick",fitView);
-stage.addEventListener("wheel",e=>{ e.preventDefault(); const r=stage.getBoundingClientRect();
-  zoomAt(e.clientX-r.left,e.clientY-r.top, Math.exp(-e.deltaY*0.0015)); },{passive:false});
+stage.addEventListener("dblclick",e=>{
+  const [px,py]=stagePt(e);
+  const hit=hitLayer(px,py);
+  if(hit && hit.type==="text"){ if(activeId!==hit.id){ activeId=hit.id; refreshPanel(); } startEdit(hit); }
+  else if(!hit) fitView();
+});
+// Figma trackpad semantics: two-finger scroll pans; pinch (browsers report it as
+// a ctrlKey wheel) or ⌘+scroll zooms at the cursor.
+stage.addEventListener("wheel",e=>{ e.preventDefault();
+  if(e.ctrlKey||e.metaKey){
+    const r=stage.getBoundingClientRect();
+    zoomAt(e.clientX-r.left,e.clientY-r.top, Math.exp(-e.deltaY*0.01));
+  } else {
+    userView=true; view.x-=e.deltaX; view.y-=e.deltaY;
+    if(editLayer) positionEd();
+    if(!rafOn) draw();
+  }
+},{passive:false});
+
+// ---------- tools ----------
+let tool="select";
+function setTool(t){ tool=t; stage.style.cursor = t==="text" ? "text" : ""; }
+
+// ---------- inline text editing on the canvas ----------
+const inlineEd=document.getElementById("inlineEdit");
+let editLayer=null;
+function positionEd(){
+  if(!editLayer) return;
+  const r=layerScreenRect(editLayer);
+  const w=Math.max(200,Math.min(360,r.w));
+  inlineEd.style.width=w+"px";
+  inlineEd.style.left=Math.max(8,Math.min(VW-w-8, r.x))+"px";
+  const above=r.y-inlineEd.offsetHeight-10;
+  inlineEd.style.top=(above>8 ? above : r.y+r.h+10)+"px";
+}
+function startEdit(L){
+  if(editLayer && editLayer!==L) endEdit();
+  editLayer=L;
+  inlineEd.value=L.text;
+  inlineEd.style.display="block";
+  positionEd();
+  inlineEd.focus(); inlineEd.select();
+}
+function endEdit(){
+  if(!editLayer) return;
+  const L=editLayer; editLayer=null;
+  inlineEd.style.display="none";
+  if(!L.text.trim()) deleteLayer(L.id);   // abandoned empty text layer
+  else { refreshPanel(); draw(); }
+}
+inlineEd.addEventListener("input",()=>{
+  if(!editLayer) return;
+  editLayer.text=inlineEd.value; editLayer.revealed=true;
+  buildLayer(editLayer);
+  if(editLayer.id===activeId) document.getElementById("text").value=editLayer.text;
+  positionEd(); draw();
+});
+inlineEd.addEventListener("keydown",e=>{
+  e.stopPropagation();
+  if(e.key==="Escape"){ e.preventDefault(); endEdit(); inlineEd.blur(); }
+});
+inlineEd.addEventListener("blur",endEdit);
+inlineEd.addEventListener("pointerdown",e=>e.stopPropagation());
 
 // view buttons
 document.getElementById("zoomin").addEventListener("click",()=>zoomAt(VW/2,VH/2,1.25));
@@ -1129,6 +1209,9 @@ function editing(){ const el=document.activeElement;
 document.addEventListener("keydown",e=>{
   if(editing()) return;
   const L=A();
+  if((e.key==="t"||e.key==="T") && !e.metaKey && !e.ctrlKey){ setTool("text"); return; }
+  if((e.key==="v"||e.key==="V") && !e.metaKey && !e.ctrlKey){ setTool("select"); return; }
+  if(e.key==="Escape" && tool!=="select"){ setTool("select"); return; }
   if((e.key==="Delete"||e.key==="Backspace") && L){ e.preventDefault(); deleteLayer(L.id); return; }
   if(e.key==="Escape" && L){ activeId=null; refreshPanel(); draw(); return; }
   if((e.metaKey||e.ctrlKey) && (e.key==="d"||e.key==="D")){ if(L){ e.preventDefault();
