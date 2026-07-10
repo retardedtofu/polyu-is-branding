@@ -19,28 +19,64 @@
   body{background:var(--paper);color:var(--ink);font-family:var(--sans);font-weight:400;
     display:flex;overflow:hidden;font-feature-settings:"tnum" 1}
 
-  #panel{width:300px;min-width:300px;height:100vh;overflow-y:auto;background:var(--panel);
-    border-right:1px solid var(--line);padding:24px 22px 60px}
-  #panel::-webkit-scrollbar{width:8px}#panel::-webkit-scrollbar-thumb{background:var(--line-2);border-radius:4px}
-  .brand{display:flex;align-items:baseline;justify-content:space-between;margin-bottom:18px}
-  .brand h1{font-size:14px;font-weight:500;margin:0;letter-spacing:-.01em}
-  .brand .v{font-family:var(--mono);font-size:10px;color:var(--ink-3);letter-spacing:.04em}
+  /* ---------- left: layers ---------- */
+  #left{width:232px;min-width:232px;height:100vh;display:flex;flex-direction:column;background:var(--panel);
+    border-right:1px solid var(--line);user-select:none}
+  #left .brand{display:flex;align-items:baseline;justify-content:space-between;padding:20px 16px 14px}
+  #left .brand h1{font-size:13px;font-weight:500;margin:0;letter-spacing:-.01em}
+  #left .brand .v{font-family:var(--mono);font-size:9px;color:var(--ink-3);letter-spacing:.06em}
+  .addrow{display:grid;grid-template-columns:1fr 1fr;gap:6px;padding:0 12px 12px}
+  .addrow button{background:transparent;color:var(--ink-2);border:1px solid var(--line-2);border-radius:3px;
+    padding:7px 0;font-family:var(--sans);font-size:11px;cursor:pointer;display:flex;align-items:center;
+    justify-content:center;gap:6px;transition:.12s}
+  .addrow button:hover{background:#f0efea;color:var(--ink)}
+  .addrow button svg{width:12px;height:12px}
+  .lhead{padding:10px 16px 7px;font-size:9px;font-weight:500;letter-spacing:.14em;text-transform:uppercase;
+    color:var(--ink-3);border-top:1px solid var(--line)}
+  #layerList{flex:1;overflow-y:auto;padding:0 8px 16px}
+  #layerList::-webkit-scrollbar{width:8px}#layerList::-webkit-scrollbar-thumb{background:var(--line-2);border-radius:4px}
+  .lempty{font-size:11px;color:var(--ink-3);padding:8px 8px}
+  .lrow{display:flex;align-items:center;gap:7px;height:30px;padding:0 6px 0 8px;border-radius:3px;
+    cursor:default;position:relative}
+  .lrow:hover{background:#f0efea}
+  .lrow.active{background:#ece6dd}
+  .lrow.active::before{content:"";position:absolute;left:0;top:5px;bottom:5px;width:2px;border-radius:1px;background:var(--accent)}
+  .lrow.dropAbove::after{content:"";position:absolute;left:4px;right:4px;top:-1.5px;height:2px;background:var(--accent);border-radius:1px}
+  .lrow.dropBelow::after{content:"";position:absolute;left:4px;right:4px;bottom:-1.5px;height:2px;background:var(--accent);border-radius:1px}
+  .lrow.dragging{opacity:.45}
+  .lrow .lico{flex:none;width:13px;height:13px;color:var(--ink-3);display:flex;align-items:center}
+  .lrow .lico svg{width:13px;height:13px}
+  .lrow .lname{flex:1;font-size:11.5px;color:var(--ink);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;
+    min-width:0;border-radius:2px;padding:1px 2px}
+  .lrow .lname[contenteditable="true"]{outline:1px solid var(--ink);background:var(--panel)}
+  .lrow.hiddenL .lname,.lrow.hiddenL .lico{opacity:.35}
+  .lrow .lbtn{background:none;border:none;padding:2px;cursor:pointer;color:var(--ink-3);display:flex;
+    align-items:center;flex:none;opacity:0;transition:opacity .1s}
+  .lrow:hover .lbtn,.lrow .lbtn.stay{opacity:1}
+  .lrow .lbtn:hover{color:var(--ink)}
+  .lrow .lbtn svg{width:12.5px;height:12.5px}
+  .lrow .ldel:hover{color:var(--accent)}
 
+  /* ---------- right: properties ---------- */
+  #rightP{width:268px;min-width:268px;height:100vh;overflow-y:auto;background:var(--panel);
+    border-left:1px solid var(--line);padding:16px 16px 60px}
+  #rightP::-webkit-scrollbar{width:8px}#rightP::-webkit-scrollbar-thumb{background:var(--line-2);border-radius:4px}
   .search{position:relative;margin-bottom:8px}
   .search input{width:100%;background:transparent;color:var(--ink);border:1px solid var(--line-2);border-radius:3px;
-    padding:9px 10px 9px 30px;font-family:var(--sans);font-size:12px}
+    padding:8px 10px 8px 30px;font-family:var(--sans);font-size:12px}
   .search input:focus{outline:none;border-color:var(--ink)}
   .search svg{position:absolute;left:10px;top:50%;transform:translateY(-50%);width:13px;height:13px;color:var(--ink-3)}
   .noresult{font-size:12px;color:var(--ink-3);padding:18px 2px;display:none}
+  #selHint{font-size:11.5px;color:var(--ink-3);line-height:1.55;padding:14px 2px 12px;margin:0}
 
   .sec{border-top:1px solid var(--line)}
   .lab{width:100%;display:flex;align-items:center;justify-content:space-between;background:none;border:none;
-    cursor:pointer;padding:15px 0 13px;font-family:var(--sans);font-size:10px;font-weight:500;letter-spacing:.14em;
+    cursor:pointer;padding:14px 0 12px;font-family:var(--sans);font-size:10px;font-weight:500;letter-spacing:.14em;
     text-transform:uppercase;color:var(--ink-3)}
   .lab:hover{color:var(--ink-2)}
   .lab .chev{width:11px;height:11px;transition:transform .18s;color:var(--ink-3)}
   .sec.collapsed .chev{transform:rotate(-90deg)}
-  .body{padding-bottom:18px}
+  .body{padding-bottom:17px}
   .sec.collapsed .body{display:none}
 
   textarea{width:100%;min-height:60px;resize:vertical;background:transparent;color:var(--ink);
@@ -48,8 +84,8 @@
     font-size:13px;line-height:1.55;letter-spacing:-.01em}
   textarea:focus{outline:none;border-color:var(--ink)}
 
-  .ctrl{margin-bottom:15px}.ctrl:last-child{margin-bottom:0}
-  .ctrl .top{display:flex;justify-content:space-between;align-items:baseline;margin-bottom:7px}
+  .ctrl{margin-bottom:14px}.ctrl:last-child{margin-bottom:0}
+  .ctrl .top{display:flex;justify-content:space-between;align-items:baseline;margin-bottom:6px}
   .ctrl .top label{font-size:12px;color:var(--ink-2)}
   .ctrl .top .val{font-family:var(--mono);font-size:11px;color:var(--ink);letter-spacing:.02em}
   input[type=range]{-webkit-appearance:none;appearance:none;width:100%;height:1px;background:var(--line-2);outline:none;margin:7px 0}
@@ -72,12 +108,12 @@
   .dd-list button:hover{background:#f0efea;color:var(--ink)}
   .dd-list button.sel{color:var(--ink);font-weight:500}
   .seg{display:grid;grid-template-columns:repeat(4,1fr);border:1px solid var(--line-2);border-radius:3px;overflow:hidden}
-  .seg button{background:transparent;border:none;border-right:1px solid var(--line-2);padding:11px 0;cursor:pointer;
+  .seg button{background:transparent;border:none;border-right:1px solid var(--line-2);padding:10px 0;cursor:pointer;
     display:flex;align-items:center;justify-content:center;color:var(--ink-3);transition:.12s}
   .seg button:last-child{border-right:none}
   .seg button:hover{color:var(--ink);background:#f0efea}
   .seg button.on{background:var(--ink);color:var(--panel)}
-  .seg button svg{width:16px;height:16px}
+  .seg button svg{width:15px;height:15px}
 
   select{width:100%;background:transparent;color:var(--ink);border:1px solid var(--line-2);border-radius:3px;
     padding:8px 10px;font-family:var(--sans);font-size:12px;cursor:pointer;-webkit-appearance:none;appearance:none;
@@ -92,7 +128,7 @@
   .sw.on{background:var(--ink);border-color:var(--ink)}.sw.on::after{left:16px;background:var(--panel)}
 
   .btn{width:100%;background:transparent;color:var(--ink);border:1px solid var(--ink);border-radius:3px;
-    padding:11px;font-family:var(--sans);font-size:12px;font-weight:500;cursor:pointer;display:flex;
+    padding:10px;font-family:var(--sans);font-size:12px;font-weight:500;cursor:pointer;display:flex;
     align-items:center;justify-content:center;gap:8px;transition:.12s;letter-spacing:.01em}
   .btn:hover{background:var(--ink);color:var(--panel)}
   .btn svg{width:14px;height:14px}
@@ -108,27 +144,14 @@
   .colors .hex{font-family:var(--mono);font-size:10px;color:var(--ink-3)}
   .swatch{width:100%;height:26px;border:1px solid var(--line-2);border-radius:3px;cursor:pointer;position:relative;overflow:hidden}
   .swatch input{position:absolute;inset:-4px;width:140%;height:160%;cursor:pointer;border:none;padding:0;background:none}
-
-  /* ---- layer list ---- */
-  #layerList{margin-bottom:10px}
-  .lrow{display:flex;align-items:center;gap:7px;padding:7px 8px;border:1px solid var(--line-2);border-radius:3px;
-    margin-bottom:6px;cursor:pointer;transition:.12s;background:transparent}
-  .lrow:hover{background:#f0efea}
-  .lrow.active{border-color:var(--ink);background:#f0efea}
-  .lrow .lname{flex:1;font-size:12px;color:var(--ink);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;min-width:0;
-    border-radius:2px;padding:1px 2px}
-  .lrow .lname[contenteditable="true"]{outline:1px solid var(--ink);background:var(--panel)}
-  .lrow .ltype{font-family:var(--mono);font-size:9px;letter-spacing:.08em;color:var(--ink-3);flex:none}
-  .lrow.hiddenL .lname,.lrow.hiddenL .ltype{opacity:.38}
-  .lrow button{background:none;border:none;padding:2px;cursor:pointer;color:var(--ink-3);display:flex;align-items:center;flex:none}
-  .lrow button:hover{color:var(--ink)}
-  .lrow button svg{width:13px;height:13px}
-  .lrow .ldel:hover{color:var(--accent)}
   .imgnote{font-size:11px;color:var(--ink-3);margin:0 0 12px;line-height:1.5;font-family:var(--mono);
     white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
 
-  #stage{flex:1;height:100vh;position:relative;overflow:hidden;cursor:grab}
-  #stage.drag{cursor:grabbing}
+  /* ---------- stage ---------- */
+  #stage{flex:1;height:100vh;position:relative;overflow:hidden;cursor:default;min-width:0}
+  #stage.pan{cursor:grabbing}
+  #stage.movel{cursor:move}
+  #stage.resz{cursor:nwse-resize}
   canvas{display:block;position:absolute;inset:0}
   .hud{position:absolute;left:16px;bottom:14px;font-family:var(--mono);font-size:10px;letter-spacing:.04em;
     color:var(--ink-3);mix-blend-mode:difference;pointer-events:none}
@@ -141,27 +164,36 @@
 </style>
 </head>
 <body>
-  <aside id="panel">
+  <aside id="left">
     <div class="brand"><h1>Pixel Shape Studio</h1><span class="v">GEIST</span></div>
+    <div class="addrow">
+      <button id="addText" title="Add text layer"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M5 6V4h14v2M12 4v16m-3 0h6" stroke-linecap="round" stroke-linejoin="round"/></svg>Text</button>
+      <button id="addImage" title="Add image layer"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><rect x="4" y="5" width="16" height="14" rx="1.5"/><circle cx="9" cy="10" r="1.4" fill="currentColor" stroke="none"/><path d="M5 17l4.5-4.5 3 3L16 12l3.5 3.5" stroke-linecap="round" stroke-linejoin="round"/></svg>Image</button>
+    </div>
+    <div class="lhead">Layers</div>
+    <div id="layerList"></div>
+    <input type="file" id="imgFile" accept="image/*" class="hide" />
+  </aside>
+
+  <main id="stage">
+    <canvas id="cv"></canvas>
+    <div class="hud" id="hud"></div>
+    <div class="viewbtns">
+      <button id="zoomout" title="Zoom out (−)">−</button>
+      <button id="zoomin" title="Zoom in (+)">+</button>
+      <button id="fit" title="Fit to view (Shift+1)"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M4 9V4h5M20 9V4h-5M4 15v5h5M20 15v5h-5" stroke-linecap="round"/></svg></button>
+    </div>
+  </main>
+
+  <aside id="rightP">
     <div class="search">
       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="7"/><path d="M21 21l-4-4" stroke-linecap="round"/></svg>
       <input id="q" placeholder="Search settings" spellcheck="false" />
     </div>
     <div class="noresult" id="noresult">No matching settings.</div>
+    <p id="selHint">No layer selected. Click a layer on the canvas or in the list — drag to move it, use the corner handles to resize. Arrows nudge, ⌘D duplicates, Delete removes.</p>
 
-    <section class="sec" data-title="layers add delete image text">
-      <button class="lab" aria-expanded="true">Layers<svg class="chev" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 9l6 6 6-6" stroke-linecap="round" stroke-linejoin="round"/></svg></button>
-      <div class="body">
-        <div id="layerList" data-kw="layer list select visibility hide delete rename"></div>
-        <div class="btnrow" data-kw="add new layer text image import">
-          <button class="btn ghost" id="addText"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M5 5h14M12 5v14" stroke-linecap="round"/></svg>Text layer</button>
-          <button class="btn ghost" id="addImage"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><rect x="4" y="5" width="16" height="14" rx="1.5"/><circle cx="9" cy="10" r="1.4" fill="currentColor" stroke="none"/><path d="M5 17l4.5-4.5 3 3L16 12l3.5 3.5" stroke-linecap="round" stroke-linejoin="round"/></svg>Image layer</button>
-        </div>
-        <input type="file" id="imgFile" accept="image/*" class="hide" />
-      </div>
-    </section>
-
-    <section class="sec" id="secText" data-title="text content">
+    <section class="sec lsec" id="secText" data-title="text content">
       <button class="lab" aria-expanded="true">Text<svg class="chev" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 9l6 6 6-6" stroke-linecap="round" stroke-linejoin="round"/></svg></button>
       <div class="body">
         <textarea id="text" spellcheck="false" data-kw="text content words" style="margin-bottom:8px">Pixel</textarea>
@@ -169,7 +201,7 @@
       </div>
     </section>
 
-    <section class="sec" id="secImage" data-title="image import resize color brand palette">
+    <section class="sec lsec" id="secImage" data-title="image import resize color brand palette">
       <button class="lab" aria-expanded="true">Image<svg class="chev" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 9l6 6 6-6" stroke-linecap="round" stroke-linejoin="round"/></svg></button>
       <div class="body">
         <p class="imgnote" id="imgName" data-kw="image file name">No image</p>
@@ -191,7 +223,7 @@
       </div>
     </section>
 
-    <section class="sec" data-title="grid size pixel position offset">
+    <section class="sec lsec" data-title="grid size pixel position offset">
       <button class="lab" aria-expanded="true">Grid<svg class="chev" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 9l6 6 6-6" stroke-linecap="round" stroke-linejoin="round"/></svg></button>
       <div class="body">
         <div class="ctrl" data-kw="container size cell"><div class="top"><label>Container size</label><span class="val" id="cellv">22</span></div>
@@ -205,7 +237,7 @@
       </div>
     </section>
 
-    <section class="sec" data-title="final shape settled circle square triangle quarter">
+    <section class="sec lsec" data-title="final shape settled circle square triangle quarter fill color">
       <button class="lab" aria-expanded="true">Final shape<svg class="chev" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 9l6 6 6-6" stroke-linecap="round" stroke-linejoin="round"/></svg></button>
       <div class="body">
         <div class="seg" id="shapes" data-kw="shape circle square triangle quarter" style="margin-bottom:13px">
@@ -216,10 +248,14 @@
         </div>
         <div class="toggle" id="randT" data-kw="randomize per pixel shape"><span>Randomize per pixel</span><div class="sw" id="randSw"></div></div>
         <div class="toggle" id="rotT" data-kw="random rotation"><span>Random rotation</span><div class="sw" id="rotSw"></div></div>
+        <div class="colors" data-kw="color pixel fill" style="margin-top:10px">
+          <div class="c"><div class="top"><label>Pixel colour</label><span class="hex" id="fghex">#1A1A17</span></div>
+            <div class="swatch"><input type="color" id="fg" value="#1a1a17" /></div></div>
+        </div>
       </div>
     </section>
 
-    <section class="sec" data-title="animation play fade reveal">
+    <section class="sec lsec" data-title="animation play fade reveal">
       <button class="lab" aria-expanded="true">Animation<svg class="chev" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 9l6 6 6-6" stroke-linecap="round" stroke-linejoin="round"/></svg></button>
       <div class="body">
         <div class="ctrl" data-kw="duration speed time"><div class="top"><label>Duration</label><span class="val" id="durv">1600ms</span></div>
@@ -266,7 +302,7 @@
       </div>
     </section>
 
-    <section class="sec" data-title="noise artifacts cloud outline radiation">
+    <section class="sec lsec" data-title="noise artifacts cloud outline radiation">
       <button class="lab" aria-expanded="true">Noise<svg class="chev" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 9l6 6 6-6" stroke-linecap="round" stroke-linejoin="round"/></svg></button>
       <div class="body">
         <p style="font-size:11px;color:var(--ink-3);line-height:1.5;margin:0 0 13px" data-kw="noise outline cloud converge">Cloud that radiates from the layer outline and converges into the shape — visible only while animating.</p>
@@ -277,13 +313,11 @@
       </div>
     </section>
 
-    <section class="sec" data-title="appearance color">
-      <button class="lab" aria-expanded="true">Appearance<svg class="chev" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 9l6 6 6-6" stroke-linecap="round" stroke-linejoin="round"/></svg></button>
+    <section class="sec" data-title="canvas page background color">
+      <button class="lab" aria-expanded="true">Canvas<svg class="chev" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 9l6 6 6-6" stroke-linecap="round" stroke-linejoin="round"/></svg></button>
       <div class="body">
-        <div class="colors" data-kw="color pixel canvas background">
-          <div class="c"><div class="top"><label>Pixel</label><span class="hex" id="fghex">#1A1A17</span></div>
-            <div class="swatch"><input type="color" id="fg" value="#1a1a17" /></div></div>
-          <div class="c"><div class="top"><label>Canvas</label><span class="hex" id="bghex">#F3F2EE</span></div>
+        <div class="colors" data-kw="canvas background color page">
+          <div class="c"><div class="top"><label>Background</label><span class="hex" id="bghex">#F3F2EE</span></div>
             <div class="swatch"><input type="color" id="bg" value="#f3f2ee" /></div></div>
         </div>
       </div>
@@ -297,22 +331,13 @@
     </section>
   </aside>
 
-  <main id="stage">
-    <canvas id="cv"></canvas>
-    <div class="hud" id="hud"></div>
-    <div class="viewbtns">
-      <button id="zoomout" title="Zoom out">−</button>
-      <button id="zoomin" title="Zoom in">+</button>
-      <button id="fit" title="Fit to view"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M4 9V4h5M20 9V4h-5M4 15v5h5M20 15v5h-5" stroke-linecap="round"/></svg></button>
-    </div>
-  </main>
-
 <script src="fontdata.js"></script>
 <script>
 const F = window.FONTDATA;
 const C2G = F.char2glyph, G = F.glyphs, KERN = F.kern;
 const SHAPES = ["circle","square","triangle","quarter"];
 const LF = 0.42;   // per-pixel reveal window as a fraction of total progress
+const ACCENT = "#e0533b";
 
 // brand direction palettes, lifted from the lab site (lab.js PAL). `cols` are the
 // family colours an image is quantised to; `paper` is the background reference —
@@ -366,7 +391,7 @@ function hash01(a,b,c){ return hash(a,b,c)/4294967296; }
 
 // ---------- layers ----------
 const GLOB = { bg:"#f3f2ee" };
-let LAYERS=[], activeId=null, layerN={text:0,image:0};
+let LAYERS=[], activeId=null, hoverId=null, layerN={text:0,image:0};
 function A(){ return LAYERS.find(l=>l.id===activeId) || null; }
 function newLayer(type){
   layerN[type]++;
@@ -387,9 +412,17 @@ function newLayer(type){
     // noise
     noise:0, nmarg:6,
     // caches + per-layer animation state
-    cells:[], noiseCells:[], bb:{minGX:0,maxGX:0,minGY:0,maxGY:0,w:1,h:1},
+    cells:[], noiseCells:[], occ:new Set(), bb:{minGX:0,maxGX:0,minGY:0,maxGY:0,w:1,h:1},
     anim:{active:false, mode:null, start:0}
   };
+}
+function cloneLayer(L){
+  const c=newLayer(L.type);
+  for(const k of ["text","kern","img","imgName","imgW","colorMode","thresh","invert","cell","child",
+    "shape","random","rot","fg","dur","dir","lrand","shuf","ease","easeMod","startop","travel","noise","nmarg"]) c[k]=L[k];
+  c.bez=L.bez.slice(); c.ox=L.ox+2; c.oy=L.oy+2;
+  c.name=(L.name+" copy").slice(0,40);
+  return c;
 }
 
 // ---------- build cells (text glyphs or image samples) + noise ----------
@@ -397,7 +430,9 @@ function buildLayer(L){
   SEED=L.seed;
   if(L.type==="text") buildTextCells(L); else buildImageCells(L);
   let a=1e9,b=-1e9,c=1e9,d=-1e9;
-  for(const t of L.cells){ if(t.gx<a)a=t.gx; if(t.gx>b)b=t.gx; if(t.gy<c)c=t.gy; if(t.gy>d)d=t.gy; }
+  L.occ=new Set();
+  for(const t of L.cells){ if(t.gx<a)a=t.gx; if(t.gx>b)b=t.gx; if(t.gy<c)c=t.gy; if(t.gy>d)d=t.gy;
+    L.occ.add(t.gx+","+t.gy); }
   if(L.cells.length===0){a=0;b=0;c=0;d=0;}
   L.bb={minGX:a,maxGX:b,minGY:c,maxGY:d,w:Math.max(1,b-a),h:Math.max(1,d-c)};
   buildNoise(L);
@@ -669,13 +704,47 @@ function drawLayer(L,now){
   }
   return drawn;
 }
+// selection / hover chrome, drawn in screen space so line weights stay constant
+function layerWorldRect(L){
+  return {x:(L.bb.minGX+L.ox)*L.cell, y:(L.bb.minGY+L.oy)*L.cell,
+          w:(L.bb.maxGX-L.bb.minGX+1)*L.cell, h:(L.bb.maxGY-L.bb.minGY+1)*L.cell};
+}
+function layerScreenRect(L){
+  const r=layerWorldRect(L);
+  return {x:r.x*view.scale+view.x, y:r.y*view.scale+view.y, w:r.w*view.scale, h:r.h*view.scale};
+}
+const HANDLE=7;
+function selHandles(L){
+  const r=layerScreenRect(L);
+  return [[r.x,r.y],[r.x+r.w,r.y],[r.x,r.y+r.h],[r.x+r.w,r.y+r.h]];
+}
+function drawChrome(L,color,lw,withHandles,label){
+  const r=layerScreenRect(L);
+  ctx.strokeStyle=color; ctx.lineWidth=lw; ctx.strokeRect(r.x,r.y,r.w,r.h);
+  if(withHandles){
+    for(const [hx,hy] of selHandles(L)){
+      ctx.fillStyle="#fff"; ctx.fillRect(hx-HANDLE/2,hy-HANDLE/2,HANDLE,HANDLE);
+      ctx.strokeRect(hx-HANDLE/2,hy-HANDLE/2,HANDLE,HANDLE);
+    }
+  }
+  if(label){ ctx.font="500 10.5px Geist, sans-serif"; ctx.fillStyle=color; ctx.fillText(L.name, r.x, r.y-6); }
+}
+function drawOverlay(){
+  ctx.setTransform(dpr,0,0,dpr,0,0); ctx.globalAlpha=1;
+  const hov=LAYERS.find(l=>l.id===hoverId);
+  if(hov && hov.id!==activeId && hov.visible && hov.cells.length) drawChrome(hov,"rgba(224,83,59,.5)",1,false,true);
+  const L=A();
+  if(L && L.visible && L.cells.length) drawChrome(L,ACCENT,1.4,true,true);
+}
 function draw(now){
   if(now===undefined) now=performance.now();
   ctx.setTransform(dpr,0,0,dpr,0,0); ctx.fillStyle=GLOB.bg; ctx.fillRect(0,0,VW,VH);
   ctx.setTransform(dpr*view.scale,0,0,dpr*view.scale, dpr*view.x, dpr*view.y);
   let drawn=0, cells=0;
   for(const L of LAYERS){ if(!L.visible) continue; drawn+=drawLayer(L,now); cells+=L.cells.length; }
-  ctx.globalAlpha=1; ctx.setTransform(1,0,0,1,0,0);
+  ctx.globalAlpha=1;
+  drawOverlay();
+  ctx.setTransform(1,0,0,1,0,0);
   hud.textContent=`${drawn} px · zoom ${Math.round(view.scale*100)}% · ${LAYERS.length} layer${LAYERS.length===1?"":"s"} · ${cells} cells`;
 }
 
@@ -685,41 +754,75 @@ const EYE='<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-wid
 const EYEOFF='<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><path d="M4 5l16 14M9.5 6.2A9.8 9.8 0 0 1 12 5.5c6 0 9.5 6.5 9.5 6.5a17 17 0 0 1-3 3.6M6 8.3A16 16 0 0 0 2.5 12S6 18.5 12 18.5a9.7 9.7 0 0 0 3-.5" stroke-linecap="round"/></svg>';
 const PLAYI='<svg viewBox="0 0 24 24" fill="currentColor"><path d="M7 5l12 7-12 7z"/></svg>';
 const XI='<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M6 6l12 12M18 6L6 18" stroke-linecap="round"/></svg>';
+const TXTI='<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M5 6V4h14v2M12 4v16m-3 0h6" stroke-linecap="round" stroke-linejoin="round"/></svg>';
+const IMGI='<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><rect x="4" y="5" width="16" height="14" rx="1.5"/><circle cx="9" cy="10" r="1.4" fill="currentColor" stroke="none"/><path d="M5 17l4.5-4.5 3 3L16 12l3.5 3.5" stroke-linecap="round" stroke-linejoin="round"/></svg>';
+let rowDrag=null;   // {id, startY, started, toIdx}
 function renderLayerList(){
   layerList.innerHTML="";
-  if(!LAYERS.length){ layerList.innerHTML='<p style="font-size:11px;color:var(--ink-3);margin:2px 0 6px">No layers — add one below.</p>'; return; }
+  if(!LAYERS.length){ layerList.innerHTML='<p class="lempty">No layers yet — add one above.</p>'; return; }
   // topmost layer first in the list (last drawn = on top)
   [...LAYERS].reverse().forEach(L=>{
     const row=document.createElement("div");
     row.className="lrow"+(L.id===activeId?" active":"")+(L.visible?"":" hiddenL");
     row.dataset.id=L.id;
     row.innerHTML=
-      '<button class="leye" title="Show / hide">'+(L.visible?EYE:EYEOFF)+'</button>'+
+      '<span class="lico">'+(L.type==="text"?TXTI:IMGI)+'</span>'+
       '<span class="lname" title="Double-click to rename"></span>'+
-      '<span class="ltype">'+(L.type==="text"?"TXT":"IMG")+'</span>'+
-      '<button class="lplay" title="Play this layer">'+PLAYI+'</button>'+
-      '<button class="ldel" title="Delete layer">'+XI+'</button>';
+      '<button class="lbtn lplay" title="Play this layer">'+PLAYI+'</button>'+
+      '<button class="lbtn leye'+(L.visible?"":" stay")+'" title="Show / hide">'+(L.visible?EYE:EYEOFF)+'</button>'+
+      '<button class="lbtn ldel" title="Delete layer">'+XI+'</button>';
     row.querySelector(".lname").textContent=L.name;
-    row.addEventListener("click",e=>{
-      if(e.target.closest("button")) return;
-      if(activeId!==L.id){ activeId=L.id; refreshPanel(); }
-    });
     const nameEl=row.querySelector(".lname");
     nameEl.addEventListener("dblclick",()=>{
       nameEl.contentEditable="true"; nameEl.focus();
       document.getSelection().selectAllChildren(nameEl);
     });
     const commit=()=>{ nameEl.contentEditable="false";
-      L.name=(nameEl.textContent||"").trim().slice(0,40)||L.name; nameEl.textContent=L.name; };
+      L.name=(nameEl.textContent||"").trim().slice(0,40)||L.name; nameEl.textContent=L.name; draw(); };
     nameEl.addEventListener("blur",commit);
-    nameEl.addEventListener("keydown",e=>{ if(e.key==="Enter"){ e.preventDefault(); nameEl.blur(); }
+    nameEl.addEventListener("keydown",e=>{ e.stopPropagation();
+      if(e.key==="Enter"){ e.preventDefault(); nameEl.blur(); }
       if(e.key==="Escape"){ nameEl.textContent=L.name; nameEl.blur(); } });
-    row.querySelector(".leye").addEventListener("click",()=>{ L.visible=!L.visible; renderLayerList(); draw(); });
-    row.querySelector(".lplay").addEventListener("click",()=>play(L,"in"));
-    row.querySelector(".ldel").addEventListener("click",()=>deleteLayer(L.id));
+    row.querySelector(".leye").addEventListener("click",e=>{ e.stopPropagation(); L.visible=!L.visible; renderLayerList(); draw(); });
+    row.querySelector(".lplay").addEventListener("click",e=>{ e.stopPropagation(); play(L,"in"); });
+    row.querySelector(".ldel").addEventListener("click",e=>{ e.stopPropagation(); deleteLayer(L.id); });
+    // select on press; drag vertically to reorder (Figma-style)
+    row.addEventListener("pointerdown",e=>{
+      if(e.target.closest(".lbtn") || e.target.isContentEditable) return;
+      if(activeId!==L.id){ activeId=L.id; refreshPanel(); draw(); }
+      rowDrag={id:L.id,startY:e.clientY,started:false,toIdx:null};
+    });
     layerList.appendChild(row);
   });
 }
+function rowsOnScreen(){ return [...layerList.querySelectorAll(".lrow")]; }
+document.addEventListener("pointermove",e=>{
+  if(!rowDrag) return;
+  if(!rowDrag.started && Math.abs(e.clientY-rowDrag.startY)>5){ rowDrag.started=true; }
+  if(!rowDrag.started) return;
+  const rows=rowsOnScreen();
+  rows.forEach(r=>{ r.classList.remove("dropAbove","dropBelow"); r.classList.toggle("dragging",r.dataset.id===rowDrag.id); });
+  let toIdx=rows.length;
+  for(let i=0;i<rows.length;i++){ const rc=rows[i].getBoundingClientRect();
+    if(e.clientY < rc.top+rc.height/2){ toIdx=i; break; } }
+  rowDrag.toIdx=toIdx;
+  if(toIdx<rows.length) rows[toIdx].classList.add("dropAbove");
+  else if(rows.length) rows[rows.length-1].classList.add("dropBelow");
+});
+document.addEventListener("pointerup",()=>{
+  if(!rowDrag) return;
+  if(rowDrag.started && rowDrag.toIdx!==null){
+    const disp=[...LAYERS].reverse().map(l=>l.id);
+    const from=disp.indexOf(rowDrag.id);
+    let to=rowDrag.toIdx; if(to>from) to--;
+    disp.splice(from,1); disp.splice(to,0,rowDrag.id);
+    const byId=Object.fromEntries(LAYERS.map(l=>[l.id,l]));
+    LAYERS=disp.reverse().map(id=>byId[id]);
+    renderLayerList(); draw();
+  } else renderLayerList();
+  rowDrag=null;
+});
+
 function addLayer(L,fit){
   LAYERS.push(L); activeId=L.id;
   buildLayer(L); refreshPanel();
@@ -729,14 +832,15 @@ function deleteLayer(id){
   const i=LAYERS.findIndex(l=>l.id===id); if(i<0) return;
   LAYERS.splice(i,1);
   if(activeId===id) activeId=LAYERS.length?LAYERS[Math.min(i,LAYERS.length-1)].id:null;
+  if(hoverId===id) hoverId=null;
   refreshPanel(); draw();
 }
-document.getElementById("addText").addEventListener("click",()=>{
-  const L=newLayer("text");
-  // drop the new layer below the current content so it doesn't overlap
+function belowPrev(L){
   const prev=LAYERS[LAYERS.length-1];
   if(prev) L.oy=Math.round(prev.oy+((prev.bb.maxGY-prev.bb.minGY)+8)*prev.cell/L.cell);
-  addLayer(L,true);
+}
+document.getElementById("addText").addEventListener("click",()=>{
+  const L=newLayer("text"); belowPrev(L); addLayer(L,true);
 });
 const imgFile=document.getElementById("imgFile");
 let imgTarget=null;   // layer waiting for a file (null = create a new layer)
@@ -753,9 +857,7 @@ imgFile.addEventListener("change",()=>{
     else{
       const L=newLayer("image");
       L.img=img; L.imgName=f.name; L.name=f.name.replace(/\.[^.]+$/,"").slice(0,24)||L.name;
-      const prev=LAYERS[LAYERS.length-1];
-      if(prev) L.oy=Math.round(prev.oy+((prev.bb.maxGY-prev.bb.minGY)+8)*prev.cell/L.cell);
-      addLayer(L,true);
+      belowPrev(L); addLayer(L,true);
     }
   };
   img.onerror=()=>{ URL.revokeObjectURL(url); alert("Could not load that image."); };
@@ -789,6 +891,7 @@ SYNCS.push(range("noise","noise",v=>v+"%",null,rebuildL));
 SYNCS.push(range("nmarg","nmarg",v=>v,null,rebuildL));
 SYNCS.push(range("imgw","imgW",v=>v+" cells",null,rebuildL));
 SYNCS.push(range("thresh","thresh",v=>v+"%",null,rebuildL));
+function syncSliders(L){ for(const s of SYNCS) s.sync(L); }
 
 document.getElementById("dir").addEventListener("change",e=>{ const L=A(); if(!L) return;
   L.dir=e.target.value; L.revealed=true; reorder(L); });
@@ -842,7 +945,7 @@ function bezAt(e){ const r=bezSvg.getBoundingClientRect();
   return [Math.max(0,Math.min(1,(x-BP)/BIN)), Math.max(0,Math.min(1,1-(y-BP)/BIN)), x, y]; }
 bezSvg.addEventListener("pointerdown",e=>{ const L=A(); if(!L) return; const [,,x,y]=bezAt(e);
   const d1=Math.hypot(x-bSX(L.bez[0]),y-bSY(L.bez[1])), d2=Math.hypot(x-bSX(L.bez[2]),y-bSY(L.bez[3]));
-  bezDrag=d1<=d2?0:2; bezSvg.setPointerCapture(e.pointerId); bezMove(e); });
+  bezDrag=d1<=d2?0:2; try{ bezSvg.setPointerCapture(e.pointerId); }catch(_){} bezMove(e); });
 function bezMove(e){ const L=A(); if(bezDrag===null||!L)return; const [ux,uy]=bezAt(e);
   L.bez[bezDrag]=+ux.toFixed(3); L.bez[bezDrag+1]=+uy.toFixed(3);
   if(!L.easeMod){ L.easeMod=true; refreshEaseLabels(); }
@@ -879,25 +982,32 @@ document.getElementById("dl").addEventListener("click",()=>{ const a=document.cr
 
 // ---------- panel sync ----------
 const secText=document.getElementById("secText"), secImage=document.getElementById("secImage");
+const selHint=document.getElementById("selHint");
 function syncImgUI(L){
   const mono=L.colorMode==="mono";
   document.getElementById("threshWrap").style.display=mono?"":"none";
   document.getElementById("invT").style.display=mono?"":"none";
 }
+function typeAllowed(s){ const L=A();
+  if(s===secText) return !!L&&L.type==="text";
+  if(s===secImage) return !!L&&L.type==="image";
+  if(s.classList.contains("lsec")) return !!L;
+  return true; }
+function applySecVis(){ for(const s of secs){ s.style.display=typeAllowed(s)?"":"none"; } }
 function refreshPanel(){
   renderLayerList();
   const L=A();
-  const isText=!!L&&L.type==="text", isImg=!!L&&L.type==="image";
-  secText.style.display=isText?"":"none";
-  secImage.style.display=isImg?"":"none";
+  selHint.style.display=L?"none":"";
+  const q=document.getElementById("q");
+  if(q.value.trim()) applyFilter(q.value); else applySecVis();
   if(!L) return;
-  if(isText) document.getElementById("text").value=L.text;
-  if(isImg){
+  if(L.type==="text") document.getElementById("text").value=L.text;
+  if(L.type==="image"){
     document.getElementById("imgName").textContent=L.imgName||"No image";
     setVal("imgcolor",L.colorMode); syncImgUI(L);
     document.getElementById("invSw").classList.toggle("on",L.invert);
   }
-  for(const s of SYNCS) s.sync(L);
+  syncSliders(L);
   setVal("dir",L.dir);
   document.querySelectorAll("#shapes button").forEach(b=>b.classList.toggle("on",b.dataset.shape===L.shape));
   document.getElementById("randSw").classList.toggle("on",L.random);
@@ -907,44 +1017,151 @@ function refreshPanel(){
   refreshEaseLabels(); bezUpdate();
 }
 
-// view buttons + interactions
+// ---------- canvas interaction: select / move / resize / pan ----------
+function stagePt(e){ const r=stage.getBoundingClientRect(); return [e.clientX-r.left, e.clientY-r.top]; }
+function hitLayer(px,py){
+  const wx=(px-view.x)/view.scale, wy=(py-view.y)/view.scale;
+  for(let i=LAYERS.length-1;i>=0;i--){ const L=LAYERS[i];
+    if(!L.visible||!L.cells.length||!L.revealed) continue;
+    const cx=Math.floor(wx/L.cell-L.ox), cy=Math.floor(wy/L.cell-L.oy);
+    if(cx<L.bb.minGX||cx>L.bb.maxGX||cy<L.bb.minGY||cy>L.bb.maxGY) continue;
+    if(L.occ.has(cx+","+cy)) return L;
+  }
+  return null;
+}
+function hitHandle(px,py){
+  const L=A(); if(!L||!L.visible||!L.cells.length) return null;
+  const hs=selHandles(L);
+  for(let i=0;i<4;i++){ if(Math.abs(px-hs[i][0])<=6&&Math.abs(py-hs[i][1])<=6) return {L,corner:i}; }
+  return null;
+}
+let gesture=null;   // {mode:"pan"|"move"|"resize", ...}
+stage.addEventListener("pointerdown",e=>{
+  const [px,py]=stagePt(e);
+  try{ stage.setPointerCapture(e.pointerId); }catch(_){}
+  const h=(e.button===0)?hitHandle(px,py):null;
+  if(h){
+    const L=h.L, r=layerScreenRect(L), hs=selHandles(L);
+    const anchor=hs[3-h.corner];   // opposite corner stays put
+    gesture={mode:"resize",L,anchor,startCorner:hs[h.corner],
+      startImgW:L.imgW,startCell:L.cell,
+      anchorWorld:[(anchor[0]-view.x)/view.scale,(anchor[1]-view.y)/view.scale]};
+    stage.classList.add("resz"); return;
+  }
+  const hit=(e.button===0)?hitLayer(px,py):null;
+  if(hit){
+    if(activeId!==hit.id){ activeId=hit.id; refreshPanel(); }
+    gesture={mode:"move",L:hit,startX:e.clientX,startY:e.clientY,startOx:hit.ox,startOy:hit.oy};
+    stage.classList.add("movel"); draw(); return;
+  }
+  gesture={mode:"pan",x:e.clientX,y:e.clientY,moved:false};
+  stage.classList.add("pan");
+});
+stage.addEventListener("pointermove",e=>{
+  if(!gesture){
+    const [px,py]=stagePt(e);
+    const hov=hitLayer(px,py);
+    const id=hov?hov.id:null;
+    if(id!==hoverId){ hoverId=id; if(!rafOn) draw(); }
+    return;
+  }
+  if(gesture.mode==="pan"){
+    userView=true; gesture.moved=gesture.moved||Math.hypot(e.clientX-gesture.x,e.clientY-gesture.y)>3;
+    view.x+=e.clientX-gesture.x; view.y+=e.clientY-gesture.y; gesture.x=e.clientX; gesture.y=e.clientY;
+    if(!rafOn) draw();
+  } else if(gesture.mode==="move"){
+    const L=gesture.L;
+    L.ox=gesture.startOx+Math.round((e.clientX-gesture.startX)/view.scale/L.cell);
+    L.oy=gesture.startOy+Math.round((e.clientY-gesture.startY)/view.scale/L.cell);
+    syncSliders(L);
+    if(!rafOn) draw();
+  } else if(gesture.mode==="resize"){
+    const [px,py]=stagePt(e), g=gesture, L=g.L;
+    const den=Math.abs(g.startCorner[0]-g.anchor[0])>Math.abs(g.startCorner[1]-g.anchor[1])
+      ? (g.startCorner[0]-g.anchor[0]) : (g.startCorner[1]-g.anchor[1]);
+    const num=Math.abs(g.startCorner[0]-g.anchor[0])>Math.abs(g.startCorner[1]-g.anchor[1])
+      ? (px-g.anchor[0]) : (py-g.anchor[1]);
+    const f=Math.max(0.05,Math.min(20,den!==0?num/den:1));
+    if(L.type==="image"){
+      const w=Math.max(8,Math.min(200,Math.round(g.startImgW*f)));
+      if(w!==L.imgW){ L.imgW=w; buildLayer(L); }
+    } else {
+      const c=Math.max(3,Math.min(64,Math.round(g.startCell*f)));
+      if(c!==L.cell) L.cell=c;
+    }
+    // keep the anchor corner fixed: solve ox so the anchor's world position is preserved
+    const abbx=(gesture.anchor[0]<g.startCorner[0]) ? L.bb.minGX : L.bb.maxGX+1;
+    const abby=(gesture.anchor[1]<g.startCorner[1]) ? L.bb.minGY : L.bb.maxGY+1;
+    L.ox=Math.round(g.anchorWorld[0]/L.cell-abbx);
+    L.oy=Math.round(g.anchorWorld[1]/L.cell-abby);
+    L.revealed=true; syncSliders(L);
+    if(!rafOn) draw();
+  }
+});
+function endGesture(e){
+  if(!gesture) return;
+  if(gesture.mode==="pan" && !gesture.moved && e && e.type==="pointerup"){
+    if(activeId!==null){ activeId=null; refreshPanel(); }   // click empty canvas = deselect
+  }
+  gesture=null;
+  stage.classList.remove("pan","movel","resz");
+  draw();
+}
+stage.addEventListener("pointerup",endGesture);
+stage.addEventListener("pointercancel",endGesture);
+stage.addEventListener("pointerleave",()=>{ if(!gesture && hoverId!==null){ hoverId=null; if(!rafOn) draw(); } });
+stage.addEventListener("dblclick",fitView);
+stage.addEventListener("wheel",e=>{ e.preventDefault(); const r=stage.getBoundingClientRect();
+  zoomAt(e.clientX-r.left,e.clientY-r.top, Math.exp(-e.deltaY*0.0015)); },{passive:false});
+
+// view buttons
 document.getElementById("zoomin").addEventListener("click",()=>zoomAt(VW/2,VH/2,1.25));
 document.getElementById("zoomout").addEventListener("click",()=>zoomAt(VW/2,VH/2,0.8));
 document.getElementById("fit").addEventListener("click",fitView);
-stage.addEventListener("wheel",e=>{ e.preventDefault(); const r=stage.getBoundingClientRect();
-  zoomAt(e.clientX-r.left,e.clientY-r.top, Math.exp(-e.deltaY*0.0015)); },{passive:false});
-let drag=null;
-stage.addEventListener("pointerdown",e=>{ drag={x:e.clientX,y:e.clientY}; stage.classList.add("drag"); stage.setPointerCapture(e.pointerId); });
-stage.addEventListener("pointermove",e=>{ if(!drag)return; userView=true; view.x+=e.clientX-drag.x; view.y+=e.clientY-drag.y; drag={x:e.clientX,y:e.clientY}; if(!rafOn) draw(); });
-stage.addEventListener("pointerup",()=>{ drag=null; stage.classList.remove("drag"); });
-stage.addEventListener("pointercancel",()=>{ drag=null; stage.classList.remove("drag"); });
-stage.addEventListener("dblclick",fitView);
 window.addEventListener("resize",()=>{ const wx=(VW/2-view.x)/view.scale, wy=(VH/2-view.y)/view.scale;
   sizeCanvas();
   if(!userView){ fitView(); return; }
   view.x=VW/2-wx*view.scale; view.y=VH/2-wy*view.scale; draw(); });
 
+// ---------- keyboard ----------
+function editing(){ const el=document.activeElement;
+  return el && (el.tagName==="INPUT"||el.tagName==="TEXTAREA"||el.tagName==="SELECT"||el.isContentEditable); }
+document.addEventListener("keydown",e=>{
+  if(editing()) return;
+  const L=A();
+  if((e.key==="Delete"||e.key==="Backspace") && L){ e.preventDefault(); deleteLayer(L.id); return; }
+  if(e.key==="Escape" && L){ activeId=null; refreshPanel(); draw(); return; }
+  if((e.metaKey||e.ctrlKey) && (e.key==="d"||e.key==="D")){ if(L){ e.preventDefault();
+    const i=LAYERS.indexOf(L); const c=cloneLayer(L); LAYERS.splice(i+1,0,c); activeId=c.id;
+    buildLayer(c); refreshPanel(); draw(); } return; }
+  if(e.shiftKey && e.key==="!"){ e.preventDefault(); fitView(); return; }   // Shift+1 = fit
+  if(e.key==="+"||e.key==="="){ zoomAt(VW/2,VH/2,1.25); return; }
+  if(e.key==="-"){ zoomAt(VW/2,VH/2,0.8); return; }
+  if(L && ["ArrowLeft","ArrowRight","ArrowUp","ArrowDown"].includes(e.key)){
+    e.preventDefault();
+    const step=e.shiftKey?10:1;
+    if(e.key==="ArrowLeft")L.ox-=step; if(e.key==="ArrowRight")L.ox+=step;
+    if(e.key==="ArrowUp")L.oy-=step; if(e.key==="ArrowDown")L.oy+=step;
+    L.revealed=true; syncSliders(L); draw();
+  }
+});
+
 // ---------- collapsible sections + search ----------
-const secs=[...document.querySelectorAll(".sec")];
+const secs=[...document.querySelectorAll("#rightP .sec")];
 const collapsed=new Set();
 secs.forEach(s=>{ const lab=s.querySelector(".lab");
   lab.addEventListener("click",()=>{
     s.classList.toggle("collapsed"); const on=s.classList.contains("collapsed");
     if(on)collapsed.add(s); else collapsed.delete(s); lab.setAttribute("aria-expanded", String(!on)); });
 });
-// text/image sections only apply to the matching layer type — keep them hidden
-// even when a search would otherwise reveal them
-function typeAllowed(s){ const L=A();
-  if(s===secText) return !!L&&L.type==="text";
-  if(s===secImage) return !!L&&L.type==="image";
-  return true; }
 const noresult=document.getElementById("noresult");
-document.getElementById("q").addEventListener("input",e=>{
-  const q=e.target.value.trim().toLowerCase();
-  if(!q){ secs.forEach(s=>{ s.style.display=typeAllowed(s)?"":"none"; s.querySelectorAll(".body > *").forEach(el=>el.style.display="");
+function applyFilter(qraw){
+  const q=qraw.trim().toLowerCase();
+  if(!q){ secs.forEach(s=>{ s.querySelectorAll(".body > *").forEach(el=>el.style.display="");
       const c=collapsed.has(s); s.classList.toggle("collapsed",c);
       s.querySelector(".lab").setAttribute("aria-expanded",String(!c)); });
-    const L=A(); if(L){ if(L.type==="image") syncImgUI(L); }
+    applySecVis();
+    const L=A(); if(L&&L.type==="image") syncImgUI(L);
     noresult.style.display="none"; return; }
   let anyVisible=false;
   secs.forEach(s=>{
@@ -958,7 +1175,8 @@ document.getElementById("q").addEventListener("input",e=>{
     s.style.display=any?"":"none"; if(any){ s.classList.remove("collapsed"); s.querySelector(".lab").setAttribute("aria-expanded","true"); anyVisible=true; }
   });
   noresult.style.display=anyVisible?"none":"block";
-});
+}
+document.getElementById("q").addEventListener("input",e=>applyFilter(e.target.value));
 
 // ---------- boot ----------
 function boot(){
