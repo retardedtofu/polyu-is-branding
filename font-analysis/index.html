@@ -109,6 +109,24 @@
   .swatch{width:100%;height:26px;border:1px solid var(--line-2);border-radius:3px;cursor:pointer;position:relative;overflow:hidden}
   .swatch input{position:absolute;inset:-4px;width:140%;height:160%;cursor:pointer;border:none;padding:0;background:none}
 
+  /* ---- layer list ---- */
+  #layerList{margin-bottom:10px}
+  .lrow{display:flex;align-items:center;gap:7px;padding:7px 8px;border:1px solid var(--line-2);border-radius:3px;
+    margin-bottom:6px;cursor:pointer;transition:.12s;background:transparent}
+  .lrow:hover{background:#f0efea}
+  .lrow.active{border-color:var(--ink);background:#f0efea}
+  .lrow .lname{flex:1;font-size:12px;color:var(--ink);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;min-width:0;
+    border-radius:2px;padding:1px 2px}
+  .lrow .lname[contenteditable="true"]{outline:1px solid var(--ink);background:var(--panel)}
+  .lrow .ltype{font-family:var(--mono);font-size:9px;letter-spacing:.08em;color:var(--ink-3);flex:none}
+  .lrow.hiddenL .lname,.lrow.hiddenL .ltype{opacity:.38}
+  .lrow button{background:none;border:none;padding:2px;cursor:pointer;color:var(--ink-3);display:flex;align-items:center;flex:none}
+  .lrow button:hover{color:var(--ink)}
+  .lrow button svg{width:13px;height:13px}
+  .lrow .ldel:hover{color:var(--accent)}
+  .imgnote{font-size:11px;color:var(--ink-3);margin:0 0 12px;line-height:1.5;font-family:var(--mono);
+    white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+
   #stage{flex:1;height:100vh;position:relative;overflow:hidden;cursor:grab}
   #stage.drag{cursor:grabbing}
   canvas{display:block;position:absolute;inset:0}
@@ -131,18 +149,59 @@
     </div>
     <div class="noresult" id="noresult">No matching settings.</div>
 
-    <section class="sec" data-title="text content">
-      <button class="lab" aria-expanded="true">Text<svg class="chev" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 9l6 6 6-6" stroke-linecap="round" stroke-linejoin="round"/></svg></button>
-      <div class="body"><textarea id="text" spellcheck="false" data-kw="text content words">Pixel</textarea></div>
+    <section class="sec" data-title="layers add delete image text">
+      <button class="lab" aria-expanded="true">Layers<svg class="chev" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 9l6 6 6-6" stroke-linecap="round" stroke-linejoin="round"/></svg></button>
+      <div class="body">
+        <div id="layerList" data-kw="layer list select visibility hide delete rename"></div>
+        <div class="btnrow" data-kw="add new layer text image import">
+          <button class="btn ghost" id="addText"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M5 5h14M12 5v14" stroke-linecap="round"/></svg>Text layer</button>
+          <button class="btn ghost" id="addImage"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><rect x="4" y="5" width="16" height="14" rx="1.5"/><circle cx="9" cy="10" r="1.4" fill="currentColor" stroke="none"/><path d="M5 17l4.5-4.5 3 3L16 12l3.5 3.5" stroke-linecap="round" stroke-linejoin="round"/></svg>Image layer</button>
+        </div>
+        <input type="file" id="imgFile" accept="image/*" class="hide" />
+      </div>
     </section>
 
-    <section class="sec" data-title="grid size pixel">
+    <section class="sec" id="secText" data-title="text content">
+      <button class="lab" aria-expanded="true">Text<svg class="chev" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 9l6 6 6-6" stroke-linecap="round" stroke-linejoin="round"/></svg></button>
+      <div class="body">
+        <textarea id="text" spellcheck="false" data-kw="text content words" style="margin-bottom:8px">Pixel</textarea>
+        <div class="toggle" id="kernT" data-kw="kerning spacing"><span>Apply kerning</span><div class="sw on" id="kernSw"></div></div>
+      </div>
+    </section>
+
+    <section class="sec" id="secImage" data-title="image import resize color brand palette">
+      <button class="lab" aria-expanded="true">Image<svg class="chev" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 9l6 6 6-6" stroke-linecap="round" stroke-linejoin="round"/></svg></button>
+      <div class="body">
+        <p class="imgnote" id="imgName" data-kw="image file name">No image</p>
+        <button class="btn ghost" id="imgReplace" data-kw="replace image import file" style="margin-bottom:14px"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M4 12a8 8 0 0 1 13.6-5.7L20 8.5M20 12a8 8 0 0 1-13.6 5.7L4 15.5M20 4v4.5h-4.5M4 20v-4.5h4.5" stroke-linecap="round" stroke-linejoin="round"/></svg>Replace image</button>
+        <div class="ctrl" data-kw="width resize cells size scale"><div class="top"><label>Width</label><span class="val" id="imgwv">48 cells</span></div>
+          <input type="range" id="imgw" min="8" max="200" step="1" value="48" /></div>
+        <div class="ctrl" data-kw="color mode monotone brand direction palette ink scholar daylight precision">
+          <div class="top"><label>Colour</label></div>
+          <select id="imgcolor">
+            <option value="mono">Monotone (pixel colour)</option>
+            <option value="d1">01 Ink &amp; Paper</option>
+            <option value="d2">02 Midnight Scholar</option>
+            <option value="d3">03 Daylight Campus</option>
+            <option value="d4">04 Precision Spectrum</option>
+          </select></div>
+        <div class="ctrl" id="threshWrap" data-kw="threshold darkness luminance stencil"><div class="top"><label>Threshold</label><span class="val" id="threshv">60%</span></div>
+          <input type="range" id="thresh" min="0" max="100" step="1" value="60" /></div>
+        <div class="toggle" id="invT" data-kw="invert light dark"><span>Invert (keep light pixels)</span><div class="sw" id="invSw"></div></div>
+      </div>
+    </section>
+
+    <section class="sec" data-title="grid size pixel position offset">
       <button class="lab" aria-expanded="true">Grid<svg class="chev" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 9l6 6 6-6" stroke-linecap="round" stroke-linejoin="round"/></svg></button>
       <div class="body">
         <div class="ctrl" data-kw="container size cell"><div class="top"><label>Container size</label><span class="val" id="cellv">22</span></div>
           <input type="range" id="cell" min="3" max="64" step="1" value="22" /></div>
         <div class="ctrl" data-kw="child size shape"><div class="top"><label>Child size</label><span class="val" id="childv">100%</span></div>
           <input type="range" id="child" min="8" max="140" step="1" value="100" /></div>
+        <div class="ctrl" data-kw="offset x position move horizontal"><div class="top"><label>Offset X</label><span class="val" id="oxv">0</span></div>
+          <input type="range" id="ox" min="-120" max="120" step="1" value="0" /></div>
+        <div class="ctrl" data-kw="offset y position move vertical"><div class="top"><label>Offset Y</label><span class="val" id="oyv">0</span></div>
+          <input type="range" id="oy" min="-120" max="120" step="1" value="0" /></div>
       </div>
     </section>
 
@@ -197,11 +256,12 @@
           <input type="range" id="startop" min="0" max="100" step="1" value="20" /></div>
         <div class="ctrl" data-kw="travel distance fly in move motion"><div class="top"><label>Travel distance</label><span class="val" id="travelv">8</span></div>
           <input type="range" id="travel" min="0" max="30" step="1" value="8" /></div>
-        <button class="btn primary" id="play" data-kw="play reveal animate" style="width:100%;margin-bottom:8px"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M7 5l12 7-12 7z"/></svg>Play</button>
+        <button class="btn primary" id="play" data-kw="play reveal animate layer" style="width:100%;margin-bottom:8px"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M7 5l12 7-12 7z"/></svg>Play layer</button>
         <div class="btnrow mb" data-kw="fade out explode burst collapse">
           <button class="btn" id="fade"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 4v6m0 4v6" stroke-linecap="round"/><circle cx="12" cy="12" r="1.4" fill="currentColor" stroke="none"/></svg>Fade out</button>
           <button class="btn" id="burst"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M8 3H3v5M16 3h5v5M8 21H3v-5M16 21h5v-5"/></svg>Explode</button>
         </div>
+        <button class="btn ghost" id="playAll" data-kw="play all layers together" style="margin-bottom:8px"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M6 5l8 7-8 7zM16 5v14" stroke-linecap="round" stroke-linejoin="round"/></svg>Play all layers</button>
         <button class="btn ghost" id="shuffle" data-kw="reseed randomness shuffle"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M4 7h4l8 10h4M4 17h4l2.5-3M16 7h4M16 17l2-2 2 2M16 7l2 2 2-2" stroke-linecap="round" stroke-linejoin="round"/></svg>Reseed randomness</button>
       </div>
     </section>
@@ -209,7 +269,7 @@
     <section class="sec" data-title="noise artifacts cloud outline radiation">
       <button class="lab" aria-expanded="true">Noise<svg class="chev" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 9l6 6 6-6" stroke-linecap="round" stroke-linejoin="round"/></svg></button>
       <div class="body">
-        <p style="font-size:11px;color:var(--ink-3);line-height:1.5;margin:0 0 13px" data-kw="noise outline cloud converge">Cloud that radiates from the text outline and converges into the shape — visible only while animating.</p>
+        <p style="font-size:11px;color:var(--ink-3);line-height:1.5;margin:0 0 13px" data-kw="noise outline cloud converge">Cloud that radiates from the layer outline and converges into the shape — visible only while animating.</p>
         <div class="ctrl" data-kw="amount density artifacts"><div class="top"><label>Amount</label><span class="val" id="noisev">0%</span></div>
           <input type="range" id="noise" min="0" max="100" step="1" value="0" /></div>
         <div class="ctrl" data-kw="reach radiation margin distance"><div class="top"><label>Reach</label><span class="val" id="nmargv">6</span></div>
@@ -217,16 +277,15 @@
       </div>
     </section>
 
-    <section class="sec" data-title="appearance color kerning">
+    <section class="sec" data-title="appearance color">
       <button class="lab" aria-expanded="true">Appearance<svg class="chev" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 9l6 6 6-6" stroke-linecap="round" stroke-linejoin="round"/></svg></button>
       <div class="body">
-        <div class="colors" data-kw="color pixel canvas background" style="margin-bottom:14px">
+        <div class="colors" data-kw="color pixel canvas background">
           <div class="c"><div class="top"><label>Pixel</label><span class="hex" id="fghex">#1A1A17</span></div>
             <div class="swatch"><input type="color" id="fg" value="#1a1a17" /></div></div>
           <div class="c"><div class="top"><label>Canvas</label><span class="hex" id="bghex">#F3F2EE</span></div>
             <div class="swatch"><input type="color" id="bg" value="#f3f2ee" /></div></div>
         </div>
-        <div class="toggle" id="kernT" data-kw="kerning spacing"><span>Apply kerning</span><div class="sw on" id="kernSw"></div></div>
       </div>
     </section>
 
@@ -253,17 +312,34 @@
 const F = window.FONTDATA;
 const C2G = F.char2glyph, G = F.glyphs, KERN = F.kern;
 const SHAPES = ["circle","square","triangle","quarter"];
+const LF = 0.42;   // per-pixel reveal window as a fraction of total progress
 
-const S = {
-  text:"Pixel", cell:22, child:100, shape:"circle", random:false, rot:false,
-  kern:true, fg:"#1a1a17", bg:"#f3f2ee",
-  dur:1600, dir:"lr", lrand:0.35, shuf:5, ease:"out", startop:0.2, travel:8,
-  bez:[0.25,0.10,0.25,1.00],   // custom easing: cubic-bezier control points (x1,y1,x2,y2)
-  noise:0, nmarg:6, seed:1
+// brand direction palettes, lifted from the lab site (lab.js PAL). `cols` are the
+// family colours an image is quantised to; `paper` is the background reference —
+// pixels nearest to paper are treated as background and dropped.
+const BRAND = {
+  d1:{ name:"01 Ink & Paper", paper:"#FBFAF7", ink:"#11151C",
+       cols:["#634093","#A4346B","#ED174B","#F0584A","#F7941E","#8CC75F","#2DB44A","#2E9FD6","#0A65A2","#11151C"] },
+  d2:{ name:"02 Midnight Scholar", paper:"#F6F1E6", ink:"#231F40",
+       cols:["#4A4178","#8E3A5A","#BD2956","#A02447","#D9A53C","#7BA796","#3F7878","#2F6BA4","#143A6B","#231F40"] },
+  d3:{ name:"03 Daylight Campus", paper:"#F8F2E7", ink:"#2E2722",
+       cols:["#894E73","#D24B43","#E14729","#C73A20","#F4A640","#B0BC72","#7E9A4D","#54ABBB","#26707F","#2E2722"] },
+  d4:{ name:"04 Precision Spectrum", paper:"#F4F9FC", ink:"#0B1521",
+       cols:["#3E4AA6","#2C6FC0","#E1227C","#B62E86","#34C6C3","#5FBA8E","#2F8E62","#2E9FD6","#04568C","#0B1521"] },
 };
+function hex2rgb(h){ return [parseInt(h.slice(1,3),16),parseInt(h.slice(3,5),16),parseInt(h.slice(5,7),16)]; }
+for(const k in BRAND){ const B=BRAND[k];
+  B.match=[{hex:null,rgb:hex2rgb(B.paper)}].concat(B.cols.map(h=>({hex:h,rgb:hex2rgb(h)}))); }
+// redmean-weighted RGB distance — cheap and close enough for palette snapping
+function cdist(r,g,b,c){ const rm=(r+c[0])/2, dr=r-c[0], dg=g-c[1], db=b-c[2];
+  return (2+rm/256)*dr*dr + 4*dg*dg + (2+(255-rm)/256)*db*db; }
+function nearestBrand(B,r,g,b){
+  let best=null,bd=Infinity;
+  for(const m of B.match){ const d=cdist(r,g,b,m.rgb); if(d<bd){ bd=d; best=m; } }
+  return best.hex;   // null = paper (background)
+}
 
-// easing curves remap the animation's progress, so they govern how fast pixels
-// change shape AND how fast the cloud converges into the final text.
+// ---------- easing ----------
 const eInOut = t=> t<0.5 ? 4*t*t*t : 1-Math.pow(-2*t+2,3)/2;
 const EASES = {
   linear:   t=>t,
@@ -271,11 +347,8 @@ const EASES = {
   out:      t=>1-Math.pow(1-t,3),
   inout:    eInOut,
   expo:     t=> t>=1 ? 1 : 1-Math.pow(2,-10*t),
-  // eases at the start, the middle, AND the end (two stacked ease-in-outs, settling at 0.5)
   inmidout: t=> t<0.5 ? 0.5*eInOut(2*t) : 0.5+0.5*eInOut(2*t-1)
 };
-// custom easing: evaluate a cubic bezier (endpoints fixed at 0,0 & 1,1) — given time t (x),
-// solve for the parameter u where Bx(u)=t, then return By(u) = the position.
 function bezAxis(u,a,b){ const m=1-u; return 3*m*m*u*a + 3*m*u*u*b + u*u*u; }
 function bezY(t,bez){
   if(t<=0) return 0; if(t>=1) return 1;
@@ -285,14 +358,53 @@ function bezY(t,bez){
   return bezAxis(u,y1,y2);
 }
 
+// ---------- hashing (SEED is set to the current layer's seed before use) ----------
+let SEED=1;
 function h32(x){ x|=0; x=(x^61)^(x>>>16); x=x+(x<<3)|0; x=x^(x>>>4); x=Math.imul(x,0x27d4eb2d); x=x^(x>>>15); return x>>>0; }
-function hash(a,b,c){ return h32(Math.imul(a|0,374761393) ^ Math.imul(b|0,668265263) ^ Math.imul((c|0)+1,2246822519) ^ Math.imul(S.seed|0,2654435761)); }
+function hash(a,b,c){ return h32(Math.imul(a|0,374761393) ^ Math.imul(b|0,668265263) ^ Math.imul((c|0)+1,2246822519) ^ Math.imul(SEED|0,2654435761)); }
 function hash01(a,b,c){ return hash(a,b,c)/4294967296; }
 
-// ---------- build text cells + radiating noise field ----------
-let TEXTC=[], NOISEC=[], BBT={minGX:0,maxGX:0,minGY:0,maxGY:0,w:1,h:1};
-function buildCells(){
-  const lines = S.text.split("\n");
+// ---------- layers ----------
+const GLOB = { bg:"#f3f2ee" };
+let LAYERS=[], activeId=null, layerN={text:0,image:0};
+function A(){ return LAYERS.find(l=>l.id===activeId) || null; }
+function newLayer(type){
+  layerN[type]++;
+  return {
+    id:"L"+Date.now()+"_"+Math.floor(Math.random()*1e6), type,
+    name:(type==="text"?"Text ":"Image ")+layerN[type],
+    visible:true, revealed:true, seed:((Math.random()*4294967296)>>>0)||1,
+    // content
+    text:"Pixel", kern:true,
+    img:null, imgName:"", imgW:48, colorMode:"mono", thresh:60, invert:false,
+    // grid & position (offsets are in this layer's grid cells)
+    cell:22, child:100, ox:0, oy:0,
+    // final shape + colour
+    shape:"circle", random:false, rot:false, fg:"#1a1a17",
+    // animation
+    dur:1600, dir:"lr", lrand:0.35, shuf:5, ease:"out", bez:[0,0,.58,1], easeMod:false,
+    startop:0.2, travel:8,
+    // noise
+    noise:0, nmarg:6,
+    // caches + per-layer animation state
+    cells:[], noiseCells:[], bb:{minGX:0,maxGX:0,minGY:0,maxGY:0,w:1,h:1},
+    anim:{active:false, mode:null, start:0}
+  };
+}
+
+// ---------- build cells (text glyphs or image samples) + noise ----------
+function buildLayer(L){
+  SEED=L.seed;
+  if(L.type==="text") buildTextCells(L); else buildImageCells(L);
+  let a=1e9,b=-1e9,c=1e9,d=-1e9;
+  for(const t of L.cells){ if(t.gx<a)a=t.gx; if(t.gx>b)b=t.gx; if(t.gy<c)c=t.gy; if(t.gy>d)d=t.gy; }
+  if(L.cells.length===0){a=0;b=0;c=0;d=0;}
+  L.bb={minGX:a,maxGX:b,minGY:c,maxGY:d,w:Math.max(1,b-a),h:Math.max(1,d-c)};
+  buildNoise(L);
+  computeOrders(L);
+}
+function buildTextCells(L){
+  const lines = L.text.split("\n");
   const spaceAdv = (G[C2G[" "]]||{a:7}).a;
   let maxRow=-1e9, minRow=1e9; const perLine=[];
   lines.forEach((line)=>{
@@ -303,28 +415,50 @@ function buildCells(){
       const g=G[gn];
       for(const [c,r] of g.c){ out.push([pen+c, r]); if(r>maxRow)maxRow=r; if(r<minRow)minRow=r; }
       pen+=g.a;
-      if(S.kern && ci<chars.length-1){ const gn2=C2G[chars[ci+1]]; if(gn2!==undefined){ const k=KERN[gn+"|"+gn2]; if(k) pen+=k; } }
+      if(L.kern && ci<chars.length-1){ const gn2=C2G[chars[ci+1]]; if(gn2!==undefined){ const k=KERN[gn+"|"+gn2]; if(k) pen+=k; } }
     });
     perLine.push(out);
   });
   if(maxRow<minRow){maxRow=18;minRow=0;}
   const span=maxRow-minRow+1, gap=2;
-  TEXTC=[]; const occ=new Set();
+  L.cells=[];
   perLine.forEach((out,li)=>{
-    for(const [x,r] of out){ const gx=Math.round(x), gy=li*(span+gap)+(maxRow-r);
-      TEXTC.push({gx,gy}); occ.add(gx+","+gy); }
+    for(const [x,r] of out){ L.cells.push({gx:Math.round(x), gy:li*(span+gap)+(maxRow-r)}); }
   });
-  let a=1e9,b=-1e9,c=1e9,d=-1e9;
-  for(const t of TEXTC){ if(t.gx<a)a=t.gx; if(t.gx>b)b=t.gx; if(t.gy<c)c=t.gy; if(t.gy>d)d=t.gy; }
-  if(TEXTC.length===0){a=0;b=0;c=0;d=0;}
-  BBT={minGX:a,maxGX:b,minGY:c,maxGY:d,w:Math.max(1,b-a),h:Math.max(1,d-c)};
-  buildNoise(occ);     // build the field first; computeOrders then orders text + noise together
-  computeOrders();
 }
-
-// directional key for a grid cell (direction blended with per-cell randomness)
-function dirKey(gx,gy){
-  const {minGX,minGY,w,h}=BBT, dir=S.dir, R=S.lrand;
+// approximate the imported image on the cell grid: downsample to imgW cells wide
+// (browser resampling does the area averaging), then either quantise each cell to
+// the chosen brand direction (paper-coloured cells = background, dropped) or keep
+// cells whose luminance passes the threshold (monotone stencil, drawn in layer fg).
+function buildImageCells(L){
+  L.cells=[];
+  if(!L.img) return;
+  const iw=L.img.naturalWidth||1, ih=L.img.naturalHeight||1;
+  const gw=Math.max(2,Math.min(240,L.imgW)), gh=Math.max(1,Math.round(gw*ih/iw));
+  const oc=document.createElement("canvas"); oc.width=gw; oc.height=gh;
+  const octx=oc.getContext("2d",{willReadFrequently:true});
+  octx.imageSmoothingEnabled=true; octx.imageSmoothingQuality="high";
+  octx.drawImage(L.img,0,0,gw,gh);
+  let d;
+  try{ d=octx.getImageData(0,0,gw,gh).data; }catch(e){ return; }   // tainted canvas etc.
+  const B = L.colorMode!=="mono" ? BRAND[L.colorMode] : null;
+  const th=(L.thresh/100)*255;
+  for(let y=0;y<gh;y++)for(let x=0;x<gw;x++){
+    const i=(y*gw+x)*4, r=d[i],g=d[i+1],b=d[i+2],a=d[i+3];
+    if(a<120) continue;
+    if(B){
+      const col=nearestBrand(B,r,g,b);
+      if(col===null) continue;
+      L.cells.push({gx:x,gy:y,col});
+    } else {
+      const lum=0.2126*r+0.7152*g+0.0722*b;
+      if(L.invert ? lum<th : lum>th) continue;
+      L.cells.push({gx:x,gy:y});
+    }
+  }
+}
+function dirKey(L,gx,gy){
+  const {minGX,minGY,w,h}=L.bb, dir=L.dir, R=L.lrand;
   const nx=(gx-minGX)/w, ny=(gy-minGY)/h; let dd;
   switch(dir){
     case "lr": dd=nx; break; case "rl": dd=1-nx; break;
@@ -339,34 +473,24 @@ function dirKey(gx,gy){
 function rankNorm(arr, assign){ const n=arr.length; if(!n) return;
   const idx=arr.map((_,i)=>i).sort((p,q)=>arr[p]._key-arr[q]._key||p-q);
   const denom=Math.max(1,n-1); idx.forEach((ci,rank)=>assign(arr[ci], rank/denom)); }
-
-// Reveal order per text cell, AND the directional lifespan of each noise cell.
-// Noise shares the same directional key as text, so the cloud sweeps with the
-// chosen direction: the cloud over a region dies right as the text there forms.
-// `df` (distance-to-outline factor) gives a small local inward stagger on top.
-function computeOrders(){
-  for(const t of TEXTC) t._key=dirKey(t.gx,t.gy);
-  rankNorm(TEXTC,(c,o)=>{ c.order=o; });
-  for(const c of NOISEC) c._key=dirKey(c.gx,c.gy);
-  rankNorm(NOISEC,(c,o)=>{ c.ord=o;
-    const start=o*(1-LF), end=start+LF, d=(c.df-0.5)*0.1;   // near-outline lingers a touch
-    c.din =Math.min(0.985, end+d);          // play-in: alive until the sweep-front passes & text settles
-    c.bout=start;                           // fade-out: born exactly as its text begins dissolving
-    c.dout=Math.min(0.985, end+d);          // ...then disperses; near-outline lingers, all clear by the end
+function computeOrders(L){
+  SEED=L.seed;
+  for(const t of L.cells) t._key=dirKey(L,t.gx,t.gy);
+  rankNorm(L.cells,(c,o)=>{ c.order=o; });
+  for(const c of L.noiseCells) c._key=dirKey(L,c.gx,c.gy);
+  rankNorm(L.noiseCells,(c,o)=>{ c.ord=o;
+    const start=o*(1-LF), end=start+LF, d=(c.df-0.5)*0.1;
+    c.din =Math.min(0.985, end+d);
+    c.bout=start;
+    c.dout=Math.min(0.985, end+d);
   });
 }
-
-// noise field: multi-source BFS outward from the glyph silhouette, so each empty
-// cell knows its distance to the outline. Density falls off with distance (the
-// cloud radiates from the edge). Each cell stores `df` = distance factor (1 at the
-// outline -> 0 at reach); computeOrders turns it + the directional order into the
-// cell's lifespan so the cloud sweeps with the animation and collapses inward.
-function buildNoise(occ){
-  NOISEC=[];
-  if(S.noise<=0 || S.nmarg<=0 || TEXTC.length===0) return;
-  const M=S.nmarg, amt=(S.noise/100)*0.9;
+function buildNoise(L){
+  L.noiseCells=[];
+  if(L.noise<=0 || L.nmarg<=0 || L.cells.length===0) return;
+  const M=L.nmarg, amt=(L.noise/100)*0.9;
   const dist=new Map(); let frontier=[];
-  for(const t of TEXTC){ const k=t.gx+","+t.gy; if(!dist.has(k)){ dist.set(k,0); frontier.push([t.gx,t.gy]); } }
+  for(const t of L.cells){ const k=t.gx+","+t.gy; if(!dist.has(k)){ dist.set(k,0); frontier.push([t.gx,t.gy]); } }
   let guard=0; const MAXV=350000;
   for(let dd=1; dd<=M && frontier.length && guard<MAXV; dd++){
     const next=[];
@@ -385,10 +509,10 @@ function buildNoise(occ){
   for(const [k,dd] of dist){
     if(dd===0) continue;
     const parts=k.split(","), gx=+parts[0], gy=+parts[1];
-    const t=(dd-1)/M;                       // 0 at outline .. ~1 at reach
-    const fall=Math.pow(1-t,1.6);           // denser near outline
+    const t=(dd-1)/M;
+    const fall=Math.pow(1-t,1.6);
     if(hash01(gx,gy,909) >= amt*fall) continue;
-    NOISEC.push({gx,gy,df:1-t});            // distance factor: 1 near outline -> 0 at reach
+    L.noiseCells.push({gx,gy,df:1-t});
   }
 }
 
@@ -398,34 +522,50 @@ const hud=document.getElementById("hud");
 let view={x:0,y:0,scale:1}, VW=0, VH=0, dpr=1;
 function sizeCanvas(){ const r=stage.getBoundingClientRect(); VW=r.width; VH=r.height; dpr=window.devicePixelRatio||1;
   cv.width=Math.round(VW*dpr); cv.height=Math.round(VH*dpr); cv.style.width=VW+"px"; cv.style.height=VH+"px"; }
+function layerPxBox(L){
+  const pad=(L.noise>0?L.nmarg:0)+L.travel;
+  const x0=(L.bb.minGX+L.ox-pad)*L.cell, x1=(L.bb.maxGX+L.ox+1+pad)*L.cell;
+  const y0=(L.bb.minGY+L.oy-pad)*L.cell, y1=(L.bb.maxGY+L.oy+1+pad)*L.cell;
+  return {x0,y0,x1,y1};
+}
 function contentPxBox(){
-  const pad=(S.noise>0?S.nmarg:0)+S.travel;   // noise reach and fly-in travel stack
-  const x0=(BBT.minGX-pad)*S.cell, x1=(BBT.maxGX+1+pad)*S.cell, y0=(BBT.minGY-pad)*S.cell, y1=(BBT.maxGY+1+pad)*S.cell;
+  let x0=1e15,y0=1e15,x1=-1e15,y1=-1e15,any=false;
+  for(const L of LAYERS){ if(!L.visible||!L.cells.length) continue; any=true;
+    const b=layerPxBox(L); x0=Math.min(x0,b.x0); y0=Math.min(y0,b.y0); x1=Math.max(x1,b.x1); y1=Math.max(y1,b.y1); }
+  if(!any){ x0=0;y0=0;x1=100;y1=100; }
   return {x0,y0,cx:(x0+x1)/2,cy:(y0+y1)/2,w:x1-x0,h:y1-y0};
 }
+let userView=false;   // becomes true once the user pans/zooms; until then resizes re-fit
 function fitView(){ const b=contentPxBox();
   view.scale=Math.max(0.05,Math.min(40, Math.min(VW/(b.w||1),VH/(b.h||1))*0.86));
   view.x=VW/2-b.cx*view.scale; view.y=VH/2-b.cy*view.scale; draw(); }
-function zoomAt(mx,my,factor){ const ns=Math.max(0.05,Math.min(40,view.scale*factor));
+function zoomAt(mx,my,factor){ userView=true; const ns=Math.max(0.05,Math.min(40,view.scale*factor));
   const wx=(mx-view.x)/view.scale, wy=(my-view.y)/view.scale; view.scale=ns; view.x=mx-wx*ns; view.y=my-wy*ns; draw(); }
 
-// ---------- animation ----------
-let anim={active:false, mode:null, start:0, raf:0, dur:1600, shuf:5, ease:"out", startop:0.2, travel:8, easeMod:false};
-let revealed=true, easeMod=false;   // easeMod: the curve has been dragged away from the selected preset
-const LF=0.42;   // per-pixel reveal window as a fraction of total progress
-function play(mode){
-  if((mode==="out"||mode==="burst") && !revealed) return;   // both need existing text to act on
-  cancelAnimationFrame(anim.raf);
-  buildCells();   // commit current settings (direction/randomness/noise/reach) for this run
-  anim.active=true; anim.mode=mode; anim.start=performance.now(); anim.dur=S.dur; anim.shuf=S.shuf;
-  anim.ease=S.ease; anim.startop=S.startop; anim.travel=S.travel; anim.bez=S.bez.slice(); anim.easeMod=easeMod;   // snapshot so mid-flight changes don't glitch
-  const tick=(now)=>{ const t=now-anim.start; draw(t,mode);
-    if(t<anim.dur+60){ anim.raf=requestAnimationFrame(tick); }
-    else { anim.active=false; anim.mode=null; revealed=(mode!=="out"); draw(); } };   // in & burst end with text shown
-  anim.raf=requestAnimationFrame(tick);
+// ---------- animation: per-layer state, one shared RAF driver ----------
+let rafOn=false;
+function ensureRaf(){ if(!rafOn){ rafOn=true; requestAnimationFrame(animTick); } }
+function animTick(now){
+  let any=false;
+  for(const L of LAYERS){
+    const a=L.anim;
+    if(!a.active) continue;
+    if(now-a.start >= a.dur+60){ a.active=false; L.revealed=(a.mode!=="out"); a.mode=null; }
+    else any=true;
+  }
+  draw(now);
+  if(any) requestAnimationFrame(animTick); else rafOn=false;
+}
+function play(L,mode){
+  if(!L) return;
+  if((mode==="out"||mode==="burst") && !L.revealed) return;
+  buildLayer(L);   // commit this layer's current settings for the run
+  L.anim={active:true, mode, start:performance.now(), dur:L.dur, shuf:L.shuf, ease:L.ease,
+          startop:L.startop, travel:L.travel, bez:L.bez.slice(), easeMod:L.easeMod};
+  ensureRaf();
 }
 
-// ---------- draw (pure shape changes — no opacity or scale animation) ----------
+// ---------- draw ----------
 function drawShape(shape,cx,cy,s,rot){ if(s<=0) return; const h=s/2;
   ctx.save(); ctx.translate(cx,cy); if(rot) ctx.rotate(rot); ctx.beginPath();
   if(shape==="circle"){ ctx.arc(0,0,h,0,Math.PI*2); }
@@ -434,92 +574,84 @@ function drawShape(shape,cx,cy,s,rot){ if(s<=0) return; const h=s/2;
   else { ctx.moveTo(-h,-h); ctx.arc(-h,-h,s,0,Math.PI/2); ctx.closePath(); }
   ctx.fill(); ctx.restore();
 }
-// per-pixel travel offset (grid units): a random direction + magnitude, so pixels
-// start scattered out in the cloud and glide to their home cell as they settle.
 function offOf(gx,gy,travel){
   const a=hash01(gx,gy,201)*6.2831853, m=travel*(0.4+0.6*hash01(gx,gy,202));
   return [Math.cos(a)*m, Math.sin(a)*m];
 }
-function paintCell(gx,gy,useFinal,slot,base,cell,rox,roy){
-  let shape,rot=0;
-  if(useFinal){ shape = S.random ? SHAPES[hash(gx,gy,11)&3] : S.shape; rot = S.rot ? (hash(gx,gy,12)&3)*(Math.PI/2) : 0; }
-  else { shape = SHAPES[hash(gx,gy,1000+slot)&3]; rot = (hash(gx,gy,2000+slot)&3)*(Math.PI/2); }
-  drawShape(shape,(gx+0.5+(rox||0))*cell,(gy+0.5+(roy||0))*cell, base, rot);
-}
-function draw(t=null, mode=null){
-  if(mode===null && anim.active){ mode=anim.mode; t=performance.now()-anim.start; }
-  ctx.setTransform(dpr,0,0,dpr,0,0); ctx.fillStyle=S.bg; ctx.fillRect(0,0,VW,VH);
-  ctx.setTransform(dpr*view.scale,0,0,dpr*view.scale, dpr*view.x, dpr*view.y);
-
-  const animating=mode!==null, cell=S.cell, base=(S.child/100)*cell;
-  const D=animating?anim.dur:S.dur, NS=animating?anim.shuf:S.shuf;
+function drawLayer(L,now){
+  SEED=L.seed;
+  const a=L.anim, animating=a.active, mode=a.mode;
+  const t=animating? now-a.start : 0;
+  const cell=L.cell, base=(L.child/100)*cell, OX=L.ox, OY=L.oy;
+  const D=animating?a.dur:L.dur, NS=animating?a.shuf:L.shuf;
   const g=animating?Math.max(0,Math.min(1,t/D)):1;
-  const easeName=animating?anim.ease:S.ease, bez=animating?anim.bez:S.bez;
-  const useBez = easeName==="custom" || (animating?anim.easeMod:easeMod);   // exact preset fn until dragged
+  const easeName=animating?a.ease:L.ease, bez=animating?a.bez:L.bez;
+  const useBez = easeName==="custom" || (animating?a.easeMod:L.easeMod);
   const ez = useBez ? (u=>bezY(u,bez)) : (EASES[easeName]||EASES.linear);
-  const ge=animating?ez(g):1;                 // eased progress drives everything below
-  const SO=animating?anim.startop:1;          // start-opacity floor (1 = no fade)
-  const rate=NS>0?NS/LF:0;                     // shape-shift cadence (matches text & cloud)
-  const TR=animating?anim.travel:0;            // fly-in distance (grid cells; 0 = appear in place)
-  ctx.fillStyle=S.fg; ctx.globalAlpha=1;
+  const ge=animating?ez(g):1;
+  const SO=animating?a.startop:1;
+  const rate=NS>0?NS/LF:0;
+  const TR=animating?a.travel:0;
+  const paletted = L.type==="image" && L.colorMode!=="mono";
+  ctx.fillStyle=L.fg;
   let drawn=0;
 
-  // "burst": explode outward then collapse back — a per-pixel round-trip out-fraction
-  // (0 = home/clean, 1 = fully scattered). Each pixel's window is STAGGERED by its
-  // directional order, so the blast ripples across in the chosen direction. (1-W) is the
-  // directional spread; W=1 would be a single synchronized blast. Endpoints stay clean:
-  // every pixel is home before/after its window, and folding raw g keeps it grid-snapped.
   let bSlot=0, bOutOf=()=>0;
   if(mode==="burst"){
     const bstep=rate>0?Math.max(2,Math.round(rate)):0;
-    const gq=bstep>0?Math.round(g*bstep)/bstep:g;   // stepped RAW progress (endpoint-safe)
+    const gq=bstep>0?Math.round(g*bstep)/bstep:g;
     const W=0.65;
     bSlot=Math.floor(ge*rate);
     bOutOf=o=>{ const start=o*(1-W), p=(gq-start)/W; return (p<=0||p>=1)?0:ez(1-Math.abs(2*p-1)); };
   }
 
-  for(const c of TEXTC){
-    let useFinal=true, slot=0, alpha=1, sf=1;    // sf = settle fraction (0 = out in cloud, 1 = home cell)
-    if(!animating){ if(!revealed) continue; }
+  const paintCell=(c,useFinal,slot,alpha,rox,roy)=>{
+    let shape,rot=0;
+    if(useFinal){ shape = L.random ? SHAPES[hash(c.gx,c.gy,11)&3] : L.shape; rot = L.rot ? (hash(c.gx,c.gy,12)&3)*(Math.PI/2) : 0; }
+    else { shape = SHAPES[hash(c.gx,c.gy,1000+slot)&3]; rot = (hash(c.gx,c.gy,2000+slot)&3)*(Math.PI/2); }
+    if(paletted) ctx.fillStyle=c.col||L.fg;
+    ctx.globalAlpha=alpha;
+    drawShape(shape,(c.gx+OX+0.5+rox)*cell,(c.gy+OY+0.5+roy)*cell, base, rot);
+    drawn++;
+  };
+
+  for(const c of L.cells){
+    let useFinal=true, slot=0, alpha=1, sf=1;
+    if(!animating){ if(!L.revealed) continue; }
     else if(mode==="burst"){ const bo=bOutOf(c.order); sf=1-bo; useFinal=bo<=0?true:(NS<=0); slot=bSlot; alpha=SO+(1-SO)*(1-bo); }
     else {
       const start=c.order*(1-LF), end=start+LF, p=(ge-start)/LF;
       if(mode==="in"){
         if(ge<start) continue;
-        else if(ge>=end){ useFinal=true; }               // settled -> full opacity, in place
+        else if(ge>=end){ useFinal=true; }
         else { useFinal=(NS<=0); slot=Math.floor(p*NS);
-               const m=NS<=0?1:Math.min(1,(slot+1)/NS);   // steps up toward full as it settles
-               alpha=SO+(1-SO)*m; sf=NS<=0?p:slot/NS; }    // travels home (grid-snapped); works even w/o shuffle
+               const m=NS<=0?1:Math.min(1,(slot+1)/NS);
+               alpha=SO+(1-SO)*m; sf=NS<=0?p:slot/NS; }
       } else {
-        if(ge<=start){ useFinal=true; }                     // clean & final until dissolve begins
+        if(ge<=start){ useFinal=true; }
         else if(ge>=end) continue;
         else { useFinal=(NS<=0); slot=Math.floor(p*NS);
-               const m=NS<=0?0:Math.max(0,1-(slot+1)/NS);  // steps down as it dissolves
-               alpha=SO+(1-SO)*m; sf=NS<=0?1-p:1-slot/NS; }  // travels back out (grid-snapped)
+               const m=NS<=0?0:Math.max(0,1-(slot+1)/NS);
+               alpha=SO+(1-SO)*m; sf=NS<=0?1-p:1-slot/NS; }
       }
     }
     let rox=0,roy=0;
     if(sf<1 && TR>0){ const o=offOf(c.gx,c.gy,TR); rox=Math.round(o[0]*(1-sf)); roy=Math.round(o[1]*(1-sf)); }
-    ctx.globalAlpha=alpha;
-    paintCell(c.gx,c.gy,useFinal,slot,base,cell,rox,roy); drawn++;
+    paintCell(c,useFinal,slot,alpha,rox,roy);
   }
 
-  // noise: animation only, never in the settled state. Lifespan is keyed to the
-  // directional order, so the cloud sweeps with the animation (in: present until
-  // the sweep-front passes; out: born as text dissolves, cleared by the end).
-  // Shape shuffles at the SAME cadence as the text reveal, and opacity steps with
-  // each shift — faint far from resolving, opaque as it nears the final text pixel.
-  if(animating && NOISEC.length){
-    for(const c of NOISEC){
-      let alive=false, mOp=1, cf=1;                       // mOp = opacity materialization, cf = travel fraction
-      if(mode==="burst"){ const bo=bOutOf(c.ord); alive=bo>0.02; mOp=bo; cf=1-bo; }   // debris ripples with the directional blast
+  if(animating && L.noiseCells.length){
+    const B=paletted?BRAND[L.colorMode]:null;
+    for(const c of L.noiseCells){
+      let alive=false, mOp=1, cf=1;
+      if(mode==="burst"){ const bo=bOutOf(c.ord); alive=bo>0.02; mOp=bo; cf=1-bo; }
       else {
         alive = mode==="in" ? (ge < c.din) : (ge > c.bout && ge < c.dout);
         if(alive){
-          const prog = mode==="in" ? Math.min(1, ge/c.din)   // continuous progress toward resolution
+          const prog = mode==="in" ? Math.min(1, ge/c.din)
                                    : Math.max(0, 1-(ge-c.bout)/Math.max(1e-6, c.dout-c.bout));
           mOp=prog; cf=prog;
-          if(rate>0){ const q=Math.floor(ge*rate)/rate;      // with shuffle: opacity + travel step per shift
+          if(rate>0){ const q=Math.floor(ge*rate)/rate;
             mOp = mode==="in" ? Math.min(1, q/c.din)
                               : Math.max(0, 1-(q-c.bout)/Math.max(1e-6, c.dout-c.bout));
             cf=mOp; }
@@ -527,53 +659,158 @@ function draw(t=null, mode=null){
       }
       if(!alive) continue;
       const sl=Math.floor(ge*rate) + (hash(c.gx,c.gy,77)&7);
+      ctx.fillStyle = B ? B.cols[hash(c.gx,c.gy,5)%B.cols.length] : L.fg;
       ctx.globalAlpha=SO+(1-SO)*mOp;
-      let rox=0,roy=0;                                   // travels in snapped grid steps
+      let rox=0,roy=0;
       if(cf<1 && TR>0){ const o=offOf(c.gx,c.gy,TR); rox=Math.round(o[0]*(1-cf)); roy=Math.round(o[1]*(1-cf)); }
       const shape=SHAPES[hash(c.gx,c.gy,1000+sl)&3], rot=(hash(c.gx,c.gy,2000+sl)&3)*(Math.PI/2);
-      drawShape(shape,(c.gx+0.5+rox)*cell,(c.gy+0.5+roy)*cell, base, rot); drawn++;
+      drawShape(shape,(c.gx+OX+0.5+rox)*cell,(c.gy+OY+0.5+roy)*cell, base, rot); drawn++;
     }
   }
+  return drawn;
+}
+function draw(now){
+  if(now===undefined) now=performance.now();
+  ctx.setTransform(dpr,0,0,dpr,0,0); ctx.fillStyle=GLOB.bg; ctx.fillRect(0,0,VW,VH);
+  ctx.setTransform(dpr*view.scale,0,0,dpr*view.scale, dpr*view.x, dpr*view.y);
+  let drawn=0, cells=0;
+  for(const L of LAYERS){ if(!L.visible) continue; drawn+=drawLayer(L,now); cells+=L.cells.length; }
   ctx.globalAlpha=1; ctx.setTransform(1,0,0,1,0,0);
-  hud.textContent=`${drawn} px · zoom ${Math.round(view.scale*100)}% · ${TEXTC.length}+${NOISEC.length}`;
+  hud.textContent=`${drawn} px · zoom ${Math.round(view.scale*100)}% · ${LAYERS.length} layer${LAYERS.length===1?"":"s"} · ${cells} cells`;
 }
 
-function rebuild(refit){ revealed=true; buildCells(); if(refit) fitView(); else draw(); }
-
-// ---------- controls ----------
-function range(id,key,fmt,scale){
-  const el=document.getElementById(id), out=document.getElementById(id+"v");
-  const upd=()=>{ out.textContent=fmt(el.value); };
-  el.addEventListener("input",()=>{ S[key]=scale?scale(+el.value):+el.value; upd(); revealed=true;
-    if(["cell","child","shuf","startop","travel"].includes(id)){ draw(); }
-    else if(id==="dur"){ /* affects next play() */ }
-    else if(id==="lrand"){ if(!anim.active){ computeOrders(); draw(); } }   // don't re-order mid-animation
-    else { if(!anim.active) rebuild(false); }   // noise/reach: don't rebuild mid-animation (both apply next play)
+// ---------- layer list UI ----------
+const layerList=document.getElementById("layerList");
+const EYE='<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><path d="M2.5 12S6 5.5 12 5.5 21.5 12 21.5 12 18 18.5 12 18.5 2.5 12 2.5 12Z"/><circle cx="12" cy="12" r="2.6"/></svg>';
+const EYEOFF='<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><path d="M4 5l16 14M9.5 6.2A9.8 9.8 0 0 1 12 5.5c6 0 9.5 6.5 9.5 6.5a17 17 0 0 1-3 3.6M6 8.3A16 16 0 0 0 2.5 12S6 18.5 12 18.5a9.7 9.7 0 0 0 3-.5" stroke-linecap="round"/></svg>';
+const PLAYI='<svg viewBox="0 0 24 24" fill="currentColor"><path d="M7 5l12 7-12 7z"/></svg>';
+const XI='<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M6 6l12 12M18 6L6 18" stroke-linecap="round"/></svg>';
+function renderLayerList(){
+  layerList.innerHTML="";
+  if(!LAYERS.length){ layerList.innerHTML='<p style="font-size:11px;color:var(--ink-3);margin:2px 0 6px">No layers — add one below.</p>'; return; }
+  // topmost layer first in the list (last drawn = on top)
+  [...LAYERS].reverse().forEach(L=>{
+    const row=document.createElement("div");
+    row.className="lrow"+(L.id===activeId?" active":"")+(L.visible?"":" hiddenL");
+    row.dataset.id=L.id;
+    row.innerHTML=
+      '<button class="leye" title="Show / hide">'+(L.visible?EYE:EYEOFF)+'</button>'+
+      '<span class="lname" title="Double-click to rename"></span>'+
+      '<span class="ltype">'+(L.type==="text"?"TXT":"IMG")+'</span>'+
+      '<button class="lplay" title="Play this layer">'+PLAYI+'</button>'+
+      '<button class="ldel" title="Delete layer">'+XI+'</button>';
+    row.querySelector(".lname").textContent=L.name;
+    row.addEventListener("click",e=>{
+      if(e.target.closest("button")) return;
+      if(activeId!==L.id){ activeId=L.id; refreshPanel(); }
+    });
+    const nameEl=row.querySelector(".lname");
+    nameEl.addEventListener("dblclick",()=>{
+      nameEl.contentEditable="true"; nameEl.focus();
+      document.getSelection().selectAllChildren(nameEl);
+    });
+    const commit=()=>{ nameEl.contentEditable="false";
+      L.name=(nameEl.textContent||"").trim().slice(0,40)||L.name; nameEl.textContent=L.name; };
+    nameEl.addEventListener("blur",commit);
+    nameEl.addEventListener("keydown",e=>{ if(e.key==="Enter"){ e.preventDefault(); nameEl.blur(); }
+      if(e.key==="Escape"){ nameEl.textContent=L.name; nameEl.blur(); } });
+    row.querySelector(".leye").addEventListener("click",()=>{ L.visible=!L.visible; renderLayerList(); draw(); });
+    row.querySelector(".lplay").addEventListener("click",()=>play(L,"in"));
+    row.querySelector(".ldel").addEventListener("click",()=>deleteLayer(L.id));
+    layerList.appendChild(row);
   });
-  upd();
 }
-range("cell","cell",v=>v); range("child","child",v=>v+"%"); range("dur","dur",v=>v+"ms");
-range("lrand","lrand",v=>v+"%",v=>v/100); range("shuf","shuf",v=>v);
-range("startop","startop",v=>v+"%",v=>v/100); range("travel","travel",v=>v);
-range("noise","noise",v=>v+"%"); range("nmarg","nmarg",v=>v);
+function addLayer(L,fit){
+  LAYERS.push(L); activeId=L.id;
+  buildLayer(L); refreshPanel();
+  if(fit) fitView(); else draw();
+}
+function deleteLayer(id){
+  const i=LAYERS.findIndex(l=>l.id===id); if(i<0) return;
+  LAYERS.splice(i,1);
+  if(activeId===id) activeId=LAYERS.length?LAYERS[Math.min(i,LAYERS.length-1)].id:null;
+  refreshPanel(); draw();
+}
+document.getElementById("addText").addEventListener("click",()=>{
+  const L=newLayer("text");
+  // drop the new layer below the current content so it doesn't overlap
+  const prev=LAYERS[LAYERS.length-1];
+  if(prev) L.oy=Math.round(prev.oy+((prev.bb.maxGY-prev.bb.minGY)+8)*prev.cell/L.cell);
+  addLayer(L,true);
+});
+const imgFile=document.getElementById("imgFile");
+let imgTarget=null;   // layer waiting for a file (null = create a new layer)
+document.getElementById("addImage").addEventListener("click",()=>{ imgTarget=null; imgFile.value=""; imgFile.click(); });
+document.getElementById("imgReplace").addEventListener("click",()=>{ const L=A();
+  if(L&&L.type==="image"){ imgTarget=L; imgFile.value=""; imgFile.click(); } });
+imgFile.addEventListener("change",()=>{
+  const f=imgFile.files&&imgFile.files[0]; if(!f) return;
+  const url=URL.createObjectURL(f);
+  const img=new Image();
+  img.onload=()=>{
+    URL.revokeObjectURL(url);
+    if(imgTarget){ imgTarget.img=img; imgTarget.imgName=f.name; buildLayer(imgTarget); refreshPanel(); draw(); }
+    else{
+      const L=newLayer("image");
+      L.img=img; L.imgName=f.name; L.name=f.name.replace(/\.[^.]+$/,"").slice(0,24)||L.name;
+      const prev=LAYERS[LAYERS.length-1];
+      if(prev) L.oy=Math.round(prev.oy+((prev.bb.maxGY-prev.bb.minGY)+8)*prev.cell/L.cell);
+      addLayer(L,true);
+    }
+  };
+  img.onerror=()=>{ URL.revokeObjectURL(url); alert("Could not load that image."); };
+  img.src=url;
+});
 
-document.getElementById("dir").addEventListener("change",e=>{ S.dir=e.target.value; revealed=true; if(!anim.active){ computeOrders(); draw(); } });
-// ---------- easing dropdown + persistent curve chart ----------
+// ---------- controls (all bound to the active layer) ----------
+function setVal(id,v){ const el=document.getElementById(id); if(el.value!==String(v)) el.value=v; }
+function range(id,key,fmt,scale,onchange){
+  const el=document.getElementById(id), out=document.getElementById(id+"v");
+  el.addEventListener("input",()=>{ const L=A(); if(!L) return;
+    L[key]=scale?scale(+el.value):+el.value; out.textContent=fmt(el.value); L.revealed=true;
+    (onchange||(()=>draw()))(L);
+  });
+  return {sync:L=>{ const raw=scale?Math.round(L[key]*(id==="lrand"||id==="startop"?100:1)):L[key];
+    setVal(id,raw); out.textContent=fmt(raw); }};
+}
+const reorder=L=>{ if(!L.anim.active){ computeOrders(L); } draw(); };
+const rebuildL=L=>{ if(!L.anim.active){ buildLayer(L); } draw(); };
+const SYNCS=[];
+SYNCS.push(range("cell","cell",v=>v));
+SYNCS.push(range("child","child",v=>v+"%"));
+SYNCS.push(range("ox","ox",v=>v));
+SYNCS.push(range("oy","oy",v=>v));
+SYNCS.push(range("dur","dur",v=>v+"ms",null,()=>{}));
+SYNCS.push(range("lrand","lrand",v=>v+"%",v=>v/100,reorder));
+SYNCS.push(range("shuf","shuf",v=>v));
+SYNCS.push(range("startop","startop",v=>v+"%",v=>v/100));
+SYNCS.push(range("travel","travel",v=>v));
+SYNCS.push(range("noise","noise",v=>v+"%",null,rebuildL));
+SYNCS.push(range("nmarg","nmarg",v=>v,null,rebuildL));
+SYNCS.push(range("imgw","imgW",v=>v+" cells",null,rebuildL));
+SYNCS.push(range("thresh","thresh",v=>v+"%",null,rebuildL));
+
+document.getElementById("dir").addEventListener("change",e=>{ const L=A(); if(!L) return;
+  L.dir=e.target.value; L.revealed=true; reorder(L); });
+document.getElementById("imgcolor").addEventListener("change",e=>{ const L=A(); if(!L) return;
+  L.colorMode=e.target.value; L.revealed=true; syncImgUI(L); rebuildL(L); });
+document.getElementById("text").addEventListener("input",e=>{ const L=A(); if(!L||L.type!=="text") return;
+  L.text=e.target.value; L.revealed=true; buildLayer(L); draw(); });
+
+// ---------- easing dropdown + curve chart (per layer) ----------
 const EASE_LABELS={linear:"Linear",in:"Ease in",out:"Ease out",inout:"Ease in-out",inmidout:"Ease in-mid-out",expo:"Expo out",custom:"Custom curve"};
-// per-preset control points that position the two handles (exact for the cubic eases,
-// close approximations for expo/in-mid-out). Until dragged, the chart & animation use the
-// exact preset function; dragging switches to the editable cubic bezier from these points.
 const PRESET_BEZ={linear:[.33,.33,.67,.67],in:[.42,0,1,1],out:[0,0,.58,1],inout:[.42,0,.58,1],inmidout:[.5,0,.5,1],expo:[.16,1,.3,1],custom:[.25,.1,.25,1]};
 const easeBtn=document.getElementById("easeBtn"), easeList=document.getElementById("easeList");
-function refreshEaseLabels(){
-  easeBtn.textContent=EASE_LABELS[S.ease]+(easeMod?" *":"");
-  [...easeList.children].forEach(b=>{ const on=b.dataset.v===S.ease;
-    b.classList.toggle("sel",on); b.textContent=EASE_LABELS[b.dataset.v]+((on&&easeMod)?" *":""); });
+function refreshEaseLabels(){ const L=A(); if(!L) return;
+  easeBtn.textContent=EASE_LABELS[L.ease]+(L.easeMod?" *":"");
+  [...easeList.children].forEach(b=>{ const on=b.dataset.v===L.ease;
+    b.classList.toggle("sel",on); b.textContent=EASE_LABELS[b.dataset.v]+((on&&L.easeMod)?" *":""); });
 }
-function applyEase(name){ S.ease=name; S.bez=PRESET_BEZ[name].slice(); easeMod=false; refreshEaseLabels(); bezUpdate(); }
+function applyEase(name){ const L=A(); if(!L) return;
+  L.ease=name; L.bez=PRESET_BEZ[name].slice(); L.easeMod=false; refreshEaseLabels(); bezUpdate(); }
 easeBtn.addEventListener("click",()=>easeList.classList.toggle("open"));
 easeList.addEventListener("click",e=>{ const b=e.target.closest("button[data-v]"); if(!b) return;
-  applyEase(b.dataset.v); easeList.classList.remove("open"); });   // re-selecting resets (asterisk cleared)
+  applyEase(b.dataset.v); easeList.classList.remove("open"); });
 document.addEventListener("click",e=>{ if(!document.getElementById("easeDD").contains(e.target)) easeList.classList.remove("open"); });
 
 const bezSvg=document.getElementById("bez"), BP=12, BIN=100-2*BP;
@@ -586,12 +823,10 @@ function bezInit(){
     '<path id="bezCurve" fill="none" stroke="var(--accent)" stroke-width="1.6"/>'+
     '<circle id="bezH1" r="3.6" fill="var(--accent)" stroke="var(--panel)" stroke-width="1"/>'+
     '<circle id="bezH2" r="3.6" fill="var(--accent)" stroke="var(--panel)" stroke-width="1"/>';
-  bezUpdate();
 }
-function bezUpdate(){
-  const [x1,y1,x2,y2]=S.bez;
-  // draw the ACTIVE easing (exact preset fn until dragged; bezier once modified/custom) so chart == animation
-  const fn = (easeMod||S.ease==="custom") ? (u=>bezY(u,S.bez)) : (EASES[S.ease]||EASES.linear);
+function bezUpdate(){ const L=A(); if(!L) return;
+  const [x1,y1,x2,y2]=L.bez;
+  const fn = (L.easeMod||L.ease==="custom") ? (u=>bezY(u,L.bez)) : (EASES[L.ease]||EASES.linear);
   let d="M "+bSX(0)+" "+bSY(0);
   for(let i=1;i<=48;i++){ const t=i/48; d+=" L "+bSX(t)+" "+bSY(fn(t)); }
   document.getElementById("bezCurve").setAttribute("d",d);
@@ -599,40 +834,78 @@ function bezUpdate(){
   set("bezL1",bSX(0),bSY(0),bSX(x1),bSY(y1)); set("bezL2",bSX(1),bSY(1),bSX(x2),bSY(y2));
   const h=(id,cx,cy)=>{const el=document.getElementById(id);el.setAttribute("cx",cx);el.setAttribute("cy",cy);};
   h("bezH1",bSX(x1),bSY(y1)); h("bezH2",bSX(x2),bSY(y2));
-  document.getElementById("bezval").textContent=S.bez.map(v=>v.toFixed(2)).join(", ");
+  document.getElementById("bezval").textContent=L.bez.map(v=>v.toFixed(2)).join(", ");
 }
 let bezDrag=null;
 function bezAt(e){ const r=bezSvg.getBoundingClientRect();
   const x=(e.clientX-r.left)/r.width*100, y=(e.clientY-r.top)/r.height*100;
   return [Math.max(0,Math.min(1,(x-BP)/BIN)), Math.max(0,Math.min(1,1-(y-BP)/BIN)), x, y]; }
-bezSvg.addEventListener("pointerdown",e=>{ const [,,x,y]=bezAt(e);
-  const d1=Math.hypot(x-bSX(S.bez[0]),y-bSY(S.bez[1])), d2=Math.hypot(x-bSX(S.bez[2]),y-bSY(S.bez[3]));
+bezSvg.addEventListener("pointerdown",e=>{ const L=A(); if(!L) return; const [,,x,y]=bezAt(e);
+  const d1=Math.hypot(x-bSX(L.bez[0]),y-bSY(L.bez[1])), d2=Math.hypot(x-bSX(L.bez[2]),y-bSY(L.bez[3]));
   bezDrag=d1<=d2?0:2; bezSvg.setPointerCapture(e.pointerId); bezMove(e); });
-function bezMove(e){ if(bezDrag===null)return; const [ux,uy]=bezAt(e);
-  S.bez[bezDrag]=+ux.toFixed(3); S.bez[bezDrag+1]=+uy.toFixed(3);
-  if(!easeMod){ easeMod=true; refreshEaseLabels(); }   // first drag marks the preset as modified (asterisk)
+function bezMove(e){ const L=A(); if(bezDrag===null||!L)return; const [ux,uy]=bezAt(e);
+  L.bez[bezDrag]=+ux.toFixed(3); L.bez[bezDrag+1]=+uy.toFixed(3);
+  if(!L.easeMod){ L.easeMod=true; refreshEaseLabels(); }
   bezUpdate(); }
 bezSvg.addEventListener("pointermove",bezMove);
 bezSvg.addEventListener("pointerup",()=>bezDrag=null);
 bezSvg.addEventListener("pointercancel",()=>bezDrag=null);
-bezInit(); applyEase(S.ease);   // sync chart + handles + dropdown label to the initial preset
-document.getElementById("text").addEventListener("input",e=>{ S.text=e.target.value; rebuild(false); });
-document.querySelectorAll("#shapes button").forEach(b=>{
-  b.addEventListener("click",()=>{ document.querySelectorAll("#shapes button").forEach(x=>x.classList.remove("on"));
-    b.classList.add("on"); S.shape=b.dataset.shape; revealed=true; draw(); }); });
-function toggle(tId,swId,key,after){ const tg=document.getElementById(tId), sw=document.getElementById(swId);
-  tg.addEventListener("click",()=>{ S[key]=!S[key]; sw.classList.toggle("on",S[key]); revealed=true; (after||draw)(); }); }
-toggle("randT","randSw","random"); toggle("rotT","rotSw","rot"); toggle("kernT","kernSw","kern",()=>rebuild(false));
+bezInit();
 
-document.getElementById("play").addEventListener("click",()=>play("in"));
-document.getElementById("fade").addEventListener("click",()=>play("out"));
-document.getElementById("burst").addEventListener("click",()=>play("burst"));
-document.getElementById("shuffle").addEventListener("click",()=>{ S.seed=h32(S.seed*1664525+1013904223); rebuild(false); });
+// ---------- shape seg, toggles, colours, buttons ----------
+document.querySelectorAll("#shapes button").forEach(b=>{
+  b.addEventListener("click",()=>{ const L=A(); if(!L) return;
+    document.querySelectorAll("#shapes button").forEach(x=>x.classList.remove("on"));
+    b.classList.add("on"); L.shape=b.dataset.shape; L.revealed=true; draw(); }); });
+function toggle(tId,swId,key,after){ const tg=document.getElementById(tId), sw=document.getElementById(swId);
+  tg.addEventListener("click",()=>{ const L=A(); if(!L) return;
+    L[key]=!L[key]; sw.classList.toggle("on",L[key]); L.revealed=true; (after||(()=>draw()))(L); }); }
+toggle("randT","randSw","random"); toggle("rotT","rotSw","rot");
+toggle("kernT","kernSw","kern",L=>{ if(L.type==="text"){ buildLayer(L); } draw(); });
+toggle("invT","invSw","invert",rebuildL);
+
+document.getElementById("play").addEventListener("click",()=>play(A(),"in"));
+document.getElementById("fade").addEventListener("click",()=>play(A(),"out"));
+document.getElementById("burst").addEventListener("click",()=>play(A(),"burst"));
+document.getElementById("playAll").addEventListener("click",()=>{ for(const L of LAYERS) if(L.visible) play(L,"in"); });
+document.getElementById("shuffle").addEventListener("click",()=>{ const L=A(); if(!L) return;
+  L.seed=h32(L.seed*1664525+1013904223); L.revealed=true; buildLayer(L); draw(); });
 
 function hexup(id,h){ document.getElementById(id).textContent=h.toUpperCase(); }
-document.getElementById("fg").addEventListener("input",e=>{ S.fg=e.target.value; hexup("fghex",e.target.value); revealed=true; draw(); });
-document.getElementById("bg").addEventListener("input",e=>{ S.bg=e.target.value; hexup("bghex",e.target.value); draw(); });
+document.getElementById("fg").addEventListener("input",e=>{ const L=A(); if(!L) return;
+  L.fg=e.target.value; hexup("fghex",e.target.value); L.revealed=true; draw(); });
+document.getElementById("bg").addEventListener("input",e=>{ GLOB.bg=e.target.value; hexup("bghex",e.target.value); draw(); });
 document.getElementById("dl").addEventListener("click",()=>{ const a=document.createElement("a"); a.download="geist-pixel.png"; a.href=cv.toDataURL("image/png"); a.click(); });
+
+// ---------- panel sync ----------
+const secText=document.getElementById("secText"), secImage=document.getElementById("secImage");
+function syncImgUI(L){
+  const mono=L.colorMode==="mono";
+  document.getElementById("threshWrap").style.display=mono?"":"none";
+  document.getElementById("invT").style.display=mono?"":"none";
+}
+function refreshPanel(){
+  renderLayerList();
+  const L=A();
+  const isText=!!L&&L.type==="text", isImg=!!L&&L.type==="image";
+  secText.style.display=isText?"":"none";
+  secImage.style.display=isImg?"":"none";
+  if(!L) return;
+  if(isText) document.getElementById("text").value=L.text;
+  if(isImg){
+    document.getElementById("imgName").textContent=L.imgName||"No image";
+    setVal("imgcolor",L.colorMode); syncImgUI(L);
+    document.getElementById("invSw").classList.toggle("on",L.invert);
+  }
+  for(const s of SYNCS) s.sync(L);
+  setVal("dir",L.dir);
+  document.querySelectorAll("#shapes button").forEach(b=>b.classList.toggle("on",b.dataset.shape===L.shape));
+  document.getElementById("randSw").classList.toggle("on",L.random);
+  document.getElementById("rotSw").classList.toggle("on",L.rot);
+  document.getElementById("kernSw").classList.toggle("on",L.kern);
+  document.getElementById("fg").value=L.fg; hexup("fghex",L.fg);
+  refreshEaseLabels(); bezUpdate();
+}
 
 // view buttons + interactions
 document.getElementById("zoomin").addEventListener("click",()=>zoomAt(VW/2,VH/2,1.25));
@@ -642,12 +915,14 @@ stage.addEventListener("wheel",e=>{ e.preventDefault(); const r=stage.getBoundin
   zoomAt(e.clientX-r.left,e.clientY-r.top, Math.exp(-e.deltaY*0.0015)); },{passive:false});
 let drag=null;
 stage.addEventListener("pointerdown",e=>{ drag={x:e.clientX,y:e.clientY}; stage.classList.add("drag"); stage.setPointerCapture(e.pointerId); });
-stage.addEventListener("pointermove",e=>{ if(!drag)return; view.x+=e.clientX-drag.x; view.y+=e.clientY-drag.y; drag={x:e.clientX,y:e.clientY}; if(!anim.active) draw(); });
+stage.addEventListener("pointermove",e=>{ if(!drag)return; userView=true; view.x+=e.clientX-drag.x; view.y+=e.clientY-drag.y; drag={x:e.clientX,y:e.clientY}; if(!rafOn) draw(); });
 stage.addEventListener("pointerup",()=>{ drag=null; stage.classList.remove("drag"); });
 stage.addEventListener("pointercancel",()=>{ drag=null; stage.classList.remove("drag"); });
 stage.addEventListener("dblclick",fitView);
 window.addEventListener("resize",()=>{ const wx=(VW/2-view.x)/view.scale, wy=(VH/2-view.y)/view.scale;
-  sizeCanvas(); view.x=VW/2-wx*view.scale; view.y=VH/2-wy*view.scale; draw(); });
+  sizeCanvas();
+  if(!userView){ fitView(); return; }
+  view.x=VW/2-wx*view.scale; view.y=VH/2-wy*view.scale; draw(); });
 
 // ---------- collapsible sections + search ----------
 const secs=[...document.querySelectorAll(".sec")];
@@ -657,14 +932,23 @@ secs.forEach(s=>{ const lab=s.querySelector(".lab");
     s.classList.toggle("collapsed"); const on=s.classList.contains("collapsed");
     if(on)collapsed.add(s); else collapsed.delete(s); lab.setAttribute("aria-expanded", String(!on)); });
 });
+// text/image sections only apply to the matching layer type — keep them hidden
+// even when a search would otherwise reveal them
+function typeAllowed(s){ const L=A();
+  if(s===secText) return !!L&&L.type==="text";
+  if(s===secImage) return !!L&&L.type==="image";
+  return true; }
 const noresult=document.getElementById("noresult");
 document.getElementById("q").addEventListener("input",e=>{
   const q=e.target.value.trim().toLowerCase();
-  if(!q){ secs.forEach(s=>{ s.style.display=""; s.querySelectorAll(".body > *").forEach(el=>el.style.display="");
+  if(!q){ secs.forEach(s=>{ s.style.display=typeAllowed(s)?"":"none"; s.querySelectorAll(".body > *").forEach(el=>el.style.display="");
       const c=collapsed.has(s); s.classList.toggle("collapsed",c);
-      s.querySelector(".lab").setAttribute("aria-expanded",String(!c)); }); noresult.style.display="none"; return; }
+      s.querySelector(".lab").setAttribute("aria-expanded",String(!c)); });
+    const L=A(); if(L){ if(L.type==="image") syncImgUI(L); }
+    noresult.style.display="none"; return; }
   let anyVisible=false;
   secs.forEach(s=>{
+    if(!typeAllowed(s)){ s.style.display="none"; return; }
     const titleMatch=(s.dataset.title||"").toLowerCase().includes(q);
     let any=false;
     s.querySelectorAll(".body > *").forEach(el=>{
@@ -677,7 +961,12 @@ document.getElementById("q").addEventListener("input",e=>{
 });
 
 // ---------- boot ----------
-function boot(){ sizeCanvas(); buildCells(); fitView(); }
+function boot(){
+  sizeCanvas();
+  const L=newLayer("text");
+  LAYERS.push(L); activeId=L.id;
+  buildLayer(L); refreshPanel(); fitView();
+}
 boot();
 </script>
 </body>
