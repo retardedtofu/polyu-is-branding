@@ -1,11 +1,12 @@
-name: Deploy Lab site to GitHub Pages
+name: Deploy sites to GitHub Pages
 
-# Publishes the lab-site/ directory to GitHub Pages on every push to main.
+# Publishes lab-site/ at the root and brand-site/ under /brand/ on every push to main.
 on:
   push:
     branches: [main]
     paths:
       - "lab-site/**"
+      - "brand-site/**"
       - ".github/workflows/deploy-pages.yml"
   workflow_dispatch:
 
@@ -32,10 +33,17 @@ jobs:
       - name: Configure Pages
         uses: actions/configure-pages@v5
 
-      - name: Upload lab-site as the Pages artifact
+      - name: Assemble site (lab at root, brand guideline at /brand/)
+        run: |
+          mkdir -p _site/brand
+          cp -R lab-site/. _site/
+          cp -R brand-site/. _site/brand/
+          touch _site/.nojekyll
+
+      - name: Upload assembled site as the Pages artifact
         uses: actions/upload-pages-artifact@v3
         with:
-          path: lab-site
+          path: _site
 
       - name: Deploy to GitHub Pages
         id: deployment
