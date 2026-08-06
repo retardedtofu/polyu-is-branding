@@ -7,7 +7,9 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;600;700&family=Inter:wght@400;500;600&family=Source+Serif+4:ital,opsz,wght@1,8..60,400;1,8..60,500&family=Noto+Sans+TC:wght@400;500;700&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="style.css">
+<link rel="stylesheet" href="palettes.css">
 <link rel="stylesheet" href="lab.css">
+<script src="mode.js"></script>
 </head>
 <body>
 
@@ -36,16 +38,10 @@
     <div class="kicker" style="--accent: var(--is-green);">The Lab · Exhibit 3 of 7</div>
     <h1>The Composer</h1>
     <p class="lede">Build cell graphics on the grid and export them as SVG or PNG. There are five brushes (quarter, split, circle, square, and erase), five colour families, three canvas sizes, and the named motifs as presets. Click to stamp, click a quarter again to rotate, and right-click the canvas to save or copy it as SVG.</p>
-    <div class="switcher" id="dir-switch">
-      <button data-d="d1" class="on">01 Ink &amp; Paper</button>
-      <button data-d="d2">02 Midnight Scholar</button>
-      <button data-d="d3">03 Daylight Campus</button>
-      <button data-d="d4">04 Precision Spectrum</button>
-    </div>
   </div>
 </header>
 
-<div id="labstage" data-theme="d1">
+<div id="labstage" >
 <section class="block" style="padding-top:2rem;">
   <div class="wrap">
     <div class="exhibit">
@@ -80,6 +76,7 @@
           <div role="group" aria-label="Custom canvas size" style="display:flex; align-items:center; gap:0.5rem; margin-top:0.55rem;">
             <label class="hint" for="size-cols" style="display:flex; align-items:center; gap:0.35rem;">W <input id="size-cols" type="number" min="1" max="40" value="9" style="width:58px;"></label>
             <label class="hint" for="size-rows" style="display:flex; align-items:center; gap:0.35rem;">H <input id="size-rows" type="number" min="1" max="40" value="3" style="width:58px;"></label>
+        <button class="btn-ghosty" type="button" id="size-swap" aria-label="Swap width and height" title="Swap width and height" style="padding:0.45rem 0.7rem;">⇄</button>
             <button class="btn-ghosty" type="button" id="size-apply">Set</button>
           </div>
         </div>

@@ -4,29 +4,17 @@
 const REDUCED = matchMedia('(prefers-reduced-motion: reduce)').matches;
 
 /* ================= palettes ================= */
-const PAL = {
-  d1: {
-    dark:'#11151C', paper:'#FBFAF7', cellline:'#D8D4CA', ghostDark:'rgba(255,255,255,0.16)', ink:'#11151C',
-    fams:[['#634093','#A4346B'],['#ED174B','#F0584A'],['#F7941E','#ED174B'],['#8CC75F','#2DB44A'],['#2E9FD6','#0A65A2']],
-    asm:[['#634093','#F0584A'],['#ED174B','#F7941E'],['#F68A2E','#ED174B'],['#F7941E','#ED174B'],['#A5CD6B','#7DBF55'],['#4FB94F','#2FB44C'],['#8CC75F','#2DB44A'],['#2E9FD6','#1175AF'],['#1278B2','#04568C'],['#0E6FA9','#0A65A2']],
-  },
-  d2: {
-    dark:'#1E1B36', paper:'#F6F1E6', cellline:'#D9D0BA', ghostDark:'rgba(246,241,230,0.16)', ink:'#231F40',
-    fams:[['#4A4178','#8E3A5A'],['#BD2956','#A02447'],['#D9A53C','#BD2956'],['#7BA796','#3F7878'],['#2F6BA4','#143A6B']],
-    asm:[['#4A4178','#8E3A5A'],['#A6294E','#D9A53C'],['#DCAB4A','#A6294E'],['#D9A53C','#A6294E'],['#8FB3A2','#6E9C8C'],['#5A918E','#42797A'],['#7BA796','#3F7878'],['#2F6BA4','#1F528B'],['#1F528B','#143A6B'],['#1C4A80','#173F73']],
-  },
-  d3: {
-    dark:'#2E2722', paper:'#F8F2E7', cellline:'#DCD0B6', ghostDark:'rgba(248,242,231,0.16)', ink:'#2E2722',
-    fams:[['#894E73','#D24B43'],['#E14729','#C73A20'],['#F4A640','#E14729'],['#B0BC72','#7E9A4D'],['#54ABBB','#26707F']],
-    asm:[['#894E73','#D24B43'],['#E14729','#F4A640'],['#F2A03B','#E14729'],['#F4A640','#E14729'],['#C2C684','#A8B468'],['#9CB163','#7E9A4D'],['#B0BC72','#7E9A4D'],['#54ABBB','#3A8FA3'],['#3A8FA3','#26707F'],['#348699','#2C7A8D']],
-  },
-  d4: {
-    dark:'#0B1521', paper:'#F4F9FC', cellline:'#C9DAE6', ghostDark:'rgba(244,249,252,0.16)', ink:'#0B1521',
-    fams:[['#3E4AA6','#2C6FC0'],['#E1227C','#B62E86'],['#34C6C3','#1565A8'],['#5FBA8E','#2F8E62'],['#2E9FD6','#04568C']],
-    asm:[['#3E4AA6','#2C6FC0'],['#E1227C','#B62E86'],['#34C6C3','#1E86C8'],['#34C6C3','#1565A8'],['#6FC4A0','#4FAE7E'],['#45A87B','#2F8E62'],['#5FBA8E','#2F8E62'],['#2E9FD6','#1175AF'],['#1278B2','#04568C'],['#0E6FA9','#0A65A2']],
-  },
+/* Palettes are generated (scratchpad/gen_palettes.js) and mirrored in palettes.css.
+   Keyed by "<palette>-<mode>": palette and mode are independent axes. */
+const PALETTES = {"ink":"01 Ink & Paper","scholar":"02 Midnight Scholar","daylight":"03 Daylight Campus","precision":"04 Precision Spectrum","terra":"05 Terra","mono-gold":"06 Mono Gold"};
+const PAL = { "ink-day": { dark: "#11151C", paper: "#FBFAF7", cellline: "#D8D4CA", ghostDark: "rgba(255,255,255,0.16)", ink: "#11151C", fams: [[ "#634093", "#A4346B" ], [ "#ED174B", "#F0584A" ], [ "#F7941E", "#ED174B" ], [ "#8CC75F", "#2DB44A" ], [ "#2E9FD6", "#0A65A2" ]] }, "ink-night": { dark: "#080A0E", paper: "#15181E", cellline: "#333941", ghostDark: "rgba(255,255,255,0.16)", ink: "#F2EDE2", fams: [[ "#845EB9", "#C8518B" ], [ "#DF4B6F", "#E2685D" ], [ "#E09F50", "#DF4B6F" ], [ "#95CC6C", "#4AD267" ], [ "#4EAEDC", "#2F96DA" ]] }, "scholar-day": { dark: "#1E1B36", paper: "#F6F1E6", cellline: "#D9D0BA", ghostDark: "rgba(255,255,255,0.16)", ink: "#1E1B36", fams: [[ "#4A4178", "#8E3A5A" ], [ "#BD2956", "#A02447" ], [ "#D9A53C", "#BD2956" ], [ "#7BA796", "#3F7878" ], [ "#2F6BA4", "#143A6B" ]] }, "scholar-night": { dark: "#0D0B18", paper: "#181530", cellline: "#332E52", ghostDark: "rgba(255,255,255,0.16)", ink: "#F2EDE2", fams: [[ "#6E62AA", "#BB577D" ], [ "#D74773", "#D33D67" ], [ "#DEB053", "#D74773" ], [ "#87AF9F", "#60ABAB" ], [ "#4B8DCB", "#317AD8" ]] }, "daylight-day": { dark: "#2E2722", paper: "#F8F2E7", cellline: "#DCD0B6", ghostDark: "rgba(255,255,255,0.16)", ink: "#2E2722", fams: [[ "#894E73", "#D24B43" ], [ "#E14729", "#C73A20" ], [ "#F4A640", "#E14729" ], [ "#B0BC72", "#7E9A4D" ], [ "#54ABBB", "#26707F" ]] }, "daylight-night": { dark: "#12100D", paper: "#1E1A15", cellline: "#3D362C", ghostDark: "rgba(255,255,255,0.16)", ink: "#F2EDE2", fams: [[ "#AB6C94", "#D76059" ], [ "#E0654D", "#DD5941" ], [ "#E2A85B", "#E0654D" ], [ "#B5C07B", "#99B46A" ], [ "#6AB6C4", "#43B0C7" ]] }, "precision-day": { dark: "#0B1521", paper: "#F4F9FC", cellline: "#C9DAE6", ghostDark: "rgba(255,255,255,0.16)", ink: "#0B1521", fams: [[ "#3E4AA6", "#2C6FC0" ], [ "#E1227C", "#B62E86" ], [ "#34C6C3", "#1565A8" ], [ "#5FBA8E", "#2F8E62" ], [ "#2E9FD6", "#04568C" ]] }, "precision-night": { dark: "#060D15", paper: "#101A24", cellline: "#2A3B4A", ghostDark: "rgba(255,255,255,0.16)", ink: "#F2EDE2", fams: [[ "#5B67C2", "#4B8AD6" ], [ "#DF4A90", "#D24BA2" ], [ "#54D2CF", "#328EDB" ], [ "#71C29A", "#4AC38B" ], [ "#4EAEDC", "#2F96DA" ]] }, "terra-day": { dark: "#261F1A", paper: "#F9F5EC", cellline: "#DDD4BF", ghostDark: "rgba(255,255,255,0.16)", ink: "#261F1A", fams: [[ "#8C2B55", "#AB0334" ], [ "#AB0334", "#8C022B" ], [ "#FF8C00", "#F26649" ], [ "#C2C684", "#A8B468" ], [ "#54ABBB", "#3A8FA3" ]] }, "terra-night": { dark: "#0E0C0A", paper: "#1C1815", cellline: "#3B342C", ghostDark: "rgba(255,255,255,0.16)", ink: "#F2EDE2", fams: [[ "#C75986", "#F0426B" ], [ "#F0426B", "#C22550" ], [ "#FFA333", "#FF7A50" ], [ "#D8DD9C", "#BCC77B" ], [ "#6FC7D7", "#4AA6BA" ]] }, "mono-gold-day": { dark: "#1A1712", paper: "#F7F4EC", cellline: "#DED7C5", ghostDark: "rgba(255,255,255,0.16)", ink: "#1A1712", fams: [[ "#3A352C", "#22201A" ], [ "#C9A227", "#9A7B14" ], [ "#E0C878", "#C9A227" ], [ "#8A8274", "#635C50" ], [ "#9A7B14", "#6E560E" ]] }, "mono-gold-night": { dark: "#0A0908", paper: "#17140F", cellline: "#3A3428", ghostDark: "rgba(255,255,255,0.16)", ink: "#F2EDE2", fams: [[ "#4A4438", "#312C24" ], [ "#F0D08A", "#C9A227" ], [ "#F7E3B5", "#E0C878" ], [ "#8A8274", "#5C554A" ], [ "#C9A227", "#96741A" ]] }
 };
-let cur = 'd3';
+/* the active key follows <html data-palette data-mode>, owned by mode.js */
+const themeKey = () => {
+  const d = document.documentElement.dataset;
+  return PAL[`${d.palette || 'terra'}-${d.mode || 'day'}`] ? `${d.palette}-${d.mode}` : 'terra-day';
+};
+let cur = themeKey();
 const P = () => PAL[cur];
 const FAM = n => P().fams[n - 1];
 const REPAINT = [];
@@ -47,14 +35,18 @@ function mkRand(anchor, handler, opts = {}) {
   return b;
 }
 
-const dirSwitch = $('dir-switch');
-if (dirSwitch) dirSwitch.addEventListener('click', e => {
-  const b = e.target.closest('button'); if (!b) return;
-  cur = b.dataset.d;
-  dirSwitch.querySelectorAll('button').forEach(x => x.classList.toggle('on', x === b));
-  $('labstage').dataset.theme = cur;
-  REPAINT.forEach(f => f());
-});
+/* shared: a ⇄ button that swaps a W/H input pair, then re-applies */
+function wireSwap(btnId, colsId, rowsId, apply) {
+  const b = $(btnId); if (!b) return;
+  b.addEventListener('click', () => {
+    const c = $(colsId), r = $(rowsId);
+    const t = c.value; c.value = r.value; r.value = t;
+    apply();
+  });
+}
+
+/* palette + mode are owned site-wide by mode.js; repaint whenever either changes */
+addEventListener('themechange', () => { cur = themeKey(); REPAINT.forEach(f => f()); });
 
 const mulberry32 = s => () => { s |= 0; s = s + 0x6D2B79F5 | 0; let t = Math.imul(s ^ s >>> 15, 1 | s); t = t + Math.imul(t ^ t >>> 7, 61 | t) ^ t; return ((t ^ t >>> 14) >>> 0) / 4294967296; };
 const djb2 = str => { let h = 5381; for (const c of str) h = (h * 33 ^ c.codePointAt(0)) >>> 0; return h; };
@@ -559,6 +551,7 @@ const MONOGRAM = [[0,0,'q','tr',1],[1,0,'q','tl',4],[2,0,'q','tr',4],[0,1,'dsq',
   };
   if ($('size-apply')) {
     $('size-apply').addEventListener('click', applyCustomSize);
+    wireSwap('size-swap', 'size-cols', 'size-rows', applyCustomSize);
     ['size-cols','size-rows'].forEach(id => $(id).addEventListener('keydown', e => { if (e.key === 'Enter') applyCustomSize(); }));
   }
   $('undo').addEventListener('click', () => { if (undoStack.length) { grid = JSON.parse(undoStack.pop()); paintAll(); } });
@@ -733,6 +726,7 @@ const MONOGRAM = [[0,0,'q','tr',1],[1,0,'q','tl',4],[2,0,'q','tr',4],[0,1,'dsq',
     $(id).addEventListener('keydown', e => { if (e.key === 'Enter') render(); });
   });
   ['mark-cols','mark-rows'].forEach(id => $(id).addEventListener('change', render));
+  wireSwap('mark-swap', 'mark-cols', 'mark-rows', render);
   $('mark-dl-svg').addEventListener('click', () => { if (grid) download(new Blob([markToSVG()], { type:'image/svg+xml' }), `bdsis-mark-${lastTag.toLowerCase()}.svg`); });
   $('mark-dl-png').addEventListener('click', () => {
     if (!grid) return;
@@ -1067,7 +1061,7 @@ const MONOGRAM = [[0,0,'q','tr',1],[1,0,'q','tl',4],[2,0,'q','tr',4],[0,1,'dsq',
     enc.width = w * dpr; enc.height = w * dpr;
     enc.style.height = w + 'px';
     ectx.setTransform(dpr, 0, 0, dpr, 0, 0);
-    ectx.fillStyle = '#FFFFFF'; ectx.fillRect(0, 0, w, w);
+    ectx.fillStyle = p.paper; ectx.fillRect(0, 0, w, w);   // palette ground; decoder handles both polarities
     for (let i = 0; i < N * N; i++) {
       const cell = curGrid[i]; if (!cell) continue;
       const c = i % N, r = (i / N) | 0;
@@ -1123,11 +1117,14 @@ const MONOGRAM = [[0,0,'q','tr',1],[1,0,'q','tl',4],[2,0,'q','tr',4],[0,1,'dsq',
     for (let i = 0; i < W * H; i++) inkGlobal[i] = L[i] < thr ? 1 : 0;
 
     let lastErr = 'No code found';
-    /* crisp sources erode at 0.97, blurred sources erode at 0.88 — try both */
+    /* crisp sources erode at 0.97, blurred sources erode at 0.88 — try both.
+       Each map is also tried inverted so light-on-dark grounds decode too. */
     for (const ink of [adaptive(0.88), adaptive(0.97), inkGlobal]) {
       const r = attempt(ink, W, H);
       if (r.ok) return r;
       lastErr = r.err;
+      const inv = attempt(ink.map(v => 1 - v), W, H);
+      if (inv.ok) return inv;
     }
     return { ok:false, err:lastErr };
   }
@@ -1366,7 +1363,7 @@ const MONOGRAM = [[0,0,'q','tr',1],[1,0,'q','tl',4],[2,0,'q','tr',4],[0,1,'dsq',
       2: `M${x+u},${y} A${u},${u} 0 0,1 ${x},${y+u} L${x},${y} Z`,
       3: `M${x+u},${y+u} A${u},${u} 0 0,1 ${x},${y} L${x+u},${y} Z`,
     });
-    const parts = [`<rect x="0" y="0" width="${W}" height="${W}" fill="#FFFFFF"/>`];
+    const parts = [`<rect x="0" y="0" width="${W}" height="${W}" fill="${p.paper}"/>`];
     for (let i = 0; i < N * N; i++) {
       const cell = curGrid[i]; if (!cell || cell.t === 'ghost') continue;
       const x = ((i % N) + 1) * u, y = (((i / N) | 0) + 1) * u, g = `url(#cf${cell.fam})`;
@@ -1384,5 +1381,130 @@ const MONOGRAM = [[0,0,'q','tr',1],[1,0,'q','tl',4],[2,0,'q','tr',4],[0,1,'dsq',
   });
 
   window.__code = { encode, decodeImage, codeToSVG, get canvas() { return enc; } };
+  make();
+})();
+
+/* ================= THE CELL HASH — deterministic Cell Code variant ================= */
+(() => {
+  const cvs = $('hash-canvas'); if (!cvs) return;
+  /*
+   * Cell Code's visual grammar (all-quarter field, corner discs, white ground)
+   * driven by Your Mark's pipeline: any string → cyrb128 → sfc32 stream → one
+   * rotation per cell. Free dimensions, no payload, no CRC — the grid is a
+   * fingerprint, not a message. Same string + same size = the same image.
+   */
+  const hctx = cvs.getContext('2d');
+  let grid = null, gc = 13, gr = 13, tag = '';
+
+  /* full field, no finders or markers. Quarters dominate; split squares,
+     circles and squares season the grid. One lead family with a sparse accent,
+     both pickable from the dropdowns or derived from the hash on Auto. The
+     shape layout only depends on the text, so switching colours recolours the
+     same composition. */
+  function genHash(text, C, R, leadPick, accentPick) {
+    const seeds = cyrb128(text);
+    const rnd = sfc32(seeds[0], seeds[1], seeds[2], seeds[3]);
+    const lead = leadPick || 1 + (seeds[0] % 5);
+    let accent = accentPick || 1 + (seeds[1] % 5);
+    if (accent === lead) accent = 1 + (accent % 5);
+    const g = new Array(C * R);
+    for (let i = 0; i < C * R; i++) {
+      const roll = rnd(), famRoll = rnd(), rotRoll = rnd();
+      const fam = famRoll < 0.12 ? accent : lead;
+      g[i] = roll < 0.58 ? { t:'q', rot:(rotRoll * 4) | 0, fam }
+        : roll < 0.76 ? { t:'dsq', fam }
+        : roll < 0.88 ? { t:'circle', fam }
+        : { t:'square', fam };
+    }
+    return { grid: g, tag: seeds[0].toString(16).padStart(8, '0').toUpperCase(), lead, accent };
+  }
+
+  function drawHash() {
+    if (!grid) return;
+    const w = Math.min(cvs.parentElement.clientWidth, 440);
+    const m = w / (gc + 2);                       // 1-cell quiet zone
+    const h = m * (gr + 2);
+    const dpr = devicePixelRatio || 1;
+    cvs.width = w * dpr; cvs.height = h * dpr;
+    cvs.style.height = h + 'px';
+    hctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+    hctx.fillStyle = P().paper; hctx.fillRect(0, 0, w, h);   // follows the palette, incl. dark themes
+    for (let i = 0; i < grid.length; i++) {
+      const cell = grid[i]; if (!cell) continue;
+      const px = m + (i % gc) * m, py = m + ((i / gc) | 0) * m;
+      const [a, b] = FAM(cell.fam);
+      if (cell.t === 'dsq') { cdsq(hctx, px, py, m, a, b); continue; }
+      const g2 = hctx.createLinearGradient(px, py, px + m, py + m);
+      g2.addColorStop(0, a); g2.addColorStop(1, b);
+      hctx.fillStyle = g2;
+      if (cell.t === 'q') quarter(hctx, px, py, m, cell.rot);
+      else if (cell.t === 'circle') cdisc(hctx, px, py, m);
+      else hctx.fillRect(px, py, m, m);
+    }
+  }
+
+  function hashToSVG() {
+    if (!grid) return '';
+    const u = 100, W = (gc + 2) * u, H = (gr + 2) * u, p = P();
+    let defs = '';
+    for (let f = 1; f <= 5; f++) {
+      const [a, b] = p.fams[f - 1];
+      defs += `<linearGradient id="hf${f}" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="${a}"/><stop offset="1" stop-color="${b}"/></linearGradient>`;
+    }
+    const PD = (x, y) => ({
+      0: `M${x+u},${y} A${u},${u} 0 0,0 ${x},${y+u} L${x+u},${y+u} Z`,
+      1: `M${x},${y} A${u},${u} 0 0,1 ${x+u},${y+u} L${x},${y+u} Z`,
+      2: `M${x+u},${y} A${u},${u} 0 0,1 ${x},${y+u} L${x},${y} Z`,
+      3: `M${x+u},${y+u} A${u},${u} 0 0,1 ${x},${y} L${x+u},${y} Z`,
+    });
+    const parts = [`<rect x="0" y="0" width="${W}" height="${H}" fill="${p.paper}"/>`];
+    for (let i = 0; i < grid.length; i++) {
+      const cell = grid[i]; if (!cell) continue;
+      const x = ((i % gc) + 1) * u, y = (((i / gc) | 0) + 1) * u, g2 = `url(#hf${cell.fam})`;
+      if (cell.t === 'q') parts.push(`<path d="${PD(x, y)[cell.rot]}" fill="${g2}"/>`);
+      else if (cell.t === 'dsq') {
+        const [a, b] = p.fams[cell.fam - 1];   // flat two-triangle split, matching the canvas
+        parts.push(`<path d="M${x},${y} L${x+u},${y} L${x},${y+u} Z" fill="${a}"/><path d="M${x+u},${y} L${x+u},${y+u} L${x},${y+u} Z" fill="${b}"/>`);
+      }
+      else if (cell.t === 'circle') parts.push(`<circle cx="${x+u/2}" cy="${y+u/2}" r="${u/2}" fill="${g2}"/>`);
+      else parts.push(`<rect x="${x}" y="${y}" width="${u}" height="${u}" fill="${g2}"/>`);
+    }
+    return `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 ${W} ${H}" width="${W}" height="${H}">\n<defs>${defs}</defs>\n${parts.join('')}\n</svg>`;
+  }
+
+  const clampDim = v => Math.max(2, Math.min(61, (parseInt(v, 10) || 13)));
+  const FAM_NAMES = ['', 'Purple', 'Red', 'Orange', 'Green', 'Blue'];
+  function make(norm) {
+    const text = $('hash-text').value || 'BDSIS JS3000';
+    gc = clampDim($('hash-cols').value);
+    gr = clampDim($('hash-rows').value);
+    if (norm) { $('hash-cols').value = gc; $('hash-rows').value = gr; }   // don't rewrite while the user is mid-keystroke
+    const res = genHash(text, gc, gr, +$('hash-lead').value, +$('hash-accent').value);
+    grid = res.grid; tag = res.tag;
+    drawHash();
+    $('hash-label').textContent = `CELL HASH · ${gc}×${gr} · ${tag} · ${FAM_NAMES[res.lead].toUpperCase()} + ${FAM_NAMES[res.accent].toUpperCase()}`;
+  }
+  /* live: every control re-renders as it changes; the button stays as an explicit anchor */
+  $('hash-make').addEventListener('click', () => make(true));
+  ['hash-text','hash-cols','hash-rows'].forEach(id => $(id).addEventListener('input', () => make(false)));
+  ['hash-cols','hash-rows'].forEach(id => $(id).addEventListener('change', () => make(true)));
+  ['hash-lead','hash-accent'].forEach(id => $(id).addEventListener('change', () => make(false)));
+  wireSwap('hash-swap', 'hash-cols', 'hash-rows', () => make(true));
+  const PHRASES = ['BDSIS JS3000', 'The few, for the many', 'Humans × Technology',
+    'Elite is the duty, not the reward', 'Interdisciplinary Studies', 'PolyU · 香港理工大學',
+    '跨學科組合學士課程', 'One of one', 'Class of 2025'];
+  mkRand($('hash-make'), () => {
+    $('hash-text').value = PHRASES[randInt(PHRASES.length)];
+    make();
+  }, { aria:'Hash a random brand phrase' });
+  REPAINT.push(drawHash);
+  attachSaveMenu(cvs, {
+    title: 'Cell Hash',
+    svg: hashToSVG,
+    name: () => 'bdsis-hash',
+    size: () => [(gc + 2) * 60, (gr + 2) * 60],
+  });
+  addEventListener('resize', drawHash);
+  window.__hash = { genHash, hashToSVG };
   make();
 })();

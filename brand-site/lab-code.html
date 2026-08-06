@@ -7,7 +7,9 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;600;700&family=Inter:wght@400;500;600&family=Source+Serif+4:ital,opsz,wght@1,8..60,400;1,8..60,500&family=Noto+Sans+TC:wght@400;500;700&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="style.css">
+<link rel="stylesheet" href="palettes.css">
 <link rel="stylesheet" href="lab.css">
+<script src="mode.js"></script>
 </head>
 <body>
 
@@ -36,16 +38,10 @@
     <div class="kicker" style="--accent: var(--is-green);">The Lab · Exhibit 7 of 7</div>
     <h1>The Cell Code</h1>
     <p class="lede">A scannable mark drawn in the brand's own shapes, like Spotify Codes. <strong>The data lives in the shape and rotation of each cell, so colour stays free for the brand</strong> and the same code reads the same way in every palette. Each quarter's orientation carries 2 bits. The corner discs, each made of four quarters, act as finder patterns, and a CRC-16 checksum guards every read. Decoding runs entirely in your browser.</p>
-    <div class="switcher" id="dir-switch">
-      <button data-d="d1" class="on">01 Ink &amp; Paper</button>
-      <button data-d="d2">02 Midnight Scholar</button>
-      <button data-d="d3">03 Daylight Campus</button>
-      <button data-d="d4">04 Precision Spectrum</button>
-    </div>
   </div>
 </header>
 
-<div id="labstage" data-theme="d1">
+<div id="labstage" >
 <section class="block" style="padding-top:2rem;">
   <div class="wrap">
     <div class="exhibit">
@@ -71,6 +67,31 @@
           <p class="hint">Pipeline: threshold → corner-disc detection → perspective correction (4-point homography) → per-cell ink-centroid classification → CRC-16 validation. It works flat-on or tilted and in mixed light; just fill at least a quarter of the frame with the code. The live status shows how many corner discs the scanner sees. Switch the palette and run the self-test again to confirm the read doesn't depend on colour. Camera frames stay local. For print where anyone needs to scan it, pair it with a standard QR; this code is meant for BDSIS surfaces and the BDSIS scanner.</p>
         </div>
       </div>
+    </div>
+  </div>
+</section>
+
+<section class="block" style="padding-top:0;">
+  <div class="wrap">
+    <div class="exhibit">
+      <h2 style="margin:0;">The Cell Hash</h2>
+      <p class="lede" style="margin-top:0.6rem;">A generative field driven by a hash instead of a payload. Any text, any grid size: the string runs through the 128-bit hash from Your Mark and the stream decides every cell. Quarter circles dominate, with split squares, circles and squares mixed in; one dominant colour family carries the field and a second appears as a sparse accent. Pick both from the dropdowns, or leave them on Auto and the hash decides. The result is a fingerprint, not a message. It cannot be decoded, but the same text with the same settings produces the same image on any machine.</p>
+      <div class="mark-input" style="margin-top:0.8rem;">
+        <input id="hash-text" type="text" maxlength="200" placeholder="Text to hash" aria-label="Text to hash" value="BDSIS JS3000 · The few, for the many" style="min-width:240px; flex:1;">
+        <label class="hint" for="hash-cols" style="display:flex; align-items:center; gap:0.3rem;">W <input id="hash-cols" type="number" min="2" max="61" value="13" style="width:58px;"></label>
+        <label class="hint" for="hash-rows" style="display:flex; align-items:center; gap:0.3rem;">H <input id="hash-rows" type="number" min="2" max="61" value="13" style="width:58px;"></label>
+        <button class="btn-ghosty" type="button" id="hash-swap" aria-label="Swap width and height" title="Swap width and height" style="padding:0.45rem 0.7rem;">⇄</button>
+        <label class="hint" for="hash-lead" style="display:flex; align-items:center; gap:0.3rem;">Dominant <select id="hash-lead" aria-label="Dominant colour family">
+          <option value="0" selected>Auto</option><option value="1">Purple</option><option value="2">Red</option><option value="3">Orange</option><option value="4">Green</option><option value="5">Blue</option>
+        </select></label>
+        <label class="hint" for="hash-accent" style="display:flex; align-items:center; gap:0.3rem;">Accent <select id="hash-accent" aria-label="Accent colour family">
+          <option value="0" selected>Auto</option><option value="1">Purple</option><option value="2">Red</option><option value="3">Orange</option><option value="4">Green</option><option value="5">Blue</option>
+        </select></label>
+        <button class="btn-prime" type="button" id="hash-make">Hash</button>
+      </div>
+      <div style="margin-top:1.2rem;"><canvas id="hash-canvas" style="width:100%; max-width:440px; border:1px solid var(--line); border-radius:2px;"></canvas></div>
+      <div id="hash-label" style="font-family:var(--font-display); font-size:0.72rem; font-weight:700; letter-spacing:0.16em; color:var(--grey); margin-top:0.8rem;"></div>
+      <p class="hint">Set W and H for any grid from 2×2 up to 61×61; tall and wide strips both work. Right-click the image to save or copy it as SVG. Everything runs locally; the text is never sent anywhere.</p>
     </div>
   </div>
 </section>

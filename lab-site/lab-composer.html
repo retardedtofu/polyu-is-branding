@@ -7,7 +7,9 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;600;700&family=Inter:wght@400;500;600&family=Source+Serif+4:ital,opsz,wght@0,8..60,400..700;1,8..60,400..500&family=Noto+Sans+TC:wght@400;500;700&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="style.css">
+<link rel="stylesheet" href="palettes.css">
 <link rel="stylesheet" href="lab.css">
+<script src="mode.js"></script>
 </head>
 <body>
 
@@ -35,7 +37,7 @@
   </div>
 </header>
 
-<div id="labstage" data-theme="d3">
+<div id="labstage" >
 <section class="block" style="padding-top:2rem;">
   <div class="wrap">
     <div class="exhibit">
@@ -70,6 +72,7 @@
           <div role="group" aria-label="Custom canvas size" style="display:flex; align-items:center; gap:0.5rem; margin-top:0.55rem;">
             <label class="hint" for="size-cols" style="display:flex; align-items:center; gap:0.35rem;">W <input id="size-cols" type="number" min="1" max="40" value="9" style="width:58px;"></label>
             <label class="hint" for="size-rows" style="display:flex; align-items:center; gap:0.35rem;">H <input id="size-rows" type="number" min="1" max="40" value="3" style="width:58px;"></label>
+        <button class="btn-ghosty" type="button" id="size-swap" aria-label="Swap width and height" title="Swap width and height" style="padding:0.45rem 0.7rem;">⇄</button>
             <button class="btn-ghosty" type="button" id="size-apply">Set</button>
           </div>
         </div>

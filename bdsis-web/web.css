@@ -1,0 +1,1644 @@
+/* ============================================================================
+   BDSIS WEB DESIGN SYSTEM
+   The single stylesheet behind both the BDSIS site (index.html) and the
+   guidelines that document it (guidelines.html). The guidelines are therefore
+   never out of date: they describe this file.
+
+   Structure
+     1. Tokens        — colour, type, space, radius, shadow, layout
+     2. Reset + base
+     3. Header / banner
+     4. Navigation
+     5. Layout primitives
+     6. Components
+     7. Page sections
+     8. Footer
+     9. Guidelines-only chrome
+    10. Responsive
+   ========================================================================== */
+
+/* ── 1. TOKENS ───────────────────────────────────────────────────────────── */
+:root {
+  /* -- Colour: PolyU corporate (PolyU Brand Communication Guidelines, p.14) -- */
+  --polyu-red:        #A02337;   /* PMS 194C — the University red. Institutional only. */
+  --polyu-red-deep:   #7E1B2B;   /* darkened for hover/press; not a corporate colour */
+  --polyu-grey:       #58595B;   /* PMS Cool Gray 11C — logotype, footer */
+  --polyu-black:      #000000;
+  --polyu-white:      #FFFFFF;
+
+  /* Metadata text. Defaults to PolyU Grey, which is tuned to a light ground;
+     the mono themes remap it, because #58595B on a dark ground is 2.5:1.   */
+  --meta:             #58595B;
+
+  /* -- Colour: the BDSIS (Terra) spectrum ---------------------------------
+     Taken from the BDSIS brand artwork. Each family is a two-stop gradient;
+     the flat value is the gradient's first stop, used wherever a solid is
+     needed. Four families, one per shape in the kit. Families are named for
+     the brand, not for the hue.                                            */
+  --is-crimson:       #A02337;   --is-crimson-2: #861C2C;   /* Red     */
+  --is-orange:        #F2A03B;   --is-orange-2:  #E14729;   /* Tangerine */
+  --is-green:         #C2C684;   --is-green-2:   #A8B468;   /* Olive   */
+  --is-blue:          #54ABBB;   --is-blue-2:    #3A8FA3;   /* Ocean   */
+
+  --grad-crimson: linear-gradient(90deg,  var(--is-crimson), var(--is-crimson-2));
+  --grad-orange:  linear-gradient(45deg,  var(--is-orange),  var(--is-orange-2));
+  --grad-green:   linear-gradient(135deg, var(--is-green),   var(--is-green-2));
+  --grad-blue:    linear-gradient(180deg, var(--is-blue),    var(--is-blue-2));
+
+  /* Text-safe darkenings. Olive and Tangerine are far too light to carry
+     white text (see §06) — these are the values to use when the family has
+     to appear as type or as a ground behind type. */
+  --is-green-ink:  #5F6733;
+  --is-orange-ink: #B8390F;
+  --is-blue-ink:   #2C7183;
+
+  --is-blue-deep:  #2C7183;      /* link colour */
+  --is-crimson-ink: #A02337;     /* Red is already text-safe on the cream */
+
+  /* Text colour for a field filled with each family. Red is dark enough to
+     carry white; the other three are not, and take ink. Themes remap these. */
+  --on-crimson: #FFFFFF;
+  --on-orange:  #14110E;
+  --on-green:   #14110E;
+  --on-blue:    #14110E;
+
+  /* -- Colour: interface neutrals ----------------------------------------- */
+  --ink:              #14110E;   /* headlines — warm black, not blue-black */
+  --ink-body:         #453F38;   /* running text */
+  --ink-muted:        #6E665C;   /* captions, metadata */
+  --line:             #E4DCCC;   /* hairlines, warmed to the paper */
+  --line-soft:        #EFE8DA;
+  --paper:            #F8F2E7;   /* the BDSIS ground — warm cream, not white */
+  --paper-tint:       #F1E9DA;   /* alternating section ground */
+  --paper-deep:       #E9E0CE;
+  --surface:          #FFFFFF;   /* cards sit ON the cream, so they stay white */
+  --space-hl:         #F7CFA6;   /* the space-in-context highlight (§15) */
+
+  /* -- Typography ---------------------------------------------------------
+     Helvetica is PolyU's official English typeface; MHei is the official
+     Chinese typeface. Roboto and Heiti are the sanctioned online fallbacks.
+     The stack below is that policy, written as CSS, in priority order.      */
+  --font: "Helvetica Neue", "HelveticaNeue", Helvetica, Roboto, Arial,
+          "MHei", "Heiti TC", "PingFang HK", "Microsoft JhengHei", sans-serif;
+  --font-mono: ui-monospace, "SF Mono", Menlo, Consolas, monospace;
+
+  /* Weights — the five PolyU-sanctioned Helvetica Neue cuts */
+  --fw-thin:    200;   /* HN 35 Thin    — PRINT ONLY. Too weak on screen.   */
+  --fw-light:   300;   /* HN 45 Light   — statistic numerals only            */
+  --fw-roman:   400;   /* HN 55 Roman   — body, and display/h1 per artwork   */
+  --fw-medium:  500;   /* HN 65 Medium  — h2–h4, UI, labels; logotype weight */
+  --fw-bold:    700;   /* HN 75 Bold    — the banner lockup, rare emphasis   */
+
+  /* Size scale — fluid, 1.25 ratio, anchored to a 17px body */
+  --fs-display: clamp(2.75rem, 1.55rem + 3.6vw, 4rem);      /* 44 → 64 */
+  --fs-h1:      clamp(2.125rem, 1.45rem + 2.1vw, 3rem);     /* 34 → 48 */
+  --fs-h2:      clamp(1.625rem, 1.22rem + 1.3vw, 2.25rem);  /* 26 → 36 */
+  --fs-h3:      clamp(1.25rem, 1.12rem + 0.45vw, 1.5rem);   /* 20 → 24 */
+  --fs-h4:      1.125rem;    /* 18 */
+  --fs-lead:    clamp(1.0625rem, 0.98rem + 0.42vw, 1.25rem);/* 17 → 20 */
+  --fs-body:    1.0625rem;   /* 17 */
+  --fs-sm:      0.9375rem;   /* 15 */
+  --fs-xs:      0.8125rem;   /* 13 */
+  --fs-label:   0.75rem;     /* 12 */
+  --fs-stat:    clamp(3rem, 2rem + 3vw, 4.5rem);            /* 48 → 72 */
+
+  /* Line height */
+  --lh-display: 1.06;
+  --lh-heading: 1.18;
+  --lh-snug:    1.35;
+  --lh-body:    1.65;
+  --lh-loose:   1.8;
+
+  /* Letter-spacing — Helvetica Neue sets loose at large sizes; pull it in. */
+  --tr-display: -0.024em;
+  --tr-heading: -0.015em;
+  --tr-snug:    -0.006em;
+  --tr-body:    0;
+  --tr-label:   0.12em;
+
+  /* -- Space: 8px base, 4px half-step ------------------------------------- */
+  --s-1: 0.25rem;  /*  4 */
+  --s-2: 0.5rem;   /*  8 */
+  --s-3: 0.75rem;  /* 12 */
+  --s-4: 1rem;     /* 16 */
+  --s-5: 1.5rem;   /* 24 */
+  --s-6: 2rem;     /* 32 */
+  --s-7: 3rem;     /* 48 */
+  --s-8: 4rem;     /* 64 */
+  --s-9: 6rem;     /* 96 */
+
+  /* -- Layout -------------------------------------------------------------- */
+  --maxw:        1280px;  /* content container */
+  --maxw-narrow: 840px;   /* long-form reading measure */
+  --gutter:      1.5rem;
+  --banner-h:    100px;   /* institutional banner */
+  --nav-h:       60px;    /* primary navigation */
+  --polyu-block: clamp(280px, 30vw, 470px);  /* width of the red PolyU block */
+
+  /* -- Radius / elevation --------------------------------------------------
+     The BDSIS graphic language is built from quarter circles: corners are
+     either square, or a full quarter-round on ONE corner. No soft 4px pills. */
+  --r-0: 0;
+  --r-cell: 28px;         /* the one rounded corner */
+  --shadow-card: 0 1px 2px rgba(0,0,0,.05), 0 8px 24px rgba(0,0,0,.06);
+  --shadow-lift: 0 2px 4px rgba(0,0,0,.06), 0 16px 40px rgba(0,0,0,.10);
+
+  --ease: cubic-bezier(.22,.61,.36,1);
+}
+
+/* ── 2. RESET + BASE ─────────────────────────────────────────────────────── */
+*, *::before, *::after { box-sizing: border-box; }
+
+html { -webkit-text-size-adjust: 100%; scroll-behavior: smooth; }
+
+body {
+  margin: 0;
+  font-family: var(--font);
+  font-size: var(--fs-body);
+  font-weight: var(--fw-roman);
+  line-height: var(--lh-body);
+  letter-spacing: var(--tr-body);
+  color: var(--ink-body);
+  background: var(--paper);
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+h1, h2, h3, h4 {
+  color: var(--ink);
+  margin: 0 0 var(--s-4);
+  text-wrap: balance;
+}
+h1 { font-size: var(--fs-h1); font-weight: var(--fw-roman);  line-height: var(--lh-heading); letter-spacing: var(--tr-heading); }
+h2 { font-size: var(--fs-h2); font-weight: var(--fw-medium); line-height: var(--lh-heading); letter-spacing: var(--tr-heading); }
+h3 { font-size: var(--fs-h3); font-weight: var(--fw-medium); line-height: var(--lh-snug);    letter-spacing: var(--tr-snug); }
+h4 { font-size: var(--fs-h4); font-weight: var(--fw-medium); line-height: var(--lh-snug); }
+
+p { margin: 0 0 var(--s-4); max-width: 68ch; }
+p:last-child { margin-bottom: 0; }
+
+a { color: var(--is-blue-deep); text-decoration: none; }
+a:hover { text-decoration: underline; }
+
+img, svg { max-width: 100%; height: auto; display: block; }
+
+strong { font-weight: var(--fw-medium); color: var(--ink); }
+
+ul, ol { margin: 0 0 var(--s-4); padding-left: 1.2em; }
+li { margin-bottom: var(--s-2); }
+
+:focus-visible {
+  outline: 3px solid var(--is-blue);
+  outline-offset: 2px;
+}
+
+.skip-link {
+  position: absolute; left: -9999px; top: 0; z-index: 999;
+  background: var(--polyu-red); color: #fff;
+  padding: var(--s-3) var(--s-5); font-weight: var(--fw-medium);
+}
+.skip-link:focus { left: 0; }
+
+/* ── 3. HEADER / INSTITUTIONAL BANNER ────────────────────────────────────── */
+/* The banner is the University's, not ours. Its geometry is fixed: unit
+   lockup left, utilities right, PolyU logo in the red angled block that
+   bleeds off the right edge. Only the unit lockup changes between sites. */
+/* The banner and the nav read as ONE block of University furniture, so only
+   the nav carries a bottom rule. Two hairlines make it look like two bars. */
+.banner {
+  position: relative;
+  background: var(--surface);
+  height: var(--banner-h);
+}
+.banner__inner {
+  max-width: none;
+  height: 100%;
+  padding-left: clamp(1rem, 3vw, 2.5rem);
+  display: flex;
+  align-items: center;
+  gap: var(--s-6);
+}
+
+/* ── LOGO ───────────────────────────────────────────────────────────────────
+   The lockup is composed, not baked: a coloured mark plus a wordmark drawn
+   as a CSS mask. The mask means one wordmark file serves black, white and
+   gold, so the logo follows the theme without a separate asset per ground.
+
+   All geometry is proportional to --logo-size (the mark's edge), taken from
+   the master artwork: mark 64, gap 17, wordmark 204.41x46.468 (IS) or
+   307.863x51.732 (PolyU IS). Never respace these by hand.               */
+.logo {
+  --logo-size: 46px;
+  display: inline-flex; align-items: center;
+  gap: calc(var(--logo-size) * 0.266);
+  color: var(--ink);
+  flex-shrink: 0;
+}
+.logo:hover { text-decoration: none; }
+.logo__mark { width: var(--logo-size); aspect-ratio: 1; flex-shrink: 0; display: block; }
+/* Monocolor uses its OWN mark artwork, in which the quadrants are separated
+   by gaps. Masking the colour mark would fuse them into a silhouette and lose
+   the construction the mark is built from. */
+.logo--mono .logo__mark {
+  background: currentColor;
+  -webkit-mask: url(assets/mark-mono.svg) no-repeat center / contain;
+          mask: url(assets/mark-mono.svg) no-repeat center / contain;
+}
+.logo__word {
+  display: block; flex-shrink: 0;
+  background: currentColor;
+  -webkit-mask-repeat: no-repeat; mask-repeat: no-repeat;
+  -webkit-mask-position: left center; mask-position: left center;
+  -webkit-mask-size: contain; mask-size: contain;
+}
+/* Standalone: "Interdisciplinary / Studies" */
+.logo--is .logo__word {
+  width: calc(var(--logo-size) * 3.194);
+  height: calc(var(--logo-size) * 0.726);
+  -webkit-mask-image: url(assets/wordmark-is.svg);
+          mask-image: url(assets/wordmark-is.svg);
+}
+/* Endorsed: "PolyU / Interdisciplinary Studies" */
+.logo--polyu .logo__word {
+  width: calc(var(--logo-size) * 4.810);
+  height: calc(var(--logo-size) * 0.808);
+  -webkit-mask-image: url(assets/wordmark-polyu-is.svg);
+          mask-image: url(assets/wordmark-polyu-is.svg);
+}
+
+/* The banner instance. Line-height 0 so the anchor contributes no leading
+   of its own — otherwise the lockup sits high with a gap beneath it. */
+.lockup { --logo-size: 46px; line-height: 0; }
+
+
+/* Parent-unit lockup — the College of Undergraduate Studies logo, in the
+   role the Faculty lockup takes on a departmental site. Supplied as artwork
+   on a white field, so it is knocked through on the dark themes rather than
+   sitting in a white box: invert flips the field, and the hue rotation puts
+   the PolyU red back where invert took it. */
+.parent-unit { flex-shrink: 0; display: flex; align-items: center; }
+.parent-unit img { height: 46px; width: auto; mix-blend-mode: multiply; }
+html[data-theme="dark"] .parent-unit img,
+html[data-theme="dark-mono-gold"] .parent-unit img {
+  mix-blend-mode: normal; filter: invert(1) hue-rotate(180deg);
+}
+
+/* Utilities sit to the right of the lockups, clear of the red block */
+.banner__utils {
+  margin-left: auto;
+  display: flex; align-items: center; gap: var(--s-5);
+  /* Clear the red block, which is absolutely positioned over this row. */
+  padding-right: calc(var(--polyu-block) + var(--s-5));
+}
+.util-btn {
+  background: none; border: 0; padding: var(--s-2);
+  color: var(--meta); cursor: pointer; line-height: 0;
+}
+.util-btn:hover { color: var(--is-crimson-ink); }
+.util-sep { width: 1px; height: 20px; background: var(--line); }
+.util-link {
+  font-size: var(--fs-sm); font-weight: var(--fw-roman);
+  color: var(--ink-body); white-space: nowrap;
+}
+.util-link:hover { color: var(--is-crimson-ink); text-decoration: none; }
+/* Only the menu utilities carry a caret — a plain link must opt out. */
+.util-link:not(.util-link--plain)::after { content: " ▾"; font-size: 0.7em; color: var(--meta); }
+
+/* The red block: a parallelogram bleeding off the right edge, PolyU logo
+   optically centred inside it. Never place BDSIS artwork in this block. */
+.banner__polyu {
+  position: absolute; top: 0; right: 0; height: 100%;
+  width: var(--polyu-block);
+  background: var(--polyu-red);
+  clip-path: polygon(58px 0, 100% 0, 100% 100%, 0 100%);
+  display: flex; align-items: center; justify-content: flex-end;
+  padding-right: clamp(1rem, 3vw, 2.5rem);
+}
+.banner__polyu img { width: 246px; }
+
+/* ── 4. NAVIGATION ───────────────────────────────────────────────────────── */
+.nav {
+  background: var(--surface);
+  border-bottom: 1px solid var(--line);
+  position: sticky; top: 0; z-index: 50;
+}
+.nav__inner {
+  max-width: var(--maxw); margin: 0 auto; padding: 0 var(--gutter);
+  display: flex; align-items: stretch; flex-wrap: nowrap;
+  gap: clamp(.5rem, 2.4vw, 2.4rem);
+  min-height: var(--nav-h);
+}
+/* One row, always. If the items do not fit, the row scrolls — it never wraps,
+   because a two-line primary nav reads as a mistake. */
+.nav__item { flex-shrink: 0; }
+.nav__item { position: relative; display: flex; align-items: center; }
+.nav__link {
+  font-size: 1.0625rem;          /* 17 */
+  font-weight: var(--fw-roman);
+  color: var(--ink-body);
+  padding: var(--s-4) 0;
+  white-space: nowrap;
+  border-bottom: 3px solid transparent;
+  transition: color .18s var(--ease), border-color .18s var(--ease);
+}
+.nav__link:hover, .nav__item.is-open .nav__link, .nav__link[aria-current] {
+  color: var(--is-crimson-ink); border-bottom-color: var(--is-crimson-ink); text-decoration: none;
+}
+
+/* Drop panel */
+.nav__panel {
+  position: absolute; top: 100%; left: calc(var(--s-4) * -1);
+  min-width: 300px; background: var(--paper);
+  border: 1px solid var(--line);
+  box-shadow: var(--shadow-card);
+  padding: var(--s-4) 0;
+  opacity: 0; visibility: hidden; transform: translateY(6px);
+  transition: opacity .18s var(--ease), transform .18s var(--ease), visibility .18s;
+}
+/* Open state is owned by web.js, which guarantees exactly one panel is open.
+   Pure :hover left a panel behind whenever focus stayed on a clicked link. */
+.nav__item.is-open .nav__panel {
+  opacity: 1; visibility: visible; transform: translateY(0);
+}
+.nav__panel a {
+  display: block; padding: var(--s-2) var(--s-5);
+  font-size: var(--fs-sm); color: var(--ink-body);
+}
+.nav__panel a:hover { background: var(--paper-tint); color: var(--is-crimson-ink); text-decoration: none; }
+
+/* Mobile toggle */
+.nav__toggle { display: none; }
+
+/* ── 5. LAYOUT PRIMITIVES ────────────────────────────────────────────────── */
+.wrap { max-width: var(--maxw); margin: 0 auto; padding: 0 var(--gutter); }
+.wrap--narrow { max-width: var(--maxw-narrow); }
+
+.section { padding: var(--s-9) 0; }
+.section--tight { padding: var(--s-8) 0; }
+.section--tint { background: var(--paper-tint); }
+.section--ink { background: var(--ink); color: #D8D8D6; }
+.section--ink h2, .section--ink h3 { color: #FFFFFF; }
+.section--red { background: var(--grad-crimson); color: var(--on-crimson); }
+.section--red h2, .section--red h3 { color: var(--on-crimson); }
+
+/* auto-fit minimums are tuned to the 1280px container so each grid tops out at
+   its named column count — a min that is too small silently adds a column. */
+.grid { display: grid; gap: var(--s-5); }
+.grid--2 { grid-template-columns: repeat(auto-fit, minmax(min(100%, 460px), 1fr)); }
+.grid--3 { grid-template-columns: repeat(auto-fit, minmax(min(100%, 320px), 1fr)); }
+.grid--4 { grid-template-columns: repeat(auto-fit, minmax(min(100%, 240px), 1fr)); }
+
+.stack > * + * { margin-top: var(--s-4); }
+
+/* Section heading — set in the warm black at Medium, not in PolyU Red at
+   Light. Red is the University's institutional signal; headings are ours,
+   and they carry more authority in ink with a brand shape beside them. */
+.section-head { margin-bottom: var(--s-7); }
+.section-head h2 { color: var(--ink); font-weight: var(--fw-medium); margin-bottom: var(--s-3); }
+.section--ink .section-head h2 { color: #FFFFFF; }
+.section--red .section-head h2 { color: var(--on-crimson); }
+
+/* The marker: a brand shape rather than a plain rule. Set --marker to any
+   family gradient; set --marker-shape via the .section-head--* modifiers. */
+.section-head__rule {
+  width: 34px; height: 34px; margin-bottom: var(--s-4);
+  background: var(--marker, var(--grad-crimson));
+  border-top-right-radius: 100%;              /* quarter circle, default */
+}
+.section-head--circle   .section-head__rule { border-radius: 50%; }
+.section-head--square   .section-head__rule { border-radius: 0; }
+.section-head--triangle .section-head__rule { border-radius: 0; clip-path: polygon(50% 0, 100% 100%, 0 100%); }
+.section-head--alt      .section-head__rule { border-radius: 0; border-top-left-radius: 100%; }
+.section--red .section-head__rule { background: rgba(255,255,255,.85); }
+.section--ink .section-head__rule { background: rgba(255,255,255,.85); }
+.section--red .section-head h2 { color: var(--on-crimson); }
+.section-head p { color: var(--ink-muted); font-size: var(--fs-lead); }
+.section--ink .section-head p { color: rgba(255,255,255,.78); }
+.section--red .section-head p { color: var(--on-crimson); opacity: .82; }
+/* Everything inside a family-filled band takes that family's on-colour.
+   Nothing here may hard-code white: in the dark themes the band is light. */
+.section--red p,
+.section--red li,
+.section--red strong { color: var(--on-crimson); }
+.section--red .eyebrow { color: var(--on-crimson); opacity: .78; }
+
+.eyebrow {
+  font-size: var(--fs-label); font-weight: var(--fw-medium);
+  letter-spacing: var(--tr-label); text-transform: uppercase;
+  color: var(--accent, var(--is-crimson-ink));
+  display: block; margin-bottom: var(--s-3);
+}
+
+/* ── 6. COMPONENTS ───────────────────────────────────────────────────────── */
+
+/* Buttons — square by default; the primary action may take one cell corner. */
+.btn {
+  display: inline-flex; align-items: center; gap: var(--s-2);
+  font-size: var(--fs-sm); font-weight: var(--fw-medium);
+  letter-spacing: 0.01em;
+  padding: 0.8rem 1.6rem;
+  border: 1px solid transparent; border-radius: var(--r-0);
+  cursor: pointer; transition: all .2s var(--ease);
+}
+.btn:hover { text-decoration: none; }
+.btn--primary { background: var(--grad-crimson); color: var(--on-crimson); border-bottom-right-radius: var(--r-cell); }
+.btn--primary:hover { filter: brightness(.9); }
+.btn--ghost { background: transparent; color: var(--is-crimson-ink); border-color: var(--is-crimson-ink); }
+.btn--ghost:hover { background: var(--is-crimson); color: var(--on-crimson); }
+.btn--onink { background: transparent; color: #fff; border-color: rgba(255,255,255,.5); }
+.btn--onink:hover { background: #fff; color: var(--ink); }
+
+/* Card — the workhorse. One quarter-round corner, never four. */
+.card {
+  background: var(--surface);
+  border: 1px solid var(--line);
+  border-bottom-right-radius: var(--r-cell);
+  overflow: hidden;
+  display: flex; flex-direction: column;
+  transition: box-shadow .25s var(--ease), transform .25s var(--ease);
+}
+.card:hover { box-shadow: var(--shadow-lift); transform: translateY(-3px); }
+.card__media { aspect-ratio: 16 / 10; background: var(--paper-deep); position: relative; overflow: hidden; }
+.card__body { padding: var(--s-5); flex: 1; display: flex; flex-direction: column; }
+.card__date {
+  font-size: var(--fs-xs); font-weight: var(--fw-medium);
+  letter-spacing: 0.06em; text-transform: uppercase;
+  color: var(--meta); margin-bottom: var(--s-2);
+}
+.card__title {
+  font-size: var(--fs-h4); font-weight: var(--fw-medium);
+  line-height: var(--lh-snug); color: var(--ink); margin: 0 0 var(--s-3);
+}
+.card a.card__title:hover { color: var(--is-crimson-ink); text-decoration: none; }
+.card__excerpt { font-size: var(--fs-sm); color: var(--ink-muted); margin: 0; }
+.card__foot { margin-top: auto; padding-top: var(--s-4); }
+
+/* ── THE SHAPE KIT ───────────────────────────────────────────────────────
+   Five primitives, drawn from the BDSIS brand artwork: quarter circle (in
+   two orientations), square, triangle and circle. Each takes a family
+   gradient through --fam-grad. These are the only shapes the brand draws
+   with — anything else is decoration.                                      */
+.shape { width: var(--size, 32px); aspect-ratio: 1; background: var(--fam-grad, var(--grad-crimson)); flex-shrink: 0; }
+.shape--quarter      { border-top-right-radius: 100%; }   /* pivot bottom-left  */
+.shape--quarter-alt  { border-top-left-radius: 100%;  }   /* pivot bottom-right */
+.shape--square       { border-radius: 0; }
+.shape--circle       { border-radius: 50%; }
+.shape--triangle     { aspect-ratio: 9 / 8; clip-path: polygon(50% 0, 100% 100%, 0 100%); }
+
+.shape-row { display: flex; align-items: flex-end; gap: var(--s-3); }
+
+/* Cell tile — the graphic-language card: a family gradient field carrying one
+   oversized brand shape, used where an honest photograph is unavailable. */
+.cell-tile {
+  position: relative; aspect-ratio: 16 / 10; overflow: hidden;
+  background: var(--fam-grad, var(--grad-blue));
+}
+.cell-tile::after {
+  content: ""; position: absolute; inset: auto -12% -12% auto;
+  width: 62%; aspect-ratio: 1;
+  background: rgba(255,255,255,.22);
+  border-top-left-radius: 100%;
+}
+/* Rotate the motif down a grid so a row of cards does not read as a pattern */
+.cell-tile--alt::after  { inset: -14% auto auto -14%; border-radius: 0; border-bottom-right-radius: 100%; }
+.cell-tile--circle::after { inset: auto -14% -22% auto; width: 54%; border-radius: 50%; }
+.cell-tile--square::after { inset: auto -10% -18% auto; width: 48%; border-radius: 0; transform: rotate(-12deg); }
+.cell-tile--triangle::after { inset: auto 50% -10% auto; width: 60%; transform: translateX(50%); border-radius: 0; clip-path: polygon(50% 0, 100% 100%, 0 100%); }
+
+/* Stat */
+.stat { text-align: left; }
+.stat__num {
+  font-size: var(--fs-stat); font-weight: var(--fw-light);
+  line-height: 1; letter-spacing: var(--tr-display);
+  color: var(--ink); display: block;
+}
+.section--ink .stat__num, .section--red .stat__num { color: #fff; }
+.stat__num sup { font-size: 0.42em; font-weight: var(--fw-light); top: -0.9em; }
+.stat__label {
+  display: block; margin-top: var(--s-3);
+  font-size: var(--fs-sm); line-height: var(--lh-snug); color: var(--ink-muted);
+  max-width: 26ch;
+}
+.section--ink .stat__label, .section--red .stat__label { color: rgba(255,255,255,.8); }
+
+/* Hero carousel */
+.hero { position: relative; background: var(--ink); overflow: hidden; }
+.hero__viewport { position: relative; min-height: clamp(360px, 46vw, 560px); }
+/* Two slides crossfading in the same position ghost their headlines through
+   each other. Stagger instead: the outgoing slide clears first, then the
+   incoming one arrives. */
+.hero__slide {
+  position: absolute; inset: 0;
+  display: grid; grid-template-columns: 1fr 1fr; align-items: center;
+  opacity: 0; visibility: hidden;
+  transition: opacity .28s var(--ease), visibility 0s linear .28s;
+}
+.hero__slide.is-active {
+  opacity: 1; visibility: visible;
+  transition: opacity .38s var(--ease) .28s, visibility 0s linear .28s;
+}
+.hero__copy {
+  padding: var(--s-8) clamp(1.5rem, 5vw, 5rem);
+  background: var(--paper);
+  height: 100%;
+  display: flex; flex-direction: column; justify-content: center;
+}
+.hero__kicker {
+  font-size: var(--fs-label); font-weight: var(--fw-medium);
+  letter-spacing: var(--tr-label); text-transform: uppercase;
+  color: var(--is-crimson-ink); margin-bottom: var(--s-4);
+}
+/* A quarter circle opens the hero — the brand shape, not a rule. */
+.hero__kicker::before {
+  content: ""; display: block; width: 30px; height: 30px;
+  background: var(--grad-crimson); border-top-right-radius: 100%;
+  margin-bottom: var(--s-4);
+}
+.hero__title {
+  font-size: var(--fs-h1); font-weight: var(--fw-medium);
+  line-height: var(--lh-heading); letter-spacing: var(--tr-heading);
+  color: var(--ink); margin: 0 0 var(--s-4);
+}
+.hero__text { font-size: var(--fs-lead); color: var(--ink-muted); margin-bottom: var(--s-5); }
+/* The hero visual fills its grid cell; the 16:10 ratio a .cell-tile normally
+   enforces would size it from its height and overflow the column. */
+.hero__visual { position: relative; height: 100%; min-height: 320px; }
+.hero__visual.cell-tile { aspect-ratio: auto; width: 100%; }
+
+/* Vertical pager, as on the PolyU pattern */
+/* The pager floats over the hero, whose two halves have opposite polarity.
+   Give it its own ground so its contrast is defined rather than inherited. */
+.hero__pager {
+  position: absolute; left: clamp(.5rem, 1.6vw, 1.4rem); top: 50%;
+  transform: translateY(-50%); z-index: 5;
+  display: flex; flex-direction: column; align-items: center; gap: var(--s-3);
+  background: var(--paper); padding: var(--s-3) var(--s-2);
+}
+.hero__dot {
+  width: 9px; height: 9px; border-radius: 50%;
+  border: 1px solid var(--ink-muted); background: transparent;
+  padding: 0; cursor: pointer;
+}
+.hero__dot.is-active { background: var(--is-crimson-ink); border-color: var(--is-crimson-ink); }
+.hero__playpause {
+  background: none; border: 0; color: var(--ink-body);
+  cursor: pointer; font-size: 12px; padding: var(--s-2) 0;
+}
+
+/* Comparison table */
+.table-wrap { overflow-x: auto; }
+table.compare {
+  width: 100%; border-collapse: collapse;
+  font-size: var(--fs-sm); min-width: 640px;
+}
+table.compare th, table.compare td {
+  text-align: left; padding: var(--s-4) var(--s-4);
+  border-bottom: 1px solid var(--line); vertical-align: top;
+}
+table.compare thead th {
+  font-weight: var(--fw-medium); font-size: var(--fs-xs);
+  letter-spacing: var(--tr-label); text-transform: uppercase;
+  color: var(--meta); border-bottom: 2px solid var(--ink);
+}
+table.compare thead th.is-us { color: var(--is-crimson-ink); }
+table.compare tbody th { font-weight: var(--fw-medium); color: var(--ink); width: 26%; }
+table.compare td.is-us { background: rgba(171,3,52,.05); color: var(--ink); }
+
+/* Curriculum bar */
+/* Credit diagram. The value sits OUTSIDE the bar: a 10% bar cannot hold a
+   label, and a label that wraps inside a bar reads as a bug. Keeping it out
+   also means the figure is always ink on paper, at one size, never reversed. */
+.curric { display: grid; gap: var(--s-3); }
+.curric__row { display: grid; grid-template-columns: minmax(150px, 22%) 1fr; gap: var(--s-4); align-items: center; }
+.curric__label { font-size: var(--fs-sm); font-weight: var(--fw-medium); color: var(--ink); }
+.curric__track { display: flex; align-items: center; gap: var(--s-4); }
+.curric__bar {
+  height: 40px; flex-shrink: 0;
+  background: var(--fam-grad, var(--grad-blue));
+}
+.curric__value {
+  font-size: var(--fs-sm); font-weight: var(--fw-medium); color: var(--ink);
+  font-variant-numeric: tabular-nums; letter-spacing: 0;
+  white-space: nowrap;
+}
+
+/* Quick links strip */
+.quicklinks { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 1px; background: var(--line); }
+.quicklink {
+  background: var(--surface); padding: var(--s-5);
+  display: flex; align-items: center; justify-content: space-between; gap: var(--s-4);
+  font-size: var(--fs-sm); font-weight: var(--fw-medium); color: var(--ink);
+}
+.quicklink:hover { background: var(--grad-crimson); color: var(--on-crimson); text-decoration: none; }
+.quicklink span:last-child { color: var(--is-crimson-ink); }
+.quicklink:hover span:last-child { color: #fff; }
+
+/* Pathway panel */
+/* The pathway marker is a brand shape, not a border. */
+.pathway { padding-top: var(--s-5); position: relative; }
+.pathway::before { content: ""; display: block; width: 30px; height: 30px; background: var(--fam-grad, var(--grad-blue)); border-top-right-radius: 100%; margin-bottom: var(--s-4); }
+.pathway--circle::before   { border-radius: 50%; }
+.pathway--square::before   { border-radius: 0; }
+.pathway--triangle::before { border-radius: 0; clip-path: polygon(50% 0, 100% 100%, 0 100%); }
+.pathway--alt::before      { border-radius: 0; border-top-left-radius: 100%; }
+.pathway h3 { margin-bottom: var(--s-2); }
+.pathway__meta { font-size: var(--fs-xs); letter-spacing: .06em; text-transform: uppercase; color: var(--fam-ink, var(--is-blue-ink)); font-weight: var(--fw-medium); }
+
+/* Profile (student journey) */
+.profile { display: grid; grid-template-columns: 84px 1fr; gap: var(--s-5); align-items: start; }
+/* The avatar takes any primitive from the kit — set the shape per profile so
+   a list of students does not read as one repeated tile. */
+.profile__avatar { width: 84px; height: 84px; background: var(--fam-grad, var(--grad-blue)); border-top-right-radius: 100%; }
+.profile__avatar--quarter-alt { border-radius: 0; border-top-left-radius: 100%; }
+.profile__avatar--square   { border-radius: 0; }
+.profile__avatar--circle   { border-radius: 50%; }
+.profile__avatar--triangle { border-radius: 0; clip-path: polygon(50% 0, 100% 100%, 0 100%); }
+.profile__disciplines { display: flex; flex-wrap: wrap; gap: var(--s-2); margin-bottom: var(--s-3); }
+.chip {
+  font-size: var(--fs-xs); font-weight: var(--fw-medium);
+  padding: 0.28rem 0.65rem; border: 1px solid currentColor; color: var(--fam-ink, var(--is-blue-ink));
+}
+
+/* ── 7. FOOTER ───────────────────────────────────────────────────────────── */
+/* The red band closing the page is the same device that closes every printed
+   BDSIS document: the crimson gradient carrying the University logo. */
+.endband {
+  background: var(--grad-crimson);
+  min-height: 64px;
+  display: flex; align-items: center;
+}
+.endband img { width: 190px; }
+
+.footer { background: var(--polyu-grey); color: #fff; }
+.footer__main { padding: var(--s-8) 0 var(--s-7); }
+.footer__grid { display: grid; grid-template-columns: 1.4fr repeat(3, 1fr); gap: var(--s-6); }
+.footer h4 {
+  color: #fff; font-size: var(--fs-xs); font-weight: var(--fw-medium);
+  letter-spacing: var(--tr-label); text-transform: uppercase; margin-bottom: var(--s-4);
+}
+.footer a { color: rgba(255,255,255,.85); font-size: var(--fs-sm); }
+.footer a:hover { color: #fff; }
+.footer ul { list-style: none; padding: 0; margin: 0; }
+.footer li { margin-bottom: var(--s-2); }
+.footer__contact { font-size: var(--fs-sm); color: rgba(255,255,255,.85); }
+.footer__bar {
+  border-top: 1px solid rgba(255,255,255,.22);
+  padding: var(--s-5) 0;
+  display: flex; flex-wrap: wrap; gap: var(--s-5); align-items: center;
+  font-size: var(--fs-xs); color: rgba(255,255,255,.8);
+}
+.footer__bar nav { display: flex; flex-wrap: wrap; gap: var(--s-5); }
+.footer__bar .copyright { margin-left: auto; }
+
+/* ── 8. GUIDELINES-ONLY CHROME ───────────────────────────────────────────── */
+.doc { max-width: var(--maxw); margin: 0 auto; padding: 0 var(--gutter); }
+.doc-layout { display: grid; grid-template-columns: 220px 1fr; gap: var(--s-8); align-items: start; }
+.doc-toc { position: sticky; top: calc(var(--nav-h) + var(--s-5)); font-size: var(--fs-sm); }
+.doc-toc ol { list-style: none; padding: 0; margin: 0; counter-reset: t; }
+.doc-toc li { margin-bottom: var(--s-2); counter-increment: t; }
+.doc-toc a { color: var(--ink-muted); display: block; padding: var(--s-1) 0; }
+.doc-toc a::before { content: counter(t, decimal-leading-zero) "  "; color: #B9B9B5; font-variant-numeric: tabular-nums; }
+.doc-toc a:hover { color: var(--is-crimson-ink); text-decoration: none; }
+
+.rule-block {
+  border-left: 3px solid var(--is-crimson-ink);
+  padding: var(--s-2) 0 var(--s-2) var(--s-5);
+  margin: var(--s-5) 0;
+}
+.rule-block p { margin-bottom: var(--s-2); }
+
+.spec {
+  width: 100%; border-collapse: collapse;
+  font-size: var(--fs-sm); margin: var(--s-5) 0;
+}
+.spec th, .spec td { text-align: left; padding: var(--s-3) var(--s-4); border-bottom: 1px solid var(--line); vertical-align: baseline; }
+.spec thead th {
+  font-size: var(--fs-xs); letter-spacing: var(--tr-label); text-transform: uppercase;
+  color: var(--meta); font-weight: var(--fw-medium); border-bottom: 2px solid var(--ink);
+}
+.spec code, code.tok {
+  font-family: var(--font-mono); font-size: 0.86em;
+  background: var(--paper-deep); padding: 0.12em 0.4em; color: var(--ink);
+  white-space: nowrap;
+}
+.spec td.num { font-variant-numeric: tabular-nums; white-space: nowrap; }
+
+.specimen {
+  border: 1px solid var(--line);
+  border-bottom-right-radius: var(--r-cell);
+  padding: var(--s-5); margin: var(--s-4) 0;
+  background: var(--surface); overflow: hidden;
+}
+.specimen__meta {
+  font-family: var(--font-mono); font-size: var(--fs-xs);
+  color: var(--ink-muted); margin-bottom: var(--s-3);
+  display: flex; flex-wrap: wrap; gap: var(--s-4);
+}
+.specimen__sample { color: var(--ink); margin: 0; max-width: none; }
+
+.swatches { display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: var(--s-4); margin: var(--s-5) 0; }
+.swatch { border: 1px solid var(--line); overflow: hidden; background: var(--surface); }
+.swatch__chip { height: 88px; }
+.swatch__meta { padding: var(--s-3) var(--s-4); }
+.swatch__name { font-size: var(--fs-sm); font-weight: var(--fw-medium); color: var(--ink); display: block; }
+.swatch__hex { font-family: var(--font-mono); font-size: var(--fs-xs); color: var(--ink-muted); }
+.swatch__use { font-size: var(--fs-xs); color: var(--ink-muted); display: block; margin-top: 2px; margin-bottom: var(--s-2); }
+/* Every colour card carries its print values, not just the hex. */
+.swatch__spec { display: block; margin-top: var(--s-2); font-family: var(--font-mono); font-size: var(--fs-label); color: var(--meta); line-height: 1.5; }
+.swatch__spec b { font-weight: var(--fw-medium); color: var(--ink-body); }
+.swatch__spec .copyval { display: block; }
+/* A gradient card carries both stops in full: hex, CMYK and ink for each,
+   because a printer setting the second stop needs its numbers, not an arrow. */
+.swatch__stop { display: block; }
+.swatch__stop + .swatch__stop { margin-top: var(--s-2); padding-top: var(--s-2); border-top: 1px solid var(--line-soft); }
+.swatch__stop > b {
+  display: block; font-family: var(--font); font-size: var(--fs-label);
+  letter-spacing: var(--tr-label); text-transform: uppercase;
+  font-weight: var(--fw-medium); color: var(--meta); margin-bottom: 2px;
+}
+
+/* Any value that can be lifted to the clipboard. The transition is on the
+   background so the confirmation reads as the same gesture on all three
+   lines, rather than the text simply blinking. */
+.copyval {
+  cursor: pointer; border-radius: 2px;
+  margin: 0 -0.25em; padding: 0 0.25em;
+  background: transparent;
+  transition: background-color .18s ease, color .18s ease;
+}
+.copyval:hover { background: var(--paper-deep); color: var(--ink); }
+.copyval:focus-visible { outline: 2px solid var(--is-crimson-ink); outline-offset: 1px; }
+.copyval.is-copied { background: var(--is-crimson-ink); color: var(--paper); }
+.copyval.is-failed { background: var(--warn-line); color: #FFFFFF; }
+.swatch__hex.copyval { display: inline-block; }
+
+.dodont { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: var(--s-5); margin: var(--s-5) 0; }
+.dodont__item { border-top: 4px solid; padding-top: var(--s-4); }
+.dodont__item.do { border-color: var(--is-green-ink); }
+.dodont__item.dont { border-color: var(--is-crimson); }
+.dodont__tag {
+  font-size: var(--fs-xs); font-weight: var(--fw-medium);
+  letter-spacing: var(--tr-label); text-transform: uppercase; display: block; margin-bottom: var(--s-2);
+}
+.dodont__item.do .dodont__tag { color: var(--is-green-ink); }
+.dodont__item.dont .dodont__tag { color: var(--is-crimson); }
+.dodont__item p { font-size: var(--fs-sm); margin: 0; }
+
+.callout {
+  background: var(--paper-tint);
+  border-bottom-right-radius: var(--r-cell);
+  padding: var(--s-5) var(--s-6); margin: var(--s-5) 0;
+}
+.callout__title { font-size: var(--fs-h4); font-weight: var(--fw-medium); color: var(--ink); margin-bottom: var(--s-3); }
+.callout p { font-size: var(--fs-sm); }
+
+/* Grid overlay demo */
+.grid-demo { position: relative; border: 1px solid var(--line); height: 180px; background: var(--surface); overflow: hidden; }
+.grid-demo__cols { position: absolute; inset: 0; display: grid; grid-template-columns: repeat(12, 1fr); gap: 24px; padding: 0 24px; }
+.grid-demo__cols span { background: rgba(171,3,52,.10); }
+
+/* Scale ramp visual */
+.ramp { display: grid; gap: var(--s-2); margin: var(--s-5) 0; }
+.ramp__row { display: grid; grid-template-columns: 155px 1fr; gap: var(--s-4); align-items: baseline; border-bottom: 1px solid var(--line-soft); padding-bottom: var(--s-2); }
+.ramp__key { font-family: var(--font-mono); font-size: var(--fs-xs); color: var(--ink-muted); }
+.ramp__demo { color: var(--ink); overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+
+/* ── 9. RESPONSIVE ───────────────────────────────────────────────────────── */
+@media (max-width: 1100px) {
+  .banner__utils { padding-right: 0; }
+  .banner__polyu { position: static; clip-path: none; width: 100%; height: 44px; justify-content: center; padding: 0; }
+  .banner { height: auto; }
+  .banner__inner { padding: var(--s-4) var(--gutter); flex-wrap: wrap; }
+  .footer__grid { grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); }
+  .doc-layout { grid-template-columns: 1fr; }
+  .doc-toc { position: static; }
+}
+
+@media (max-width: 860px) {
+  .lockup-divider, .parent-unit { display: none; }
+  .hero__slide { grid-template-columns: 1fr; }
+  .hero__visual { display: none; }
+  .nav__inner { overflow-x: auto; }
+  .nav__panel { display: none; }
+  .curric__row { grid-template-columns: 1fr; }
+  .footer__bar .copyright { margin-left: 0; width: 100%; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after { animation-duration: .01ms !important; transition-duration: .01ms !important; scroll-behavior: auto !important; }
+}
+
+/* ── 11. THEMES ──────────────────────────────────────────────────────────────
+   Three grounds, switched on <html data-theme>. Tokens only — no component
+   carries a per-theme rule except the handful of polarity flips at the end.
+
+   light            the cream ground and the four families        (default)
+   dark             the same four families, relit for a dark ground
+   dark-mono-gold   the dark discipline reduced to one gold accent
+
+   Every dark family value clears 4.5:1 against BOTH the paper and the
+   surface, at both gradient stops. Because contrast is symmetric, that one
+   property makes each family usable as a field AND as text — which is why
+   the dark themes need no separate "ink" variants.
+   ========================================================================== */
+
+html[data-theme="dark"] {
+  --meta:       #A79E90;
+  --space-hl:   #6B4A22;
+  --paper:      #14130F;
+  --paper-tint: #1C1A15;
+  --paper-deep: #26231C;
+  --surface:    #1D1B16;
+  --ink:        #F4EFE4;
+  --ink-body:   #D3CCBE;
+  --ink-muted:  #9A9285;
+  --line:       #35312A;
+  --line-soft:  #2A2721;
+
+  /* The four families, relit. Same hues, raised in value and softened in
+     saturation so they sit on the dark ground instead of vibrating on it. */
+  --is-crimson: #F2778C;  --is-crimson-2: #DB5670;   /* Red       6.9 / 4.9 */
+  --is-orange:  #F5A85A;  --is-orange-2:  #EE8340;   /* Tangerine 9.4 / 7.0 */
+  --is-green:   #C9CE8C;  --is-green-2:   #ADB878;   /* Olive    11.2 / 8.8 */
+  --is-blue:    #7FC9D8;  --is-blue-2:    #58A9BC;   /* Ocean    10.0 / 6.9 */
+
+  /* On a dark ground the flat family value IS the text-safe value. */
+  --is-crimson-ink: #F2778C;
+  --is-orange-ink:  #F5A85A;
+  --is-green-ink:   #C9CE8C;
+  --is-blue-ink:    #7FC9D8;
+  --is-blue-deep:   #7FC9D8;   /* links */
+
+  /* All four families are light here, so every one takes dark text. */
+  --on-crimson: #14130F;  --on-orange: #14130F;
+  --on-green:   #14130F;  --on-blue:   #14130F;
+
+  --shadow-card: 0 1px 2px rgba(0,0,0,.5), 0 8px 24px rgba(0,0,0,.45);
+  --shadow-lift: 0 2px 4px rgba(0,0,0,.55), 0 16px 40px rgba(0,0,0,.5);
+}
+
+html[data-theme="dark-mono-gold"] {
+  --meta:       #ABA28F;
+  --space-hl:   #5C4718;
+  --paper:      #0F0D0A;
+  --paper-tint: #17140F;
+  --paper-deep: #221E17;
+  --surface:    #17140F;
+  --ink:        #F5EFE0;
+  --ink-body:   #D8D0BE;
+  --ink-muted:  #9E9683;
+  --line:       #332C21;
+  --line-soft:  #26211A;
+
+  /* Three golds of differing depth plus one neutral, so the four families
+     stay separable by value without becoming four hues. */
+  --is-crimson: #F0D08A;  --is-crimson-2: #C9A227;   /* gold, hero   */
+  --is-orange:  #F7E3B5;  --is-orange-2:  #E0C878;   /* champagne    */
+  --is-green:   #C9A227;  --is-green-2:   #96741A;   /* antique gold */
+  --is-blue:    #B3AA99;  --is-blue-2:    #8A8274;   /* neutral      */
+
+  --is-crimson-ink: #F0D08A;
+  --is-orange-ink:  #F7E3B5;
+  --is-green-ink:   #D9B84A;
+  --is-blue-ink:    #B3AA99;
+  --is-blue-deep:   #E0C878;   /* links */
+
+  --on-crimson: #0F0D0A;  --on-orange: #0F0D0A;
+  --on-green:   #0F0D0A;  --on-blue:   #0F0D0A;
+
+  --shadow-card: 0 1px 2px rgba(0,0,0,.6), 0 8px 24px rgba(0,0,0,.5);
+  --shadow-lift: 0 2px 4px rgba(0,0,0,.65), 0 16px 40px rgba(0,0,0,.55);
+}
+
+/* Polarity flips — the only places a theme touches a component. Each exists
+   because the element's ground comes from outside the token set. */
+html[data-theme="dark"] .footer,
+html[data-theme="dark-mono-gold"] .footer { background: var(--paper-deep); }
+html[data-theme="dark"] .section--ink,
+html[data-theme="dark-mono-gold"] .section--ink { background: var(--paper-deep); }
+/* The end band carries the family-1 gradient, which is light in the dark
+   themes — so the white logo would vanish. Swap the artwork, don't filter it. */
+html[data-theme="dark"] .endband img,
+html[data-theme="dark-mono-gold"] .endband img { content: url(assets/polyu-logo-colour.svg); }
+html[data-theme="dark"] table.compare td.is-us,
+html[data-theme="dark-mono-gold"] table.compare td.is-us { background: rgba(255,255,255,.05); }
+html[data-theme="dark"] .cell-tile::after,
+html[data-theme="dark-mono-gold"] .cell-tile::after { background: rgba(0,0,0,.20); }
+
+/* ── 12. THEME BAR ───────────────────────────────────────────────────────── */
+.theme-bar {
+  position: fixed; left: var(--s-5); bottom: var(--s-5); z-index: 200;
+  display: flex; gap: 2px; padding: 4px;
+  background: var(--surface); border: 1px solid var(--line);
+  box-shadow: var(--shadow-card);
+}
+.theme-bar button {
+  font: inherit; font-size: var(--fs-xs); font-weight: var(--fw-medium);
+  padding: 0.4rem 0.7rem; border: 0; cursor: pointer;
+  background: transparent; color: var(--ink-muted);
+}
+.theme-bar button:hover { color: var(--ink); }
+.theme-bar button.on { background: var(--ink); color: var(--paper); }
+@media (max-width: 700px) { .theme-bar { left: var(--s-3); bottom: var(--s-3); } }
+
+/* ── 13. GUIDELINES: VISUAL DEMONSTRATIONS ───────────────────────────────────
+   Chrome for showing a rule rather than describing it. Demo frames render
+   live components, so a specimen can never disagree with the component. */
+
+/* A demo stage: neutral frame, page ground inside, caption underneath. */
+.demo {
+  border: 1px solid var(--line);
+  background: var(--paper);
+  padding: var(--s-5);
+  overflow: hidden;
+}
+.demo--tight { padding: var(--s-4); }
+.demo--surface { background: var(--surface); }
+.demo-cap {
+  font-size: var(--fs-xs); color: var(--ink-muted);
+  margin-top: var(--s-2); display: block;
+}
+
+/* Paired good/bad examples. The bar across the top is the verdict. */
+.pair { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 300px), 1fr)); gap: var(--s-5); margin: var(--s-5) 0 var(--s-7); }
+.pair__item { display: flex; flex-direction: column; }
+.pair__verdict {
+  display: flex; align-items: center; gap: var(--s-2);
+  font-size: var(--fs-xs); font-weight: var(--fw-medium);
+  letter-spacing: var(--tr-label); text-transform: uppercase;
+  padding-bottom: var(--s-2); margin-bottom: 0;
+  border-bottom: 3px solid;
+}
+.pair__item.do  .pair__verdict { color: var(--is-green-ink); border-color: var(--is-green-ink); }
+.pair__item.dont .pair__verdict { color: var(--is-crimson-ink); border-color: var(--is-crimson-ink); }
+.pair__verdict::before {
+  content: ""; width: 13px; height: 13px; background: currentColor; flex-shrink: 0;
+}
+.pair__item.do  .pair__verdict::before { border-top-right-radius: 100%; }
+.pair__item.dont .pair__verdict::before { border-radius: 50%; }
+.pair__stage {
+  border: 1px solid var(--line); border-top: 0;
+  background: var(--paper); padding: var(--s-5);
+  min-height: 132px; display: flex; flex-direction: column; justify-content: center;
+  overflow: hidden;
+}
+.pair__note { font-size: var(--fs-sm); color: var(--ink-muted); margin: var(--s-3) 0 0; }
+
+/* Token visualisers ------------------------------------------------------- */
+.tok-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 210px), 1fr)); gap: var(--s-4); margin: var(--s-5) 0; }
+.tok-card { border: 1px solid var(--line); background: var(--surface); padding: var(--s-4); }
+.tok-card__demo { margin-bottom: var(--s-3); min-height: 56px; display: flex; align-items: center; }
+.tok-card__name { font-family: var(--font-mono); font-size: var(--fs-xs); color: var(--ink); display: block; }
+.tok-card__val  { font-family: var(--font-mono); font-size: var(--fs-xs); color: var(--ink-muted); }
+
+/* Spacing ruler: each step drawn at its true size. */
+.ruler { display: grid; gap: var(--s-2); margin: var(--s-5) 0; }
+.ruler__row { display: grid; grid-template-columns: 92px minmax(0, 1fr) 210px; gap: var(--s-4); align-items: center; }
+.ruler__bar { height: 20px; background: var(--grad-crimson); }
+.ruler__key, .ruler__px { font-family: var(--font-mono); font-size: var(--fs-xs); color: var(--ink-muted); }
+
+/* Space in context ----------------------------------------------------------
+   The highlight IS the gap. Each stage carries the highlight colour and every
+   child is painted in the surface colour, so what shows through is exactly the
+   space the token creates. Nothing here is drawn by hand or hard-coded in
+   pixels, which means these diagrams cannot drift from the values above: change
+   --s-5 and the picture of --s-5 changes with it. */
+.gapset {
+  display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 300px), 1fr));
+  gap: var(--s-5); margin: var(--s-5) 0; align-items: start;
+}
+.gapdemo { border: 1px solid var(--line); background: var(--surface); margin: 0; }
+.gapdemo__head {
+  display: flex; align-items: baseline; gap: var(--s-3); flex-wrap: wrap;
+  padding: var(--s-3) var(--s-4); border-bottom: 1px solid var(--line);
+}
+.gapdemo__tok { font-family: var(--font-mono); font-size: var(--fs-xs); font-weight: var(--fw-medium); color: var(--is-crimson-ink); }
+.gapdemo__val { font-family: var(--font-mono); font-size: var(--fs-xs); color: var(--meta); }
+.gapdemo__stage { padding: var(--s-5); }
+
+/* Gap between siblings. --g is the token under test. */
+.gaphl { display: grid; gap: var(--g); background: var(--space-hl); }
+/* A row shrinks to its content. Left to fill the stage, the container's own
+   background would read as part of the gap and a 4 px nudge would look like a
+   400 px band. */
+.gaphl--row {
+  grid-auto-flow: column; justify-content: start; align-items: center;
+  width: max-content; max-width: 100%;
+}
+.gaphl > * { background: var(--surface); margin: 0; }
+
+/* Padding inside a container. --p is the token under test. */
+.padhl { background: var(--space-hl); padding: var(--p); }
+.padhl--y { padding: var(--p) 0; }
+.padhl > * { background: var(--surface); margin: 0; }
+
+/* Miniature UI, so the specimens read as interface rather than as boxes. */
+.gapdemo__eyebrow { font-size: var(--fs-label); letter-spacing: var(--tr-label); text-transform: uppercase; color: var(--is-crimson-ink); font-weight: var(--fw-medium); }
+.gapdemo__title { font-size: var(--fs-h4); font-weight: var(--fw-medium); }
+.gapdemo__body { font-size: var(--fs-sm); color: var(--ink-body); }
+.gapdemo__meta { font-size: var(--fs-xs); color: var(--meta); }
+.gapdemo__shape { width: 22px; aspect-ratio: 1; display: block; }
+.gapdemo__rule { height: 3px; width: 44px; background: var(--grad-crimson); display: block; }
+.gapdemo__card { border: 1px solid var(--line); padding: var(--s-4); }
+
+/* The mark, with every shape numbered, and the per-row thumbnails that
+   answer "which piece is this?" without making the reader count quadrants.
+   Both are the real artwork: same paths, same gradients, greyed where the row
+   is not talking about them. */
+.markmap { margin: var(--s-5) 0 var(--s-6); display: grid; gap: var(--s-3); justify-items: center; }
+.markmap__svg { width: min(340px, 70%); height: auto; display: block; }
+.markmap__svg text { font-family: var(--font); }
+
+.formcell { display: flex; align-items: center; gap: var(--s-3); }
+.formmap { width: 42px; height: 42px; flex-shrink: 0; display: block; }
+
+/* Radius / elevation demonstrators */
+.box-demo { height: 90px; background: var(--paper-deep); border: 1px solid var(--line); }
+.box-demo--cell   { border-bottom-right-radius: var(--r-cell); }
+.box-demo--square { border-radius: 0; }
+.box-demo--wrong  { border-radius: 8px; }
+.box-demo--card   { background: var(--surface); box-shadow: var(--shadow-card); border: 0; }
+.box-demo--lift   { background: var(--surface); box-shadow: var(--shadow-lift); border: 0; }
+
+/* Theme preview tiles */
+.theme-previews { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 250px), 1fr)); gap: var(--s-5); margin: var(--s-5) 0; }
+.tprev { border: 1px solid var(--line); overflow: hidden; }
+.tprev__body { padding: var(--s-5); }
+.tprev__shapes { display: flex; gap: var(--s-2); align-items: flex-end; margin-bottom: var(--s-4); }
+.tprev__shapes span { width: 26px; aspect-ratio: 1; }
+.tprev__title { font-size: var(--fs-h4); font-weight: var(--fw-medium); margin-bottom: var(--s-2); }
+.tprev__text { font-size: var(--fs-sm); margin: 0 0 var(--s-4); }
+.tprev__btn { display: inline-block; font-size: var(--fs-xs); font-weight: var(--fw-medium); padding: .5rem 1rem; border-bottom-right-radius: 18px; }
+.tprev__label { font-size: var(--fs-xs); font-family: var(--font-mono); padding: var(--s-2) var(--s-5); border-top: 1px solid; }
+
+/* ── 14. LOGO DEMONSTRATIONS (guidelines only) ─────────────────────────────
+   Chrome for showing logo rules — clear space, minimum size, misuse. */
+
+/* Clear-space diagram: the exclusion zone drawn as a tinted band around the
+   lockup, with the measuring unit (half the mark height) shown as a chip. */
+.clearspace {
+  position: relative; display: inline-block;
+  padding: var(--cs, 23px);
+  outline: 1px dashed var(--is-crimson-ink);
+  background:
+    repeating-linear-gradient(45deg, rgba(171,3,52,.07) 0 6px, transparent 6px 12px);
+}
+.clearspace__inner { background: var(--surface); display: inline-flex; }
+.clearspace__tick {
+  position: absolute; background: var(--is-crimson-ink);
+  font-size: 0; 
+}
+.clearspace__tick--top { top: 0; left: 50%; width: 1px; height: var(--cs, 23px); }
+.clearspace__tick--left { left: 0; top: 50%; height: 1px; width: var(--cs, 23px); }
+.clearspace__label {
+  position: absolute; left: calc(100% + var(--s-3)); top: 50%; transform: translateY(-50%);
+  font-family: var(--font-mono); font-size: var(--fs-xs); color: var(--is-crimson-ink);
+  white-space: nowrap;
+}
+
+/* Misuse tiles: the wrong logo rendered, with a diagonal strike. */
+.misuse { position: relative; overflow: hidden; }
+.misuse__stage {
+  border: 1px solid var(--line); background: var(--surface);
+  min-height: 104px; display: flex; align-items: center; justify-content: center;
+  padding: var(--s-4); overflow: hidden;
+}
+.misuse__cap { font-size: var(--fs-xs); color: var(--ink-muted); display: block; margin-top: var(--s-2); }
+.misuse__tag {
+  display: flex; align-items: center; gap: var(--s-2);
+  font-size: var(--fs-xs); font-weight: var(--fw-medium);
+  letter-spacing: var(--tr-label); text-transform: uppercase;
+  color: var(--is-crimson-ink); padding-bottom: var(--s-2);
+  border-bottom: 3px solid var(--is-crimson-ink);
+}
+.misuse__tag::before { content: ""; width: 13px; height: 13px; background: currentColor; border-radius: 50%; flex-shrink: 0; }
+
+/* Minimum-size ladder */
+.sizes { display: flex; align-items: flex-end; gap: var(--s-6); flex-wrap: wrap; }
+.sizes figure { margin: 0; text-align: left; }
+.sizes figcaption { font-family: var(--font-mono); font-size: var(--fs-xs); color: var(--ink-muted); margin-top: var(--s-3); }
+
+/* ── 15. BANNER / NAV DEMONSTRATIONS (guidelines only) ────────────────────
+   A scaled, non-interactive replica of the real banner with its four zones
+   called out, so the anatomy can be pointed at rather than described. */
+.anat { position: relative; border: 1px solid var(--line); background: var(--surface); overflow: hidden; }
+.anat__bar {
+  position: relative; height: 72px; display: flex; align-items: center;
+  gap: var(--s-5); padding-left: var(--s-5); background: var(--surface);
+}
+.anat__zone { position: relative; display: inline-flex; align-items: center; }
+.anat__zone::after {
+  content: attr(data-zone);
+  position: absolute; top: -8px; left: -6px;
+  font-family: var(--font-mono); font-size: 10px; line-height: 1;
+  background: var(--is-crimson-ink); color: var(--on-crimson);
+  padding: 2px 4px; z-index: 3;
+}
+.anat__zone--outline { outline: 1px dashed var(--is-crimson-ink); outline-offset: 5px; }
+.anat__polyu {
+  position: absolute; top: 0; right: 0; height: 100%; width: 210px;
+  background: var(--polyu-red); clip-path: polygon(42px 0, 100% 0, 100% 100%, 0 100%);
+  display: flex; align-items: center; justify-content: flex-end; padding-right: var(--s-5);
+}
+.anat__polyu img { width: 130px; }
+.anat__nav {
+  display: flex; flex-wrap: nowrap; overflow-x: auto; gap: var(--s-5); padding: 0 var(--s-5);
+  border-top: 1px solid var(--line); border-bottom: 1px solid var(--line);
+  background: var(--surface); min-height: 44px; align-items: center;
+}
+.anat__nav span { font-size: var(--fs-sm); color: var(--ink-body); white-space: nowrap; }
+.anat__nav span { position: relative; }
+.anat__nav span.on { color: var(--is-crimson-ink); }
+.anat__nav span.on::after {
+  content: ""; position: absolute; left: 0; right: 0; bottom: -14px;
+  height: 3px; background: var(--is-crimson-ink);
+}
+.anat__panel {
+  border: 1px solid var(--line);
+  background: var(--surface); box-shadow: var(--shadow-card);
+  width: 240px; margin: 0 0 var(--s-5) 92px; padding: var(--s-3) 0;
+}
+.anat__panel a, .anat__panel span { display: block; padding: var(--s-2) var(--s-5); font-size: var(--fs-sm); color: var(--ink-body); }
+.anat__panel span.on { background: var(--paper-tint); color: var(--is-crimson-ink); }
+
+/* Legend for the callouts */
+.legend { display: grid; gap: var(--s-2); margin: var(--s-4) 0 var(--s-6); }
+.legend__row { display: grid; grid-template-columns: 26px 1fr; gap: var(--s-3); align-items: baseline; font-size: var(--fs-sm); }
+.legend__n {
+  font-family: var(--font-mono); font-size: 10px; text-align: center;
+  background: var(--is-crimson-ink); color: var(--on-crimson); padding: 2px 0;
+}
+
+/* ── 16. LANGUAGE ──────────────────────────────────────────────────────────
+   Chinese needs different vertical rhythm and no negative tracking: CJK
+   glyphs fill the em box, so they crowd at Latin leading and collide when
+   pulled tight. This is §06 of the guidelines, implemented. */
+html[data-lang="zh"] {
+  --lh-heading: 1.42;
+  --lh-snug:    1.50;
+  --lh-body:    1.80;
+  --lh-display: 1.28;
+  --tr-display: 0;
+  --tr-heading: 0;
+  --tr-snug:    0;
+  /* A Latin label survives 0.16em; three Chinese characters just scatter.
+     Enough to open the label up, not enough to break it into pieces. */
+  --tr-label:   0.05em;
+
+  /* CJK needs a higher floor than Latin. A 12px "聯" has more strokes than a
+     12px "m" has parts, and they close up at the same pixel density — so the
+     bottom three steps of the scale move up while the top of the scale, where
+     size is already sufficient, is left exactly as authored. */
+  --fs-label: 0.875rem;    /* 12 → 14 */
+  --fs-xs:    0.875rem;    /* 13 → 14 */
+  --fs-sm:    1rem;        /* 15 → 16 */
+}
+/* Font fallback is resolved PER GLYPH, so the Latin face must come FIRST and
+   the Chinese face after it. Listing the CJK face first would hand Latin text
+   to that font's own Latin subset — wider, softer, and nothing like Helvetica.
+   In this order "BDSIS" and "JS3000" stay Helvetica while 跨學科 comes from
+   MHei, inside the same sentence. */
+html[data-lang="zh"] body,
+html[data-lang="zh"] .lang-bar button[lang="zh-Hant"] {
+  font-family: "Helvetica Neue", "HelveticaNeue", Helvetica, Arial,
+               "MHei", "Heiti TC", "PingFang HK", "PingFang TC",
+               "Hiragino Sans CNS", "Microsoft JhengHei", "Noto Sans TC", sans-serif;
+}
+/* Chinese has no lowercase, so uppercasing a label does nothing but add a
+   transform the browser must undo. Latin runs inside a label still benefit. */
+html[data-lang="zh"] .eyebrow,
+html[data-lang="zh"] .card__date,
+html[data-lang="zh"] .pathway__meta { text-transform: none; }
+/* Balanced wrapping assumes word boundaries; CJK breaks anywhere. */
+html[data-lang="zh"] h1,
+html[data-lang="zh"] h2,
+html[data-lang="zh"] h3,
+html[data-lang="zh"] h4 { text-wrap: normal; }
+/* The measure is set in ch, which is a Latin unit — CJK glyphs are ~2ch. */
+html[data-lang="zh"] p { max-width: 40em; }
+html[data-lang="zh"] .stat__label { max-width: 15em; }
+
+/* Language switch, mirroring the theme bar on the opposite corner. */
+.lang-bar {
+  position: fixed; right: var(--s-5); bottom: var(--s-5); z-index: 200;
+  display: flex; gap: 2px; padding: 4px;
+  background: var(--surface); border: 1px solid var(--line);
+  box-shadow: var(--shadow-card);
+}
+.lang-bar button {
+  font: inherit; font-size: var(--fs-xs); font-weight: var(--fw-medium);
+  padding: 0.4rem 0.7rem; border: 0; cursor: pointer; min-width: 44px;
+  background: transparent; color: var(--ink-muted);
+}
+.lang-bar button:hover { color: var(--ink); }
+.lang-bar button.on { background: var(--ink); color: var(--paper); }
+@media (max-width: 700px) { .lang-bar { right: var(--s-3); bottom: var(--s-3); } }
+
+/* Shown only when the page is in Chinese: states plainly which layer is
+   translated, so a half-translated technical document reads as a decision
+   rather than as an oversight. */
+.lang-note { display: none; }
+html[data-lang="zh"] .lang-note {
+  display: block;
+  border-left: 3px solid var(--is-crimson-ink);
+  padding: var(--s-3) 0 var(--s-3) var(--s-5);
+  margin: var(--s-5) 0 0;
+  font-size: var(--fs-sm); color: var(--ink-muted);
+}
+
+/* ── 17. FIXED-POLARITY SPECIMENS ──────────────────────────────────────────
+   A specimen that pins its background must pin its text colour too. The
+   wordmark is drawn from `currentColor`, so a hard-coded white panel inside
+   a dark theme would inherit the theme's light ink and vanish. These two
+   classes keep ground and ink together, and win over .demo / .pair__stage. */
+.demo.on-light, .pair__stage.on-light, .misuse__stage.on-light, .on-light {
+  background: #FFFFFF;
+  color: #14110E;
+}
+.demo.on-cream, .pair__stage.on-cream, .on-cream {
+  background: #F2EBDD;
+  color: #14110E;
+}
+.demo.on-dark, .pair__stage.on-dark, .misuse__stage.on-dark, .on-dark {
+  background: #14110E;
+  color: #F4EFE4;
+}
+.demo.on-midtone, .pair__stage.on-midtone, .on-midtone {
+  background: #7A6E5A;
+  color: #14110E;
+}
+/* .logo sets its own colour from --ink, so it does NOT inherit the pinned ink
+   above — it has to be told explicitly, or the wordmark keeps the theme's
+   colour and disappears against the pinned ground. */
+.on-light .logo, .on-cream .logo, .on-midtone .logo { color: #14110E; }
+.on-dark .logo { color: #F4EFE4; }
+
+/* ── 18. THE "DON'T" MARKING ───────────────────────────────────────────────
+   The warning colour must NOT theme. Every other accent here is remapped per
+   theme, and in Dark Mono Gold the brand red becomes gold — which turns a
+   prohibition into an ornament. These two values are fixed in every theme;
+   only the polarity of the text changes, never the hue.
+
+   --warn-line  graphical (3:1 bar) — one value works on all seven grounds
+   --warn-text  type (4.5:1 bar) — no single red clears it light AND dark,
+                so it flips polarity while staying unmistakably red         */
+:root {
+  --warn-line: #E03C3C;   /* ≥3.5:1 on every ground in the system */
+  --warn-text: #C41E2A;   /* 5.9:1 white · 5.3:1 cream · 4.9:1 tint */
+}
+html[data-theme="dark"],
+html[data-theme="dark-mono-gold"] {
+  --warn-text: #FF7A7A;   /* 7.4:1 dark · 7.7:1 gold */
+}
+
+/* Markers take the fixed red rather than --is-crimson-ink. */
+.pair__item.dont .pair__verdict { color: var(--warn-text); border-color: var(--warn-line); }
+.misuse__tag                    { color: var(--warn-text); border-color: var(--warn-line); }
+.dodont__item.dont              { border-color: var(--warn-line); }
+.dodont__item.dont .dodont__tag { color: var(--warn-text); }
+
+/* A single stroke corner to corner, top-left to bottom-right. Drawn with a
+   gradient band perpendicular to the opposite diagonal, so it lands exactly
+   on the corners at any aspect ratio and needs no JS or SVG. */
+.pair__item.dont .pair__stage,
+.misuse__stage { position: relative; }
+.pair__item.dont .pair__stage::after,
+.misuse__stage::after {
+  content: ""; position: absolute; inset: 0; pointer-events: none;
+  background: linear-gradient(to top right,
+    transparent calc(50% - 1.2px),
+    var(--warn-line) calc(50% - 1.2px),
+    var(--warn-line) calc(50% + 1.2px),
+    transparent calc(50% + 1.2px));
+}
+/* The stage clips its content, so the stroke stops at the frame. */
+.pair__item.dont .pair__stage { overflow: hidden; }
+
+/* Section cross-reference. Underlined rather than coloured, so it reads as a
+   link without competing with the family accents around it. */
+.xref {
+  color: inherit;
+  text-decoration: underline;
+  text-decoration-color: var(--is-crimson-ink);
+  text-underline-offset: 0.18em;
+  text-decoration-thickness: 1px;
+  white-space: nowrap;
+}
+.xref:hover { color: var(--is-crimson-ink); text-decoration-thickness: 2px; }
+/* Anchor jumps must clear the sticky nav. */
+section[id] { scroll-margin-top: calc(var(--nav-h) + var(--s-5)); }
+
+/* ── 19. ARTIFACT RENDERS ──────────────────────────────────────────────────
+   Printed pieces drawn at true proportion. Everything inside an .artifact is
+   sized in `em`, and the element's font-size IS the scale — so one number
+   resizes a whole piece and every measurement stays in proportion.
+
+   --mm is set per artifact from its real width: font-size = width_px / width_mm
+   means 1em = 1mm. Every dimension below is therefore literally millimetres. */
+.artifact {
+  position: relative;
+  background: #F8F2E7;
+  color: #14110E;
+  overflow: hidden;
+  box-shadow: 0 2px 6px rgba(0,0,0,.10), 0 18px 44px rgba(0,0,0,.16);
+  font-family: var(--font);
+  flex-shrink: 0;
+}
+.artifact * { box-sizing: border-box; }
+
+/* Trim + safety guides, toggled for the whole page. */
+.artifact__guide {
+  position: absolute; pointer-events: none; z-index: 9;
+  inset: 8em;                       /* 8 mm safety margin */
+  outline: 1px dashed rgba(224,60,60,.55);
+  display: none;
+}
+body.show-guides .artifact__guide { display: block; }
+body.show-guides .artifact::before {
+  content: ""; position: absolute; inset: 3em; z-index: 9; pointer-events: none;
+  outline: 1px solid rgba(44,113,131,.5);   /* 3 mm bleed line */
+}
+
+/* The scale is set with container-query units. `100%` cannot be used here:
+   in a font-size it resolves against the PARENT'S FONT SIZE, not its width,
+   which silently collapses the whole millimetre system. 100cqw is the frame's
+   inline size, so dividing by the piece's width in mm makes 1em === 1mm. */
+.piece__frame { container-type: inline-size; flex-shrink: 0; }
+
+.artifact--a4    { width: 100%; aspect-ratio: 210 / 297;  font-size: calc(100cqw / 210); }
+.artifact--card  { width: 100%; aspect-ratio: 90 / 54;    font-size: calc(100cqw / 90); }
+/* ID-1 mandates a 3.18 mm radius so the card feeds through readers. */
+.artifact--id    { width: 100%; aspect-ratio: 85.6 / 54;  font-size: calc(100cqw / 85.6); border-radius: 3.18em; }
+/* The tag takes the house radius on one corner only, the same move as --r-cell. */
+.artifact--tag   { width: 100%; aspect-ratio: 100 / 55;   font-size: calc(100cqw / 100); border-bottom-right-radius: 14em; }
+.artifact--panel { width: 100%; aspect-ratio: 850 / 2000; font-size: calc(100cqw / 850); }
+
+/* Shared furniture inside a piece.
+   --m is the MARK HEIGHT IN MILLIMETRES, and every other dimension is derived
+   from it using the master artwork's own ratios — the same numbers as .logo.
+   Writing the gap as a flat `0.266em` would make it 0.266 mm rather than
+   0.266 x the mark, which closes the lockup up onto the symbol. */
+.af-logo {
+  --m: 10;
+  display: inline-flex; align-items: center;
+  gap: calc(var(--m) * 0.266em);
+  color: inherit;
+}
+.af-logo__mark { width: calc(var(--m) * 1em); aspect-ratio: 1; flex-shrink: 0; display: block; }
+.af-logo__word {
+  display: block; flex-shrink: 0; background: currentColor;
+  -webkit-mask-repeat: no-repeat; mask-repeat: no-repeat;
+  -webkit-mask-position: left center; mask-position: left center;
+  -webkit-mask-size: contain; mask-size: contain;
+  -webkit-mask-image: url(assets/wordmark-polyu-is.svg);
+          mask-image: url(assets/wordmark-polyu-is.svg);
+}
+/* Endorsed lockup — "PolyU / Interdisciplinary Studies" */
+.af-logo__word { width: calc(var(--m) * 4.810em); height: calc(var(--m) * 0.808em); }
+/* Standalone lockup — "Interdisciplinary Studies" */
+.af-logo--is .af-logo__word {
+  width: calc(var(--m) * 3.194em); height: calc(var(--m) * 0.726em);
+  -webkit-mask-image: url(assets/wordmark-is.svg);
+          mask-image: url(assets/wordmark-is.svg);
+}
+.af-logo--mono .af-logo__mark {
+  background: currentColor;
+  -webkit-mask: url(assets/mark-mono.svg) no-repeat center / contain;
+          mask: url(assets/mark-mono.svg) no-repeat center / contain;
+}
+
+/* A full-bleed art field. One edge is pinned and measured from the TRIM, so
+   the boundary where art meets type never moves; the rest push out into the
+   bleed at print time. The lattice inside is deliberately larger than the
+   field, and the overhang is what runs off the trim.
+
+   Default: pinned along the bottom, bleeding off the other three. The lattice
+   sits on that pinned edge, so the row boundary there is exact. */
+.af-field { position: absolute; left: 0; right: 0; top: 0; overflow: hidden; }
+.af-field > svg {
+  position: absolute; left: 0; bottom: 0;
+  width: calc(var(--cols) * var(--cell) * 1em);
+  height: calc(var(--rows) * var(--cell) * 1em);
+  /* The global `img, svg { max-width: 100% }` would clamp the lattice back to
+     the trim width, which is precisely the overhang the bleed needs. */
+  max-width: none;
+  display: block;
+}
+/* A column down the left edge, pinned on its right. Nothing pins it top or
+   bottom, so the lattice is CENTRED rather than anchored: the field bleeds
+   symmetrically, and centring is the one placement that lands identically on
+   screen and on press. `right: calc(100% - <width>em)` sets the column width,
+   since a plain `width` would be measured from the bled edge. */
+.af-field--left { bottom: 0; }
+.af-field--left > svg {
+  left: auto; right: 0;
+  bottom: auto; top: 50%; transform: translateY(-50%);
+}
+
+/* A horizontal band that bleeds left and right but keeps its own vertical
+   position, for things measured from the trim like a magnetic stripe. */
+.af-band { position: absolute; left: 0; right: 0; }
+
+/* A field that does not bleed: a framed block of cells sized in place. The
+   lattice stretches to fill it, which is exact because cols x cell equals the
+   width and rows x cell the height. */
+.af-block { position: absolute; overflow: hidden; }
+.af-block > svg {
+  position: absolute; inset: 0; width: 100%; height: 100%;
+  max-width: none; display: block;
+}
+
+/* A punched hole. In artwork this is a die line and carries no ink; here it is
+   filled with the stage colour so the render reads as a hole rather than a
+   dot, with a hairline to show the cut. Position is the hole's CENTRE. */
+.af-hole {
+  position: absolute; border-radius: 100%;
+  transform: translate(-50%, -50%);
+  background: #EDE5D6;
+  box-shadow: inset 0 0 0 0.25em rgba(20, 17, 14, .22);
+}
+
+/* A quarter circle bleeding off a corner — the house device. */
+.af-bleed { position: absolute; aspect-ratio: 1; }
+.af-bleed--br { right: 0; bottom: 0; border-top-left-radius: 100%; }
+.af-bleed--bl { left: 0; bottom: 0; border-top-right-radius: 100%; }
+.af-bleed--tr { right: 0; top: 0; border-bottom-left-radius: 100%; }
+.af-bleed--tl { left: 0; top: 0; border-bottom-right-radius: 100%; }
+
+/* Editing a piece in place ---------------------------------------------------
+   A card is a layout, and the only way to learn that a long name runs into the
+   safety margin is to type one. The affordance is hover and focus only: a
+   permanent underline would be carried into the cloned artwork at export.
+   Values are in em, which inside an artifact means millimetres. */
+.artifact [data-edit] { cursor: text; outline: none; }
+.artifact [data-edit]:hover { box-shadow: 0 0 0 0.6em rgba(171, 3, 52, .07); background: rgba(171, 3, 52, .07); }
+.artifact [data-edit]:focus { box-shadow: 0 0 0 0.6em rgba(171, 3, 52, .12); background: rgba(171, 3, 52, .12); }
+
+/* Family picker. Auto means "whatever the name hashed to". */
+.piece__ctl { display: flex; flex-wrap: wrap; align-items: center; gap: var(--s-4); margin-top: var(--s-5); }
+.piece__ctl__label {
+  font-size: var(--fs-label); letter-spacing: var(--tr-label); text-transform: uppercase;
+  color: var(--meta); font-weight: var(--fw-medium);
+}
+.fam-pick { display: flex; gap: 6px; }
+.fam-pick button {
+  height: 26px; min-width: 34px; padding: 0 4px; position: relative;
+  border: 1px solid var(--line); background: var(--paper); color: var(--ink);
+  font: inherit; font-size: var(--fs-label); letter-spacing: var(--tr-label);
+  text-transform: uppercase; cursor: pointer;
+}
+.fam-pick button i { display: block; position: absolute; inset: 3px; }
+.fam-pick button.on { outline: 2px solid var(--ink); outline-offset: 1px; }
+.fam-pick button:focus-visible { outline: 2px solid var(--is-crimson-ink); outline-offset: 1px; }
+
+/* QR generator (§09) -------------------------------------------------------- */
+.qrgen {
+  display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 280px), 1fr));
+  gap: var(--s-6); align-items: start;
+  border: 1px solid var(--line); background: var(--surface);
+  padding: clamp(1rem, 3vw, 2rem); margin: var(--s-5) 0;
+}
+.qrgen__controls { display: grid; gap: var(--s-5); }
+.qrgen__row { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 170px), 1fr)); gap: var(--s-5); }
+.qrgen__field { display: grid; gap: var(--s-2); }
+.qrgen__label {
+  font-size: var(--fs-label); letter-spacing: var(--tr-label); text-transform: uppercase;
+  color: var(--meta); font-weight: var(--fw-medium);
+}
+.qrgen__field input {
+  font: inherit; font-size: var(--fs-sm); font-family: var(--font-mono);
+  padding: .55rem .7rem; border: 1px solid var(--line);
+  background: var(--paper); color: var(--ink); width: 100%;
+}
+.qrgen__field input:focus-visible { outline: 2px solid var(--is-crimson-ink); outline-offset: 1px; }
+.seg { display: flex; flex-wrap: wrap; gap: 4px; }
+.seg button {
+  font: inherit; font-size: var(--fs-label); letter-spacing: var(--tr-label); text-transform: uppercase;
+  padding: .4rem .6rem; border: 1px solid var(--line); background: var(--paper); color: var(--ink);
+  cursor: pointer;
+}
+.seg button.on { background: var(--ink); color: var(--paper); border-color: var(--ink); }
+.seg button:focus-visible { outline: 2px solid var(--is-crimson-ink); outline-offset: 1px; }
+.qrgen__readout { font-size: var(--fs-xs); font-family: var(--font-mono); color: var(--meta); margin: 0; }
+.qrgen__readout.is-error { color: var(--warn-text); }
+.qrgen__actions { display: flex; gap: var(--s-3); flex-wrap: wrap; }
+.qrgen__out { display: grid; gap: var(--s-3); justify-items: center; }
+.qrgen__stage {
+  width: min(280px, 100%); aspect-ratio: 1;
+  background: var(--paper); border: 1px solid var(--line);
+}
+.qrgen__stage svg { width: 100%; height: 100%; display: block; }
+/* A QR code is pinned polarity: it is dark-on-light artwork in every theme,
+   because a scanner does not know what a theme is. */
+[data-qr] svg { width: 100%; height: auto; display: block; }
+
+/* Page chrome for the artifacts page --------------------------------------- */
+.piece { margin-bottom: var(--s-9); }
+.piece__stage {
+  background: var(--paper-tint);
+  border: 1px solid var(--line);
+  padding: clamp(1.5rem, 4vw, 3.5rem);
+  display: flex; gap: clamp(1rem, 3vw, 2.5rem);
+  align-items: flex-start; justify-content: center; flex-wrap: wrap;
+}
+.piece__meta { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%,180px), 1fr)); gap: var(--s-5); margin-top: var(--s-5); }
+.piece__meta dt {
+  font-size: var(--fs-label); font-weight: var(--fw-medium);
+  letter-spacing: var(--tr-label); text-transform: uppercase; color: var(--meta);
+  margin-bottom: var(--s-1);
+}
+.piece__meta dd { margin: 0; font-size: var(--fs-sm); color: var(--ink); }
+.piece__label { font-size: var(--fs-xs); color: var(--ink-muted); text-align: center; margin-top: var(--s-3); }
+
+.guide-toggle {
+  display: inline-flex; align-items: center; gap: var(--s-2);
+  font-size: var(--fs-sm); font-weight: var(--fw-medium);
+  padding: 0.55rem 1rem; border: 1px solid var(--line); background: var(--surface);
+  color: var(--ink); cursor: pointer;
+}
+.guide-toggle.on { background: var(--ink); color: var(--paper); border-color: var(--ink); }
+.guide-key { display: flex; gap: var(--s-5); flex-wrap: wrap; font-size: var(--fs-xs); color: var(--ink-muted); align-items: center; }
+.guide-key span { display: inline-flex; align-items: center; gap: var(--s-2); }
+.guide-key i { width: 18px; height: 0; border-top: 1px dashed; display: inline-block; }
+
+/* ── 20. PDF EXPORT ────────────────────────────────────────────────────────
+   Export runs through the browser's own print pipeline, which emits real
+   vector PDF — paths stay paths and text stays text, so Illustrator opens it
+   editable. Two things make that work:
+
+   1. Named @page rules give each piece its true physical page, trim + 3 mm
+      bleed all round. Margin 0, because the artwork IS the page.
+   2. In print the artifact's font-size becomes exactly 1mm. Every dimension
+      inside is authored in em, so the whole piece renders at true size with
+      no scaling step — a 13 mm mark measures 13 mm in the PDF.               */
+@page { margin: 0; }            /* never let the browser add its own */
+@page a4-piece   { size: 216mm 303mm;   margin: 0; }
+@page card-piece { size: 96mm 60mm;     margin: 0; }
+@page id-piece   { size: 91.6mm 60mm;   margin: 0; }
+@page tag-piece  { size: 106mm 61mm;    margin: 0; }
+@page panel-piece{ size: 856mm 2006mm;  margin: 0; }
+
+#print-root { display: none; }
+
+@media print {
+  /* Only the export container prints. */
+  body.is-exporting > *:not(#print-root) { display: none !important; }
+  body.is-exporting #print-root { display: block; }
+
+  #print-root .artifact {
+    font-size: 1mm;            /* 1em === 1mm — true physical size */
+    box-shadow: none;
+    overflow: visible;         /* let the bleed shapes run past the trim */
+    margin: 3mm;               /* the bleed area */
+    break-after: page;
+  }
+  #print-root .artifact:last-child { break-after: auto; }
+  #print-root .artifact--a4   { width: 210mm;   page: a4-piece; }
+  #print-root .artifact--card { width: 90mm;    page: card-piece; }
+  #print-root .artifact--id   { width: 85.6mm;  page: id-piece; }
+  #print-root .artifact--tag  { width: 100mm;   page: tag-piece; }
+  #print-root .artifact--panel{ width: 850mm;   page: panel-piece; }
+
+  /* Bleed: push the corner devices 3 mm past the trim so the printer has
+     something to cut into. On screen they stop at the trim. */
+  #print-root .af-bleed--br { right: -3mm; bottom: -3mm; }
+  #print-root .af-bleed--bl { left: -3mm;  bottom: -3mm; }
+  #print-root .af-bleed--tr { right: -3mm; top: -3mm; }
+  #print-root .af-bleed--tl { left: -3mm;  top: -3mm; }
+  /* Same for an art field: three sides out, the fourth pinned to its band. */
+  #print-root .af-field { left: -3mm; right: -3mm; top: -3mm; }
+  /* The column keeps its inline `right`, which is measured from the artifact
+     and so still lands on 6 mm once the left edge has moved into the bleed. */
+  #print-root .af-field--left { bottom: -3mm; }
+  #print-root .af-band { left: -3mm; right: -3mm; }
+
+  /* The editing affordance belongs to the screen. */
+  #print-root [contenteditable] { outline: none !important; background: none !important; box-shadow: none !important; }
+
+  #print-root .artifact__guide { display: none !important; }
+
+  /* Gradients and flat fields must survive the print colour pass. */
+  #print-root, #print-root * {
+    -webkit-print-color-adjust: exact;
+            print-color-adjust: exact;
+  }
+}
+
+/* Export controls */
+.piece__actions { display: flex; gap: var(--s-3); flex-wrap: wrap; margin-top: var(--s-5); }
+.btn--export {
+  background: var(--surface); color: var(--ink);
+  border: 1px solid var(--line); border-bottom-right-radius: var(--r-cell);
+}
+.btn--export:hover { border-color: var(--ink); }
+.export-note { font-size: var(--fs-xs); color: var(--ink-muted); margin-top: var(--s-3); max-width: 60ch; }
+
+/* A deliberately rasterised logo, for the vector/raster comparison in §02.
+   The SVG is drawn into a small box and blown up with smoothing off, which
+   reproduces what a low-resolution PNG does on press: stepped edges and
+   banded gradients. */
+.raster-demo {
+  image-rendering: pixelated;
+  image-rendering: -moz-crisp-edges;
+  transform-origin: left center;
+}

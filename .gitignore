@@ -11,3 +11,9 @@ __pycache__/
 *.pptx
 *.pdf
 OneDrive_1_6-10-2026/
+
+# Downloaded third-party mockup PSDs — licences permit use but NOT redistribution
+mockup-psd/
+
+# Page renders of the ignored brand PDF: 24 MB of derived assets
+PolyU Brand_Communication_Guidelines_pages/

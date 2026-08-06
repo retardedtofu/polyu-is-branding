@@ -7,7 +7,9 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;600;700&family=Inter:wght@400;500;600&family=Source+Serif+4:ital,opsz,wght@1,8..60,400;1,8..60,500&family=Noto+Sans+TC:wght@400;500;700&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="style.css">
+<link rel="stylesheet" href="palettes.css">
 <link rel="stylesheet" href="lab.css">
+<script src="mode.js"></script>
 </head>
 <body>
 
@@ -36,16 +38,10 @@
     <div class="kicker" style="--accent: var(--is-crimson);">The Lab · Exhibit 6 of 7</div>
     <h1>The Toy Bin</h1>
     <p class="lede">Drop shapes into the bin (quarters, splits, circles, squares, and ghosts), throw them around, then hit <strong>Snap to grid</strong> and every piece settles into a cell at a right angle. Release them again, or reset the bin. Real physics, built for an Info Day touchscreen.</p>
-    <div class="switcher" id="dir-switch">
-      <button data-d="d1" class="on">01 Ink &amp; Paper</button>
-      <button data-d="d2">02 Midnight Scholar</button>
-      <button data-d="d3">03 Daylight Campus</button>
-      <button data-d="d4">04 Precision Spectrum</button>
-    </div>
   </div>
 </header>
 
-<div id="labstage" data-theme="d1">
+<div id="labstage" >
 <section class="block" style="padding-top:2rem;">
   <div class="wrap">
     <div class="exhibit" style="padding:1.2rem;">

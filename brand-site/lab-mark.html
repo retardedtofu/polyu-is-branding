@@ -7,7 +7,9 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;600;700&family=Inter:wght@400;500;600&family=Source+Serif+4:ital,opsz,wght@1,8..60,400;1,8..60,500&family=Noto+Sans+TC:wght@400;500;700&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="style.css">
+<link rel="stylesheet" href="palettes.css">
 <link rel="stylesheet" href="lab.css">
+<script src="mode.js"></script>
 </head>
 <body>
 
@@ -36,16 +38,10 @@
     <div class="kicker" style="--accent: var(--is-blue);">The Lab · Exhibit 4 of 7</div>
     <h1>Your Mark</h1>
     <p class="lede">Type anything: a name, a student number, a line of poetry. A 128-bit hash turns it into a cell composition on a grid <strong>up to 256 × 256</strong>, using one lead colour family, a few accent cells, and the quarter, split, circle, and square shapes. Drag the corner of the preview to resize it; the mark keeps its proportions. The same text always produces the same mark. (A business-card version comes later. This is the raw generator.)</p>
-    <div class="switcher" id="dir-switch">
-      <button data-d="d1" class="on">01 Ink &amp; Paper</button>
-      <button data-d="d2">02 Midnight Scholar</button>
-      <button data-d="d3">03 Daylight Campus</button>
-      <button data-d="d4">04 Precision Spectrum</button>
-    </div>
   </div>
 </header>
 
-<div id="labstage" data-theme="d1">
+<div id="labstage" >
 <section class="block" style="padding-top:2rem;">
   <div class="wrap">
     <div class="exhibit">
@@ -53,6 +49,7 @@
         <input id="mark-name" type="text" maxlength="120" placeholder="Type anything, in any language" aria-label="Input string" value="Lyra Chan" style="min-width:280px; flex:1;">
         <label class="hint" for="mark-cols" style="display:flex; align-items:center; gap:0.4rem;">W <input id="mark-cols" type="number" min="2" max="256" value="7" style="width:64px;"></label>
         <label class="hint" for="mark-rows" style="display:flex; align-items:center; gap:0.4rem;">H <input id="mark-rows" type="number" min="2" max="256" value="5" style="width:64px;"></label>
+        <button class="btn-ghosty" type="button" id="mark-swap" aria-label="Swap width and height" title="Swap width and height" style="padding:0.45rem 0.7rem;">⇄</button>
         <button class="btn-prime" type="button" id="mark-make">Generate</button>
         <button class="btn-ghosty" type="button" id="mark-dl-svg">SVG</button>
         <button class="btn-ghosty" type="button" id="mark-dl-png">PNG</button>

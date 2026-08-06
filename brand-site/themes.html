@@ -7,6 +7,7 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;600;700&family=Inter:wght@400;500;600&family=Source+Serif+4:ital,opsz,wght@1,8..60,400;1,8..60,500&family=Noto+Sans+TC:wght@400;500;700&family=Fraunces:ital,opsz,wght@0,9..144,500;0,9..144,600;0,9..144,700;1,9..144,400;1,9..144,500&family=Source+Sans+3:wght@400;600&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="style.css">
+<link rel="stylesheet" href="palettes.css">
 <style>
 /* local tokens — demos shown in Midnight Scholar; the system works in any direction */
 .tt {
@@ -20,7 +21,7 @@
 .tt .dsq { background:linear-gradient(to top right, var(--qb) 49.8%, var(--qa) 50.2%); }
 .tt .ghost { border:1.5px solid var(--t-line); }
 .tt .ghost.on-dark { border-color:rgba(255,255,255,0.2); }
-.motif { background:#fff; border:1px solid var(--line); border-radius:2px 2px 2px 26px; padding:1.5rem; }
+.motif { background:var(--surface); border:1px solid var(--line); border-radius:2px 2px 2px 26px; padding:1.5rem; }
 .motif .demo { margin:0.9rem 0 1rem; }
 .motif h3 { margin-top:0; display:flex; align-items:center; gap:0.6rem; flex-wrap:wrap; }
 .motif .ttag { font-size:0.62rem; font-weight:600; letter-spacing:0.1em; text-transform:uppercase; padding:0.2rem 0.55rem; border-radius:999px; }
@@ -30,6 +31,7 @@
 .motif p { font-size:0.88rem; }
 .regposter { aspect-ratio:3/4; border-radius:2px 2px 2px 30px; overflow:hidden; display:flex; flex-direction:column; box-shadow:0 18px 50px rgba(17,21,28,0.15); }
 </style>
+<script src="mode.js"></script>
 </head>
 <body>
 
@@ -65,15 +67,15 @@
   <div class="wrap">
     <div class="kicker">The synthesis</div>
     <div class="grid cols-3" style="margin-top:1.5rem;">
-      <div class="card" style="background:var(--ink-soft); border:none;">
+      <div class="card panel-dark">
         <span class="tag" style="color:#E3B863;">Prestige alone</span>
         <p style="font-size:0.92rem; color:#C9C7C1;">Brilliant, hungry, unaccountable. Power that society has to hope behaves. This is the failure mode the brief warns against.</p>
       </div>
-      <div class="card" style="background:var(--ink-soft); border:none;">
+      <div class="card panel-dark">
         <span class="tag" style="color:#8FB3A2;">Care alone</span>
         <p style="font-size:0.92rem; color:#C9C7C1;">Worthy, kind — and without the bar, indistinguishable from every values statement in higher education. Admirable, not magnetic.</p>
       </div>
-      <div class="card" style="background:#fff; border:none;">
+      <div class="card invert">
         <span class="tag" style="--accent: var(--is-crimson);">BDSIS — both</span>
         <p style="font-size:0.92rem;"><strong>Trustworthy power.</strong> The hardest programme to enter, pointed entirely outward: every capstone serves a real societal issue. The few, for the many.</p>
       </div>

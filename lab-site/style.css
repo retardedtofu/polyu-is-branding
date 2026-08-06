@@ -13,6 +13,20 @@
   --grey: #58595B;
   --line: #E4E1DA;
 
+  /* Surfaces — these flip with the mode, so components never hard-code white.
+     --on-ink is text sitting ON an --ink background; --dark-panel is a surface
+     that must stay dark in BOTH modes (logo-on-dark demos, .dark sections). */
+  --surface: #FFFFFF;
+  --on-ink: #FFFFFF;
+  --link: #0766A0;
+  /* Panels that keep their polarity in BOTH modes: a logo-on-dark demo must
+     stay dark, and the inverted "answer" card must stay light. */
+  --dark-panel: #11151C;
+  --dark-panel-soft: #2A2F38;
+  --light-panel: #FFFFFF;
+  --on-dark-panel: #EDEBE6;
+  --on-light-panel: #11151C;
+
   /* Spectrum — anchored to the logo */
   --is-purple: #634093;
   --is-crimson: #ED174B;
@@ -36,6 +50,65 @@
 
   --maxw: 1080px;
 }
+
+/* ===== Night mode =====================================================
+   Site-wide, set by mode.js on <html>. Only tokens are redefined here, so
+   every component follows without per-component overrides. The spectrum is
+   lifted (same hues, raised lightness) so red stays red and olive stays olive
+   at legible contrast on a dark ground. */
+html[data-mode="night"] {
+  --ink: #F2EDE2;
+  --ink-soft: #CFC7B9;
+  --paper: #141110;
+  --paper-deep: #241F1A;
+  --grey: #A79E90;
+  --line: #332C25;
+
+  --surface: #1C1815;
+  --on-ink: #141110;
+  --link: #6FC7D7;
+  --dark-panel: #26211C;
+  --dark-panel-soft: #332C24;
+  --light-panel: #F2EDE2;
+
+  --is-purple: #C77FA8;
+  --is-crimson: #F0426B;
+  --is-orange: #FFA333;
+  --is-green: #BCC77B;
+  --is-green-light: #D8DD9C;
+  --is-blue: #6FC7D7;
+  --is-blue-deep: #4AA6BA;
+}
+html[data-mode="night"] nav.site-nav { background: rgba(20, 17, 16, 0.92); }
+html[data-mode="night"] .card.flat { background: var(--paper-deep); }
+html[data-mode="night"] a.card:hover { box-shadow: 0 10px 30px rgba(0, 0, 0, 0.45); }
+/* .dark sections keep their own light-on-dark colours in both modes, so they
+   need no night override here — adding one would out-specify .card.invert. */
+
+/* Theme bar — palette + Day/Night, fixed bottom-left on every page */
+.theme-bar {
+  position: fixed; left: 1rem; bottom: 1rem; z-index: 80;
+  display: flex; align-items: center; gap: 0.4rem;
+  padding: 0.3rem; border: 1px solid var(--line); border-radius: 999px;
+  background: var(--surface); box-shadow: 0 4px 18px rgba(0, 0, 0, 0.18);
+}
+.theme-bar select {
+  font-family: var(--font-display); font-size: 0.75rem; font-weight: 600;
+  color: var(--ink); background: transparent; border: 0; cursor: pointer;
+  padding: 0.3rem 0.5rem; border-radius: 999px; max-width: 11rem;
+}
+.theme-bar select:focus-visible { outline: 2px solid var(--is-blue); }
+.theme-bar option { color: #11151C; background: #fff; }   /* native menu stays readable */
+.theme-seg { display: inline-flex; border: 1px solid var(--line); border-radius: 999px; overflow: hidden; }
+.theme-seg button {
+  font-family: var(--font-display); font-size: 0.75rem; font-weight: 600;
+  letter-spacing: 0.04em; padding: 0.4rem 0.85rem;
+  border: 0; background: transparent; color: var(--grey); cursor: pointer;
+}
+.theme-seg button:hover { color: var(--ink); }
+.theme-seg button.on { background: var(--ink); color: var(--on-ink); }
+.theme-seg button:focus-visible { outline: 2px solid var(--is-blue); outline-offset: -2px; }
+@media (max-width: 720px) { .theme-bar select { max-width: 6.5rem; } }
 
 * { margin: 0; padding: 0; box-sizing: border-box; }
 
@@ -77,7 +150,7 @@ nav.site-nav {
   transition: color .15s, background .15s;
 }
 .nav-links a:hover { color: var(--ink); background: var(--paper-deep); }
-.nav-links a.active { color: #fff; background: var(--ink); }
+.nav-links a.active { color: var(--on-ink); background: var(--ink); }
 
 /* ---------- Layout primitives ---------- */
 .wrap { max-width: var(--maxw); margin: 0 auto; padding: 0 1.5rem; }
@@ -116,7 +189,7 @@ h3 {
 }
 p { margin-bottom: 1rem; max-width: 68ch; }
 .lede { font-size: 1.18rem; color: var(--ink-soft); max-width: 58ch; }
-a { color: var(--is-blue-deep); }
+a { color: var(--link); }
 strong { font-weight: 600; }
 
 /* Human voice — the serif register */
@@ -135,7 +208,7 @@ blockquote cite {
 }
 
 /* Dark sections */
-.dark { background: var(--ink); color: #EDEBE6; }
+.dark { background: var(--dark-panel); color: #EDEBE6; }
 .dark h1, .dark h2, .dark h3, .dark .voice, .dark blockquote { color: #fff; }
 .dark p { color: #C9C7C1; }
 .dark .kicker { color: #8B8F98; }
@@ -147,10 +220,24 @@ blockquote cite {
 .grid.cols-4 { grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); }
 
 .card {
-  background: #fff; border: 1px solid var(--line);
+  background: var(--surface); border: 1px solid var(--line);
   border-radius: 14px; padding: 1.6rem;
 }
 .card.flat { background: var(--paper-deep); border: none; }
+/* .card is declared after .dark, so a .card.dark needs to restate the dark ground */
+.card.dark { background: var(--dark-panel); border-color: var(--dark-panel); }
+/* fixed-polarity cards: .panel-dark stays dark, .invert stays light, in both modes */
+.card.panel-dark { background: var(--dark-panel-soft); border: none; }
+.card.panel-dark, .card.panel-dark p, .card.panel-dark h3, .card.panel-dark strong { color: var(--on-dark-panel); }
+.card.invert { background: var(--light-panel); border: none; }
+.card.invert, .card.invert p, .card.invert h3, .card.invert strong { color: var(--on-light-panel); }
+/* Accents are tuned for the page ground, so on a panel of the opposite polarity
+   they can vanish. Blend each accent toward that panel's text colour: the hue
+   survives, the legibility does not depend on which mode is active. */
+.card.panel-dark .tag { color: var(--on-dark-panel); }
+.card.panel-dark .tag { color: color-mix(in srgb, var(--accent, var(--is-blue)) 45%, var(--on-dark-panel)); }
+.card.invert .tag { color: var(--on-light-panel); }
+.card.invert .tag { color: color-mix(in srgb, var(--accent, var(--is-blue)) 45%, var(--on-light-panel)); }
 .card h3 { margin-top: 0; }
 .card .tag {
   display: inline-block; font-size: 0.72rem; font-weight: 600;
@@ -170,7 +257,7 @@ td:first-child { font-weight: 600; }
 
 /* Do / Don't */
 .dodont { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 1.25rem; margin: 1.5rem 0; }
-.do, .dont { border-radius: 14px; padding: 1.4rem 1.6rem; background: #fff; border: 1px solid var(--line); }
+.do, .dont { border-radius: 14px; padding: 1.4rem 1.6rem; background: var(--surface); border: 1px solid var(--line); }
 .do { border-top: 4px solid var(--is-green); }
 .dont { border-top: 4px solid var(--is-crimson); }
 .do h4, .dont h4 { font-family: var(--font-display); font-size: 0.85rem; letter-spacing: 0.15em; text-transform: uppercase; margin-bottom: 0.7rem; }
@@ -182,7 +269,7 @@ td:first-child { font-weight: 600; }
 .swatch-row { display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 1rem; margin: 1.4rem 0 2rem; }
 .swatch {
   border-radius: 14px; overflow: hidden; cursor: pointer;
-  border: 1px solid var(--line); background: #fff;
+  border: 1px solid var(--line); background: var(--surface);
   transition: transform .12s;
 }
 .swatch:hover { transform: scale(1.02); }
@@ -197,12 +284,12 @@ td:first-child { font-weight: 600; }
 .ratio-bar > div { display: flex; align-items: center; justify-content: center; }
 
 /* Type specimens */
-.specimen { border: 1px solid var(--line); background: #fff; border-radius: 14px; padding: 2rem; margin: 1.2rem 0; }
+.specimen { border: 1px solid var(--line); background: var(--surface); border-radius: 14px; padding: 2rem; margin: 1.2rem 0; }
 .specimen .label { font-size: 0.72rem; letter-spacing: 0.12em; text-transform: uppercase; color: var(--grey); margin-bottom: 0.6rem; font-family: var(--font-body); }
 
 /* Asset frames */
-.asset { background: #fff; border: 1px solid var(--line); border-radius: 14px; padding: 1.4rem; text-align: center; }
-.asset.on-dark { background: var(--ink); }
+.asset { background: var(--surface); border: 1px solid var(--line); border-radius: 14px; padding: 1.4rem; text-align: center; }
+.asset.on-dark { background: var(--dark-panel); }
 .asset.on-grad { background: var(--grad-blue); }
 .asset img { max-width: 100%; height: auto; max-height: 200px; }
 .asset .cap { font-size: 0.78rem; color: var(--grey); margin-top: 0.8rem; }
@@ -223,7 +310,7 @@ footer a { color: var(--grey); }
   font-family: var(--font-display); font-weight: 600; text-decoration: none;
   color: var(--ink); font-size: 0.95rem;
   padding: 0.8rem 1.3rem; border: 1px solid var(--line); border-radius: 999px;
-  background: #fff; transition: background .15s;
+  background: var(--surface); transition: background .15s;
 }
 .pageturn a:hover { background: var(--paper-deep); }
 
