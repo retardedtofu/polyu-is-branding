@@ -16,7 +16,7 @@
 
 <header class="banner">
   <div class="banner__inner">
-    <a class="logo logo--is lockup" href="index.html" aria-label="PolyU Interdisciplinary Studies, home">
+    <a class="logo logo--is lockup" href="site.html" aria-label="PolyU Interdisciplinary Studies, home">
       <img class="logo__mark" src="assets/mark-colour.svg" alt="">
       <span class="logo__word" role="img" aria-label="Interdisciplinary Studies"></span>
     </a>
@@ -44,7 +44,7 @@
     <div class="nav__item"><a class="nav__link" href="#id-card">ID card</a></div>
     <div class="nav__item"><a class="nav__link" href="#luggage-tag">Luggage tag</a></div>
     <div class="nav__item"><a class="nav__link" href="#display-board">Display board</a></div>
-    <div class="nav__item" style="margin-left:auto"><a class="nav__link" href="index.html" style="color:var(--is-crimson-ink)">The site ↗</a></div>
+    <div class="nav__item" style="margin-left:auto"><a class="nav__link" href="site.html" style="color:var(--is-crimson-ink)">The site ↗</a></div>
   </div>
 </nav>
 
@@ -73,7 +73,7 @@
     <div class="section-head" style="--marker: var(--grad-crimson)">
       <div class="section-head__rule"></div>
       <h2>Letterhead</h2>
-      <p>A4. The endorsed lockup top-left in its clear space, the University logo bottom-left as the institutional signature, and the address block opposite it. Everything a letter needs and nothing it doesn't. Nothing bleeds, so the sheet can be run on an office press.</p>
+      <p>A4, two versions. <strong>A</strong> puts the endorsed lockup in the masthead and the University logo in the footer as the institutional signature. <strong>B</strong> pairs the two logos across the masthead at the 90% ratio in §02 and leaves the foot to the address alone. Neither bleeds, so both run on an office press.</p>
     </div>
 
     <div class="piece__stage">
@@ -125,7 +125,58 @@
             </div>
           </div>
         </div>
-        <p class="piece__label">A4 · 210 × 297&nbsp;mm</p>
+        <p class="piece__label">A · endorsed lockup, University logo in the foot</p>
+      </div>
+
+      <div class="piece__frame" style="width:min(420px, 100%)">
+        <div class="artifact artifact--a4">
+          <span class="artifact__guide"></span>
+
+          <!-- masthead: the two logos paired. University logo 12 mm high, the
+               programme mark 10.8 mm, which is the 90% ratio, and the gap is
+               the mark height. 121.6 mm overall, well inside the 174 mm
+               measure, and the mark clears the 10 mm standalone minimum
+               without needing the card exception. -->
+          <div style="position:absolute; left:18em; top:18em; display:flex; align-items:center; gap:10.8em; line-height:0">
+            <img src="assets/polyu-logo-colour.svg" alt="The Hong Kong Polytechnic University"
+                 style="width:62.64em; max-width:none; flex-shrink:0; display:block">
+            <span class="af-logo af-logo--is" style="--m:10.8; color:#14110E">
+              <img class="af-logo__mark" src="assets/mark-colour.svg" alt="">
+              <span class="af-logo__word"></span>
+            </span>
+          </div>
+
+          <div style="position:absolute; left:18em; top:58em; width:120em">
+            <div style="font-size:3.1em; line-height:1.5; color:#453F38">
+            <div style="font-weight:500; color:#14110E">Dr Chan Siu Ming</div>
+            <div>Director of Admissions</div>
+            <div>Hong Kong Examinations and Assessment Authority</div>
+            <div style="margin-top:1.4em">6 August 2026</div>
+            <div style="margin-top:1.6em; color:#14110E">Dear Dr Chan,</div>
+            <div style="margin-top:1em">
+              Thank you for your enquiry regarding the Bachelor's Degree Scheme in
+              Interdisciplinary Studies (JUPAS JS3000). I am glad to confirm that the
+              scheme will admit thirty students for September 2027 entry, recruited
+              through JUPAS, the Mainland JEE and international qualifications.
+            </div>
+            <div style="margin-top:1em">
+              Each student is matched one-on-one with a Personal Academic Mentor and
+              designs sixty credits of self-determined curriculum drawn from any
+              department across our ten Faculties and Schools.
+            </div>
+            </div>
+          </div>
+
+          <!-- both logos are in the masthead, so the foot carries the address
+               alone, left-aligned to the same margin as everything above it -->
+          <div style="position:absolute; left:18em; bottom:15em; right:18em">
+            <div style="font-size:2.4em; line-height:1.55; color:#6E665C">
+              <span style="display:block; color:#14110E; font-weight:500">College of Undergraduate Studies</span>
+              Hung Hom, Kowloon, Hong Kong · bdsis@polyu.edu.hk · (852) 2766 0000 · polyu.edu.hk/cus
+            </div>
+          </div>
+        </div>
+        <p class="piece__label">B · the two logos paired in the masthead</p>
       </div>
     </div>
 
@@ -133,18 +184,20 @@
       <div><dt>Trim</dt><dd>210 × 297&nbsp;mm</dd></div>
       <div><dt>Bleed</dt><dd>None. Nothing runs off the trim, so this can be run on an office press</dd></div>
       <div><dt>Margins</dt><dd>18&nbsp;mm left, right and top, 15&nbsp;mm foot</dd></div>
-      <div><dt>Lockup</dt><dd>Endorsed, 13&nbsp;mm mark, above the 12&nbsp;mm minimum</dd></div>
-      <div><dt>University logo</dt><dd>Full colour, 9&nbsp;mm high, bottom-left. Same ground and colourway as the masthead (§03)</dd></div>
+      <div><dt>Lockup · A</dt><dd>Endorsed, 13&nbsp;mm mark, above the 12&nbsp;mm minimum</dd></div>
+      <div><dt>Lockup · B</dt><dd>University logo 12&nbsp;mm high, standalone mark 10.8&nbsp;mm at the 90% ratio, gap equal to the mark. 121.6&nbsp;mm overall</dd></div>
+      <div><dt>University logo</dt><dd>Full colour throughout: 9&nbsp;mm in the foot on A, 12&nbsp;mm in the masthead on B. Same ground and colourway as the programme mark either way (§03)</dd></div>
       <div><dt>Type</dt><dd>Helvetica Neue Roman 9.5&nbsp;pt / 14&nbsp;pt, footer 7&nbsp;pt</dd></div>
       <div><dt>Colour</dt><dd>Four-colour process. Run as spot it needs the mark's Red and Tangerine plus PMS 194&nbsp;C and Cool Gray 11&nbsp;C for the University logo</dd></div>
       <div><dt>Stock</dt><dd>Warm uncoated 100&nbsp;gsm. The cream is the paper, not a flood tint</dd></div>
-      <div><dt>Correspondence</dt><dd>Starts at 58&nbsp;mm, clear of the masthead</dd></div>
+      <div><dt>Correspondence</dt><dd>Starts at 58&nbsp;mm on both, clear of either masthead</dd></div>
+      <div><dt>Which one</dt><dd>A for correspondence leaving the University, where the endorsed lockup names the programme in one mark. B where the letter is co-signed or the University needs equal billing</dd></div>
     </dl>
 
     <div class="piece__actions">
       <button class="btn btn--export" data-export="letterhead">Export PDF</button>
     </div>
-    <p class="export-note">A4 · 216 × 303&nbsp;mm with bleed. Opens your browser's print dialog, where you choose <strong>Save as PDF</strong>. Set the destination scale to 100% and leave margins at none.</p>
+    <p class="export-note">2 pages · A4 · 216 × 303&nbsp;mm with bleed. Both versions export together. Opens your browser's print dialog, where you choose <strong>Save as PDF</strong>. Set the destination scale to 100% and leave margins at none.</p>
   </div>
 </section>
 
@@ -914,7 +967,7 @@
   <div class="wrap">
     <div class="footer__bar">
       <nav aria-label="Legal">
-        <a href="index.html">BDSIS site</a>
+        <a href="site.html">BDSIS site</a>
         <a href="guidelines.html">Brand guidelines</a>
         <a href="guidelines.html#print">Print specification</a>
       </nav>
