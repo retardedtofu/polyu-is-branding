@@ -1,7 +1,8 @@
-/* Cell-grid hash — the Lab's "Your Mark" generator, applied to print, and the
-   live editing that drives it.
+/* Signature fields — the generator applied to print, and the live editing that
+   drives it. The generator itself is in the guidelines (§08); this is the same
+   pipeline bound to the pieces. Originally the Lab's "Your Mark".
 
-   Same pipeline as Exhibit 4: cyrb128 hashes the holder's name to 128 bits,
+   cyrb128 hashes the holder's name to 128 bits,
    and an sfc32 stream then lays out every cell in reading order. The same name
    always produces the same field, so a mark generated in the Lab and a mark
    printed on a card are the same artwork.
@@ -87,7 +88,7 @@
 
   /* `lead` overrides the family the hash would have chosen. The accent is
      always nudged off the lead so the two never collapse into one colour. */
-  function field(text, cols, rows, idp, lead, pal, accent) {
+  function field(text, cols, rows, idp, lead, pal, accent, over) {
     const P = PALETTE[pal] || FAM;
     const s = cyrb128(text);
     const rnd = sfc32(s[0], s[1], s[2], s[3]);
@@ -99,20 +100,36 @@
       accent = s[1] % 4; if (accent === lead) accent = (lead + 1) % 4;
     }
 
-    const parts = [];
+    const parts = [], cells = [];
     for (let i = 0; i < cols * rows; i++) {
-      /* Three draws per cell, in this order, so the stream matches the Lab. */
+      /* Three draws per cell, in this order, so the stream matches the Lab.
+         They are taken for every cell whether or not it carries an override,
+         so overriding one cell never shifts the cells after it. */
       const roll = rnd(), famRoll = rnd(), rotRoll = rnd();
-      const f = famRoll < 0.12 ? accent : lead;
+      let f = famRoll < 0.12 ? accent : lead;
+      let t = roll < 0.50 ? 'quarter'
+            : roll < 0.66 ? 'split'
+            : roll < 0.78 ? 'circle'
+            : roll < 0.88 ? 'square' : 'empty';
+      let rot = (rotRoll * 4) | 0;
+
+      const o = over && over[i];
+      if (o) {
+        if (o.t) t = o.t;
+        if (o.rot !== undefined && o.rot !== null) rot = o.rot;
+        if (o.fam !== undefined && o.fam !== null) f = o.fam;
+      }
+      cells.push({ t, rot, fam: f, custom: !!o });
+
       const x = (i % cols) * U, y = ((i / cols) | 0) * U;
       const g = `url(#${idp}${f})`;
-      if (roll < 0.50)      parts.push(`<path d="${QUARTER(x, y)[(rotRoll * 4) | 0]}" fill="${g}"/>`);
-      else if (roll < 0.66) parts.push(
+      if (t === 'quarter')    parts.push(`<path d="${QUARTER(x, y)[rot & 3]}" fill="${g}"/>`);
+      else if (t === 'split') parts.push(
         `<path d="M${x},${y} L${x + U},${y} L${x},${y + U} Z" fill="${P[f].a}"/>`,
         `<path d="M${x + U},${y} L${x + U},${y + U} L${x},${y + U} Z" fill="${P[f].b}"/>`);
-      else if (roll < 0.78) parts.push(`<circle cx="${x + U / 2}" cy="${y + U / 2}" r="${U / 2}" fill="${g}"/>`);
-      else if (roll < 0.88) parts.push(`<rect x="${x}" y="${y}" width="${U}" height="${U}" fill="${g}"/>`);
-      /* the remaining 12% stay empty, and the stock shows through */
+      else if (t === 'circle') parts.push(`<circle cx="${x + U / 2}" cy="${y + U / 2}" r="${U / 2}" fill="${g}"/>`);
+      else if (t === 'square') parts.push(`<rect x="${x}" y="${y}" width="${U}" height="${U}" fill="${g}"/>`);
+      /* 'empty' draws nothing, and the stock shows through */
     }
 
     const defs = P.map((f, n) =>
@@ -123,14 +140,14 @@
       svg: `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 ${cols * U} ${rows * U}" ` +
            `preserveAspectRatio="none" aria-hidden="true"><defs>${defs}</defs>${parts.join('')}</svg>`,
       tag: s[0].toString(16).padStart(8, '0').toUpperCase(),
-      lead, accent,
+      lead, accent, cells,
     };
   }
 
   /* Repaint one field from its own data attributes. Called on load and on
      every keystroke in the name it is bound to. */
   const seen = new Map();
-  function paint(host) {
+  function paint(host, over) {
     if (!seen.has(host)) seen.set(host, `h${seen.size}f`);
     const idp = seen.get(host);
     const num = v => (v === '' || v === undefined) ? null : parseInt(v, 10);
@@ -142,7 +159,7 @@
       host.dataset.hash || ' ',
       parseInt(host.dataset.hashCols, 10) || 17,
       parseInt(host.dataset.hashRows, 10) || 7,
-      idp, lead, pal, accent);
+      idp, lead, pal, accent, over);
     host.innerHTML = res.svg;
     host.dataset.hashTagValue = res.tag;
     /* Type that has to hold its own beside the field follows the lead family
@@ -216,5 +233,5 @@
     });
   });
 
-  window.CellHash = { FAM, field, paint };
+  window.CellHash = { FAM, field, paint, QUARTER, U };
 })();

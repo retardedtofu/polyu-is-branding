@@ -5,6 +5,9 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>BDSIS Brand System</title>
 <meta name="description" content="The BDSIS brand system: the sample website, the brand guidelines and the print artifacts, all running on one stylesheet.">
+<link rel="icon" href="assets/favicon.svg" type="image/svg+xml">
+<link rel="icon" href="assets/favicon-32.png" sizes="32x32" type="image/png">
+<link rel="apple-touch-icon" href="assets/apple-touch-icon.png">
 <link rel="stylesheet" href="web.css">
 <script src="theme.js"></script>
 <script src="zh.js"></script>
@@ -22,7 +25,8 @@
     </a>
     <div class="parent-unit">
       <a href="https://www.polyu.edu.hk/cus/" aria-label="College of Undergraduate Studies">
-        <img src="assets/cus-logo.png" alt="College of Undergraduate Studies 本科生學院">
+        <img class="cus-logo cus-logo--light" src="assets/cus-logo.png" alt="College of Undergraduate Studies 本科生學院">
+        <img class="cus-logo cus-logo--dark" src="assets/cus-logo-dark.png" alt="">
       </a>
     </div>
     <div class="banner__polyu">
@@ -38,8 +42,9 @@
 <section class="section">
   <div class="wrap">
     <span class="eyebrow">BDSIS Brand System · Version 1.0 · August 2026</span>
-    <h1 style="font-size:var(--fs-display); font-weight:var(--fw-roman); line-height:var(--lh-display); letter-spacing:var(--tr-display); max-width:16ch">Three things, one stylesheet</h1>
-    <p style="font-size:var(--fs-lead); color:var(--ink-muted); max-width:62ch">A site, the rules it was built from, and the printed pieces those rules produce. All three run on <code class="tok">web.css</code>, so the specification can never drift from the thing it specifies.</p>
+    <h1 style="font-size:var(--fs-display); font-weight:var(--fw-roman); line-height:var(--lh-display); letter-spacing:var(--tr-display); max-width:20ch">An identity for those who think across boundaries.</h1>
+    <p style="font-size:var(--fs-lead); color:var(--ink-muted); max-width:62ch">A new visual system for BDSIS – PolyU’s interdisciplinary programme for high-performing students tackling complex challenges across disciplines, sectors, and society.</p>
+    <p style="font-size:var(--fs-lead); color:var(--ink-muted); max-width:62ch; margin-top:var(--s-4)">Built to be as flexible, and forward-looking as the programme itself.</p>
   </div>
 </section>
 
@@ -88,10 +93,6 @@
 </section>
 
 </main>
-
-<div class="endband">
-  <div class="wrap"><img src="assets/polyu-logo-white.svg" alt="The Hong Kong Polytechnic University 香港理工大學"></div>
-</div>
 
 <footer class="footer">
   <div class="wrap">

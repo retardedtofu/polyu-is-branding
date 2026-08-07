@@ -5,6 +5,9 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Designing the BDSIS Website | Brand Guidelines</title>
 <meta name="description" content="How to design and build BDSIS web pages: banner, grid, Helvetica Neue type scale and tokens, colour roles, components and accessibility.">
+<link rel="icon" href="assets/favicon.svg" type="image/svg+xml">
+<link rel="icon" href="assets/favicon-32.png" sizes="32x32" type="image/png">
+<link rel="apple-touch-icon" href="assets/apple-touch-icon.png">
 <link rel="stylesheet" href="web.css">
 <script src="theme.js"></script>
 <script src="zh.js"></script>
@@ -22,7 +25,8 @@
     </a>
     <div class="parent-unit">
       <a href="https://www.polyu.edu.hk/cus/" aria-label="College of Undergraduate Studies">
-        <img src="assets/cus-logo.png" alt="College of Undergraduate Studies 本科生學院">
+        <img class="cus-logo cus-logo--light" src="assets/cus-logo.png" alt="College of Undergraduate Studies 本科生學院">
+        <img class="cus-logo cus-logo--dark" src="assets/cus-logo-dark.png" alt="">
       </a>
     </div>
     <div class="banner__utils">
@@ -78,7 +82,9 @@
         <li><a href="#grid">Grid and spacing</a></li>
         <li><a href="#type">Typography</a></li>
         <li><a href="#colour">Colour</a></li>
-        <li><a href="#cells">The shape kit</a></li>
+        <li><a href="#cells">The shape kit</a>
+          <ul><li><a href="#signature">Signature fields</a></li></ul>
+        </li>
         <li><a href="#components">Components</a></li>
         <li><a href="#imagery">Imagery</a></li>
         <li><a href="#print">Print artifacts</a></li>
@@ -184,6 +190,47 @@
       </div>
       <span class="demo-cap">Monocolor · one-colour print, engraving, embroidery, fax. The mark keeps its full geometry, so the quadrants read as shape instead of colour.</span>
     </div>
+  </div>
+
+  <h3 style="margin-top:var(--s-7)">The artwork</h3>
+  <p>Every variation as SVG, each <strong>64&nbsp;mm tall</strong> with the width falling out of the master ratios. 64&nbsp;mm is the mark's own master size, so nothing is rescaled on the way out and the wordmarks sit at their drawn 204.41&nbsp;×&nbsp;46.468 and 307.863&nbsp;×&nbsp;51.732.</p>
+  <table class="spec">
+    <thead><tr><th>Form</th><th>Size</th><th>Inks</th></tr></thead>
+    <tbody>
+      <tr>
+        <th scope="row">Endorsed lockup</th>
+        <td>388.86 × 64&nbsp;mm</td>
+        <td><a href="downloads/logo/svg/endorsed/is-endorsed-colour.svg" download>colour</a> ·
+            <a href="downloads/logo/svg/endorsed/is-endorsed-colour-reversed.svg" download>colour reversed</a> ·
+            <a href="downloads/logo/svg/endorsed/is-endorsed-mono-black.svg" download>black</a> ·
+            <a href="downloads/logo/svg/endorsed/is-endorsed-mono-white.svg" download>white</a> ·
+            <a href="downloads/logo/svg/endorsed/is-endorsed-mono-gold.svg" download>gold</a> ·
+            <a href="downloads/logo/svg/endorsed/is-endorsed-mono-cream.svg" download>cream</a></td>
+      </tr>
+      <tr>
+        <th scope="row">Standalone lockup</th>
+        <td>285.44 × 64&nbsp;mm</td>
+        <td><a href="downloads/logo/svg/standalone/is-standalone-colour.svg" download>colour</a> ·
+            <a href="downloads/logo/svg/standalone/is-standalone-colour-reversed.svg" download>colour reversed</a> ·
+            <a href="downloads/logo/svg/standalone/is-standalone-mono-black.svg" download>black</a> ·
+            <a href="downloads/logo/svg/standalone/is-standalone-mono-white.svg" download>white</a> ·
+            <a href="downloads/logo/svg/standalone/is-standalone-mono-gold.svg" download>gold</a> ·
+            <a href="downloads/logo/svg/standalone/is-standalone-mono-cream.svg" download>cream</a></td>
+      </tr>
+      <tr>
+        <th scope="row">Mark alone</th>
+        <td>64 × 64&nbsp;mm</td>
+        <td><a href="downloads/logo/svg/mark/is-mark-colour.svg" download>colour</a> ·
+            <a href="downloads/logo/svg/mark/is-mark-mono-black.svg" download>black</a> ·
+            <a href="downloads/logo/svg/mark/is-mark-mono-white.svg" download>white</a> ·
+            <a href="downloads/logo/svg/mark/is-mark-mono-gold.svg" download>gold</a> ·
+            <a href="downloads/logo/svg/mark/is-mark-mono-cream.svg" download>cream</a></td>
+      </tr>
+    </tbody>
+  </table>
+  <p class="export-note">Colour keeps the mark's ten gradients and sets the wordmark in <code class="tok">#14110E</code>; reversed swaps that for <code class="tok">#F4EFE4</code>. The mono files use the mark's own separated artwork, not a silhouette of the colour one. Full colour needs a light ground, so it has no white or gold variant.</p>
+  <div class="piece__actions">
+    <a class="btn btn--export" href="downloads/logo/bdsis-logo.zip" download>All 17, SVG + AI (.zip)</a>
   </div>
 
   <h3 style="margin-top:var(--s-7)">Colour inside the mark</h3>
@@ -736,7 +783,8 @@
         </span>
       </span>
       <span class="anat__zone anat__zone--outline" data-zone="2" style="display:flex; align-items:center">
-        <img src="assets/cus-logo.png" alt="College of Undergraduate Studies" style="height:34px; mix-blend-mode:multiply">
+        <img class="cus-logo cus-logo--light" src="assets/cus-logo.png" alt="College of Undergraduate Studies" style="height:34px">
+        <img class="cus-logo cus-logo--dark" src="assets/cus-logo-dark.png" alt="" style="height:34px">
       </span>
       <span class="anat__zone" data-zone="3" style="margin-left:auto; margin-right:230px; display:flex; gap:var(--s-4); align-items:center; font-size:var(--fs-sm); color:var(--meta); white-space:nowrap">
         <span>Search</span><span>Share</span><span style="width:1px;height:16px;background:var(--line)"></span><span>Intranet ▾</span><span>Quick Access ▾</span>
@@ -775,7 +823,7 @@
       <tr>
         <th scope="row">2 · Parent unit</th>
         <td>The College of Undergraduate Studies logo</td>
-        <td>Supplied artwork, 46&nbsp;px high. It occupies the position the Faculty lockup takes on departmental sites. It arrives on a white field, so it is multiplied on Light and knocked through with <code class="tok">invert(1) hue-rotate(180deg)</code> on the dark themes. Hidden below 860&nbsp;px.</td>
+        <td>Supplied artwork, 46&nbsp;px high. It occupies the position the Faculty lockup takes on departmental sites. Two transparent files ship with it, dark ink and light ink, and the theme picks between them. Hidden below 860&nbsp;px.</td>
       </tr>
       <tr>
         <th scope="row">3 · Utilities</th>
@@ -1236,6 +1284,102 @@
     <div class="cell-tile cell-tile--circle" style="--fam-grad: var(--grad-orange)"></div>
   </div>
   <p style="font-size:var(--fs-sm); color:var(--ink-muted)">Rotate the motif down a grid through <code class="tok">.cell-tile</code> and its modifiers, so a column never repeats itself.</p>
+
+  <h3 id="signature" style="margin-top:var(--s-7); scroll-margin-top:calc(var(--nav-h) + var(--s-5))">Signature fields</h3>
+  <p>The kit used generatively. Any text becomes a field of cells that belongs to that text and nothing else: a name, a student number, a cohort. It is the one part of the system that produces artwork nobody drew, and the <strong>same text always produces the same field</strong>, on any machine, forever.</p>
+  <p>Used across the reverse of the business card, the ID card and the luggage tag, where it does the work a photograph would otherwise do. Not decoration and not a pattern library. A field stands for a person.</p>
+
+  <div class="rule-block">
+    <p><strong>It is a fingerprint, not a message.</strong> Nothing can be read back out of a field. The text is hashed to 128 bits and the bits choose cells, so the input is gone by the time the first shape is drawn.</p>
+  </div>
+
+  <div class="hashgen">
+    <div class="hashgen__controls">
+      <label class="hashgen__field">
+        <span class="hashgen__label">Text</span>
+        <input type="text" id="sig-text" autocomplete="off" value="Alan P.T. Lau" maxlength="120" spellcheck="false">
+      </label>
+
+      <div class="hashgen__row">
+        <div class="hashgen__field">
+          <span class="hashgen__label">Columns</span>
+          <input type="number" id="sig-cols" autocomplete="off" min="2" max="64" value="17">
+        </div>
+        <div class="hashgen__field">
+          <span class="hashgen__label">Rows</span>
+          <input type="number" id="sig-rows" autocomplete="off" min="2" max="64" value="7">
+        </div>
+      </div>
+
+      <div class="hashgen__field">
+        <span class="hashgen__label">Lead family</span>
+        <div class="fam-pick" id="sig-lead">
+          <button type="button" data-v="auto" class="on" aria-pressed="true">Auto</button>
+          <button type="button" data-v="0" aria-label="Red" title="Red"><i style="background:#A02337"></i></button>
+          <button type="button" data-v="1" aria-label="Tangerine" title="Tangerine"><i style="background:#F2A03B"></i></button>
+          <button type="button" data-v="2" aria-label="Olive" title="Olive"><i style="background:#C2C684"></i></button>
+          <button type="button" data-v="3" aria-label="Ocean" title="Ocean"><i style="background:#54ABBB"></i></button>
+        </div>
+      </div>
+
+      <div class="hashgen__field">
+        <span class="hashgen__label">Accent family</span>
+        <div class="fam-pick" id="sig-accent">
+          <button type="button" data-v="auto" class="on" aria-pressed="true">Auto</button>
+          <button type="button" data-v="0" aria-label="Red" title="Red"><i style="background:#A02337"></i></button>
+          <button type="button" data-v="1" aria-label="Tangerine" title="Tangerine"><i style="background:#F2A03B"></i></button>
+          <button type="button" data-v="2" aria-label="Olive" title="Olive"><i style="background:#C2C684"></i></button>
+          <button type="button" data-v="3" aria-label="Ocean" title="Ocean"><i style="background:#54ABBB"></i></button>
+        </div>
+      </div>
+
+      <div class="hashgen__field">
+        <span class="hashgen__label">Register</span>
+        <div class="seg" id="sig-pal">
+          <button type="button" data-v="brand" class="on" aria-pressed="true">Light</button>
+          <button type="button" data-v="dark">Dark</button>
+          <button type="button" data-v="gold">Dark Mono Gold</button>
+        </div>
+      </div>
+
+      <div class="hashgen__field">
+        <span class="hashgen__label">Cell shape</span>
+        <div class="seg seg--cells" id="sig-shape"></div>
+      </div>
+
+      <div class="hashgen__field">
+        <span class="hashgen__label">Cell colour</span>
+        <div class="fam-pick" id="sig-cellfam"></div>
+      </div>
+    </div>
+
+    <div class="hashgen__out">
+      <div class="hashgen__stage">
+        <div class="hashgen__art" id="sig-field" data-hash="Alan P.T. Lau" data-hash-cols="17" data-hash-rows="7"></div>
+        <div class="hashgen__cells" id="sig-cells"></div>
+      </div>
+      <p class="hashgen__readout"><span id="sig-tag"></span> · <span id="sig-size"></span></p>
+      <div class="hashgen__actions">
+        <button type="button" class="btn btn--export" id="sig-save">Save SVG</button>
+        <button type="button" class="btn btn--export" id="sig-copy">Copy SVG</button>
+        <button type="button" class="btn btn--export" id="sig-reset">Reset cells</button>
+      </div>
+      <p class="hashgen__readout">Pick a shape and a colour, then click any cell to set it. The last tool clears a cell back to what the hash chose.</p>
+    </div>
+  </div>
+
+  <table class="spec">
+    <thead><tr><th>Cell</th><th>Share</th><th>Drawn as</th></tr></thead>
+    <tbody>
+      <tr><td>Quarter circle</td><td>50%</td><td>One of four rotations, in the family gradient</td></tr>
+      <tr><td>Split square</td><td>16%</td><td>Two triangles, the family's two stops flat</td></tr>
+      <tr><td>Circle</td><td>12%</td><td>Inscribed, in the family gradient</td></tr>
+      <tr><td>Square</td><td>10%</td><td>Full cell, in the family gradient</td></tr>
+      <tr><td>Empty</td><td>12%</td><td>Nothing. The stock shows through</td></tr>
+    </tbody>
+  </table>
+  <p class="export-note">One lead family carries the field and a second appears in roughly one cell in eight. Leave both on Auto and the hash decides; choose one and only that choice is overridden, so the layout stays keyed to the text. The eight-character tag beside the preview is the first 32 bits of the hash, which is how two fields are told apart at a glance. Saved artwork is 10&nbsp;mm to the cell.</p>
+  <p class="export-note"><strong>Nothing you type here leaves the page.</strong> The hash is computed in your browser; the text is not sent anywhere, not logged and not stored. That is what makes it safe to put a student number in.</p>
 </section>
 
 <!-- ═══ 08 COMPONENTS ══════════════════════════════════════════════════════ -->
@@ -1632,7 +1776,7 @@
       <tr><td>Business card</td><td>90 × 54&nbsp;mm (HK standard)</td><td>A cell field generated from the holder's name across the reverse, with the lockup in a band below it. Name side stays typographic.</td></tr>
       <tr><td>Presentation folder</td><td>A4 capacity, 3&nbsp;mm spine</td><td>Quarter circle bleeding off the bottom-right of the front face.</td></tr>
       <tr><td>Compliment slip</td><td>210 × 99&nbsp;mm</td><td></td></tr>
-      <tr><td>Luggage tag</td><td>100 × 55&nbsp;mm</td><td>Name and return address on the face, cell hash across the reverse. 5&nbsp;mm strap hole, nothing but the field within 24&nbsp;mm of it.</td></tr>
+      <tr><td>Luggage tag</td><td>100 × 55&nbsp;mm</td><td>Name and return address on the face, signature field across the reverse. 5&nbsp;mm strap hole, nothing but the field within 24&nbsp;mm of it.</td></tr>
       <tr><td colspan="3" style="padding-top:var(--s-4); font-weight:var(--fw-medium); color:var(--ink); border-bottom:2px solid var(--ink)">Student-facing</td></tr>
       <tr><td>ID card / lanyard</td><td>85.6 × 54&nbsp;mm</td><td>Symbol only; the University card design governs everything else.</td></tr>
       <tr><td>Certificate of completion</td><td>A4 landscape</td><td>The one place Dark Mono Gold applies in print. See §14.</td></tr>
@@ -2262,5 +2406,7 @@ html[data-theme="dark-mono-gold"] {
 
 <script src="qr.js"></script>
 <script src="web.js"></script>
+<script src="cellhash.js"></script>
+<script src="hashgen.js"></script>
 </body>
 </html>

@@ -5,6 +5,9 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Print Artifacts | BDSIS Brand Guidelines</title>
 <meta name="description" content="BDSIS printed collateral designed to specification: letterhead, business card, ID card, luggage tag and display board, drawn at true proportion.">
+<link rel="icon" href="assets/favicon.svg" type="image/svg+xml">
+<link rel="icon" href="assets/favicon-32.png" sizes="32x32" type="image/png">
+<link rel="apple-touch-icon" href="assets/apple-touch-icon.png">
 <link rel="stylesheet" href="web.css">
 <script src="theme.js"></script>
 <script src="zh.js"></script>
@@ -22,7 +25,8 @@
     </a>
     <div class="parent-unit">
       <a href="https://www.polyu.edu.hk/cus/" aria-label="College of Undergraduate Studies">
-        <img src="assets/cus-logo.png" alt="College of Undergraduate Studies 本科生學院">
+        <img class="cus-logo cus-logo--light" src="assets/cus-logo.png" alt="College of Undergraduate Studies 本科生學院">
+        <img class="cus-logo cus-logo--dark" src="assets/cus-logo-dark.png" alt="">
       </a>
     </div>
     <div class="banner__utils">
@@ -64,6 +68,12 @@
         <span><i style="border-color:rgba(224,60,60,.9)"></i> 8&nbsp;mm safety margin</span>
       </div>
     </div>
+    <p style="font-size:var(--fs-sm); color:var(--ink-muted); max-width:62ch; margin-top:var(--s-4)">Every piece also saves or copies as SVG from the buttons under it. Those files are drawn at trim plus 3&nbsp;mm bleed, one user unit to the millimetre, with the trim, bleed and safety lines in a <code class="tok">guides</code> layer you delete before sending to press. Art that sits on a trim edge is carried out into the bleed.</p>
+    <div class="piece__actions">
+      <a class="btn btn--export" href="downloads/print/bdsis-print.zip" download>All 23 pieces, SVG + AI (.zip)</a>
+      <a class="btn btn--export" href="downloads/bdsis-brand-assets.zip" download>Everything, including the logo (.zip)</a>
+    </div>
+    <p class="export-note">The <code class="tok">.ai</code> files are PDF-compatible Illustrator files, which is what an <code class="tok">.ai</code> has been since version 9. Paths stay paths, and Helvetica Neue is embedded as a subset, so the type is still live and still sets correctly on a machine that does not have the font.</p>
   </div>
 </section>
 
@@ -196,8 +206,13 @@
 
     <div class="piece__actions">
       <button class="btn btn--export" data-export="letterhead">Export PDF</button>
+      <a class="btn btn--export" href="downloads/word/BDSIS-letterhead-A.docx" download>A (.docx)</a>
+      <a class="btn btn--export" href="downloads/word/BDSIS-letterhead-B.docx" download>B (.docx)</a>
+      <a class="btn btn--export" href="downloads/word/BDSIS-letterhead-A-mono.docx" download>A mono (.docx)</a>
+      <a class="btn btn--export" href="downloads/word/BDSIS-letterhead-B-mono.docx" download>B mono (.docx)</a>
     </div>
     <p class="export-note">2 pages · A4 · 216 × 303&nbsp;mm with bleed. Both versions export together. Opens your browser's print dialog, where you choose <strong>Save as PDF</strong>. Set the destination scale to 100% and leave margins at none.</p>
+    <p class="export-note">The Word files are the same two sheets set to type at 210 × 297&nbsp;mm, for letters written in the office rather than sent to a printer. Masthead and foot are anchored to the page, so they hold position while the letter is typed over the sample text and cannot be clipped by Word's header frame on the way to the printer. Logos are embedded at 600&nbsp;dpi; the body is ordinary editable text. The <strong>mono</strong> pair puts both marks on one plate for one-colour print, fax and photocopy: the programme mark uses its own separated artwork, not a silhouette of the colour one (§02).</p>
   </div>
 </section>
 
@@ -261,7 +276,7 @@
       <div class="piece__frame" style="width:min(340px, 100%)">
         <div class="artifact artifact--card">
           <span class="artifact__guide" style="inset:5em"></span>
-          <!-- The holder's own cell hash. 6 mm cells: six clean rows down to the
+          <!-- The holder's own signature field. 6 mm cells: six clean rows down to the
                band at 36 mm, a seventh row and a seventeenth column held in
                reserve so the field has something to bleed with. -->
           <div class="af-field" id="bc-hash" style="bottom:18em; --cell:6; --cols:17; --rows:7"
@@ -279,7 +294,7 @@
             </span>
           </div>
         </div>
-        <p class="piece__label">Reverse · the holder's cell hash</p>
+        <p class="piece__label">Reverse · the holder's signature field</p>
       </div>
     </div>
 
@@ -617,7 +632,7 @@
     <div class="section-head section-head--triangle" style="--marker: var(--grad-green)">
       <div class="section-head__rule"></div>
       <h2>Luggage tag</h2>
-      <p>100 × 55&nbsp;mm, for the exchange cohort and for staff travelling to recruitment fairs. A tag is read at a glance on a moving belt, so the face is nothing but the name and the return address, and the whole of the reverse is the holder's cell hash. One corner takes the house radius, the same move as <code class="tok">--r-cell</code> on screen.</p>
+      <p>100 × 55&nbsp;mm, for the exchange cohort and for staff travelling to recruitment fairs. A tag is read at a glance on a moving belt, so the face is nothing but the name and the return address, and the whole of the reverse is the holder's signature field. One corner takes the house radius, the same move as <code class="tok">--r-cell</code> on screen.</p>
     </div>
 
     <div class="piece__ctl">
@@ -680,7 +695,7 @@
             </span>
           </div>
         </div>
-        <p class="piece__label">Reverse · the holder's cell hash</p>
+        <p class="piece__label">Reverse · the holder's signature field</p>
       </div>
     </div>
 
@@ -959,10 +974,6 @@
 
 </main>
 
-<div class="endband">
-  <div class="wrap"><img src="assets/polyu-logo-white.svg" alt="The Hong Kong Polytechnic University 香港理工大學"></div>
-</div>
-
 <footer class="footer">
   <div class="wrap">
     <div class="footer__bar">
@@ -980,6 +991,7 @@
 <script src="cellhash.js"></script>
 <script src="qr.js"></script>
 <script src="export.js"></script>
+<script src="svgexport.js"></script>
 <script>
 /* Guides toggle — one class on <body>, so every artifact answers at once. */
 (() => {

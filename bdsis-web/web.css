@@ -272,16 +272,20 @@ li { margin-bottom: var(--s-2); }
 
 
 /* Parent-unit lockup — the College of Undergraduate Studies logo, in the
-   role the Faculty lockup takes on a departmental site. Supplied as artwork
-   on a white field, so it is knocked through on the dark themes rather than
-   sitting in a white box: invert flips the field, and the hue rotation puts
-   the PolyU red back where invert took it. */
+   role the Faculty lockup takes on a departmental site. Two transparent
+   artworks, both supplied by the College: dark ink for light grounds, light
+   ink for dark ones. The dark-mode file is used rather than a filter over
+   the light one, so the mark on a dark ground is what the College drew
+   rather than what an inversion happened to produce. The two register to
+   within 0.1% of the frame, so the swap does not shift or resize it. */
 .parent-unit { flex-shrink: 0; display: flex; align-items: center; }
-.parent-unit img { height: 46px; width: auto; mix-blend-mode: multiply; }
-html[data-theme="dark"] .parent-unit img,
-html[data-theme="dark-mono-gold"] .parent-unit img {
-  mix-blend-mode: normal; filter: invert(1) hue-rotate(180deg);
-}
+.parent-unit .cus-logo { height: 46px; }
+.cus-logo { width: auto; }
+.cus-logo--dark { display: none; }
+html[data-theme="dark"] .cus-logo--light,
+html[data-theme="dark-mono-gold"] .cus-logo--light { display: none; }
+html[data-theme="dark"] .cus-logo--dark,
+html[data-theme="dark-mono-gold"] .cus-logo--dark { display: block; }
 
 /* Utilities sit to the right of the lockups, clear of the red block */
 .banner__utils {
@@ -696,15 +700,6 @@ table.compare td.is-us { background: rgba(171,3,52,.05); color: var(--ink); }
 }
 
 /* ── 7. FOOTER ───────────────────────────────────────────────────────────── */
-/* The red band closing the page is the same device that closes every printed
-   BDSIS document: the crimson gradient carrying the University logo. */
-.endband {
-  background: var(--grad-crimson);
-  min-height: 64px;
-  display: flex; align-items: center;
-}
-.endband img { width: 190px; }
-
 .footer { background: var(--polyu-grey); color: #fff; }
 .footer__main { padding: var(--s-8) 0 var(--s-7); }
 .footer__grid { display: grid; grid-template-columns: 1.4fr repeat(3, 1fr); gap: var(--s-6); }
@@ -954,8 +949,6 @@ html[data-theme="dark"] .section--ink,
 html[data-theme="dark-mono-gold"] .section--ink { background: var(--paper-deep); }
 /* The end band carries the family-1 gradient, which is light in the dark
    themes — so the white logo would vanish. Swap the artwork, don't filter it. */
-html[data-theme="dark"] .endband img,
-html[data-theme="dark-mono-gold"] .endband img { content: url(assets/polyu-logo-colour.svg); }
 html[data-theme="dark"] table.compare td.is-us,
 html[data-theme="dark-mono-gold"] table.compare td.is-us { background: rgba(255,255,255,.05); }
 html[data-theme="dark"] .cell-tile::after,
@@ -1568,6 +1561,81 @@ body.show-guides .artifact::before {
    because a scanner does not know what a theme is. */
 [data-qr] svg { width: 100%; height: auto; display: block; }
 
+/* Signature field generator ------------------------------------------------
+   The same three-part shape as the QR generator — controls, stage, actions —
+   but the stage takes its ratio from the lattice rather than being square. */
+.hashgen {
+  display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 300px), 1fr));
+  gap: var(--s-6); align-items: start;
+  border: 1px solid var(--line); background: var(--surface);
+  padding: clamp(1rem, 3vw, 2rem); margin: var(--s-5) 0;
+}
+.hashgen__controls { display: grid; gap: var(--s-5); align-content: start; }
+.hashgen__row { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 150px), 1fr)); gap: var(--s-5); }
+.hashgen__field { display: grid; gap: var(--s-2); }
+.hashgen__label {
+  font-size: var(--fs-xs); font-weight: var(--fw-medium);
+  letter-spacing: var(--tr-label); text-transform: uppercase; color: var(--meta);
+}
+.hashgen__field input {
+  font: inherit; font-size: var(--fs-sm); color: var(--ink);
+  background: var(--paper); border: 1px solid var(--line);
+  border-radius: var(--r-0); padding: 0.55rem 0.7rem; width: 100%;
+}
+.hashgen__field input:focus-visible { outline: 2px solid var(--is-crimson-ink); outline-offset: 1px; }
+.hashgen__out { display: grid; gap: var(--s-3); align-content: start; }
+.hashgen__stage {
+  position: relative;
+  width: 100%; background: var(--paper); border: 1px solid var(--line);
+  overflow: hidden;
+}
+.hashgen__stage svg { width: 100%; height: 100%; display: block; }
+/* The artwork is redrawn by replacing its innerHTML, so the clickable lattice
+   has to be its sibling: as a child it would be wiped on every repaint. */
+.hashgen__art { position: absolute; inset: 0; }
+
+/* The lattice sits over the artwork on the same grid, so a click lands on the
+   cell it looks like it landed on. */
+.hashgen__cells { position: absolute; inset: 0; display: grid; }
+.hashgen__cells button {
+  border: 0; background: transparent; padding: 0; cursor: crosshair;
+  min-width: 0; min-height: 0;
+}
+.hashgen__cells button:hover { box-shadow: inset 0 0 0 2px var(--is-crimson-ink); }
+.hashgen__cells button:focus-visible { outline: 2px solid var(--is-crimson-ink); outline-offset: -2px; }
+/* Which cells were customised is shown only while the lattice is being worked
+   on. Any mark left standing over the artwork gets read as part of it — a
+   filled corner in particular looks exactly like a cell shape — so at rest the
+   preview is the artwork and nothing else. A dashed stroke is unambiguous
+   because nothing the generator draws is ever stroked. */
+.hashgen__cells:hover button.is-custom,
+.hashgen__cells:focus-within button.is-custom {
+  outline: 1px dashed var(--is-crimson-ink);
+  outline-offset: -2px;
+}
+
+/* Shape tools. The swatch inherits currentColor, so it follows the theme. */
+.seg--cells { gap: 5px; }
+.hashgen .cellbtn {
+  width: 34px; height: 34px; padding: 4px;
+  display: grid; place-items: center;
+  background: var(--paper); color: var(--ink-muted);
+  border: 1px solid var(--line); border-radius: var(--r-0);
+  cursor: pointer; transition: all .15s var(--ease);
+}
+.hashgen .cellbtn svg { width: 100%; height: 100%; display: block; }
+.hashgen .cellbtn:hover { border-color: var(--ink); color: var(--ink); }
+.hashgen .cellbtn.on { border-color: var(--ink); color: var(--ink); background: var(--paper-tint); }
+.hashgen .cellbtn:focus-visible { outline: 2px solid var(--is-crimson-ink); outline-offset: 1px; }
+.hashgen__readout { font-size: var(--fs-xs); font-family: var(--font-mono); color: var(--meta); margin: 0; }
+.hashgen__actions { display: flex; gap: var(--s-3); flex-wrap: wrap; }
+
+/* Sub-entries in the document contents. The list numbers itself off a
+   counter, so a nested item must not increment it. */
+.doc-toc ul { list-style: none; padding: 0 0 0 2.4ch; margin: 0; }
+.doc-toc ul li { counter-increment: none; margin-bottom: 0; }
+.doc-toc ul a::before { content: "· "; color: #B9B9B5; }
+
 /* Page chrome for the artifacts page --------------------------------------- */
 .piece { margin-bottom: var(--s-9); }
 .piece__stage {
@@ -1585,6 +1653,18 @@ body.show-guides .artifact::before {
 }
 .piece__meta dd { margin: 0; font-size: var(--fs-sm); color: var(--ink); }
 .piece__label { font-size: var(--fs-xs); color: var(--ink-muted); text-align: center; margin-top: var(--s-3); }
+
+/* Per-piece SVG export. Sits under each frame rather than with the section's
+   actions, because each variant is its own file. */
+.svgbar { display: flex; gap: var(--s-2); justify-content: center; margin-top: var(--s-2); }
+.svgbar__btn {
+  font: inherit; font-size: var(--fs-xs); color: var(--ink-muted);
+  background: transparent; border: 1px solid var(--line); border-radius: var(--r-0);
+  padding: 0.35rem 0.8rem; cursor: pointer; transition: all .2s var(--ease);
+}
+.svgbar__btn:hover { color: var(--ink); border-color: var(--ink); }
+.svgbar__btn:disabled { opacity: .5; cursor: default; }
+.is-exporting .svgbar { display: none; }
 
 .guide-toggle {
   display: inline-flex; align-items: center; gap: var(--s-2);

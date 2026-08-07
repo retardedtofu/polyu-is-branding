@@ -17,3 +17,9 @@ mockup-psd/
 
 # Page renders of the ignored brand PDF: 24 MB of derived assets
 PolyU Brand_Communication_Guidelines_pages/
+
+# Licensed typeface binaries. Helvetica Neue is commercially licensed and
+# pushing the files redistributes them, which is the same reason mockup-psd
+# is excluded. Nothing here needs them: the site sets Helvetica Neue by name
+# and picks up the system copy, and there is no @font-face anywhere.
+bdsis-web/fonts/
