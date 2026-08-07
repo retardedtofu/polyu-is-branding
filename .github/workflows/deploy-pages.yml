@@ -1,13 +1,15 @@
 name: Deploy sites to GitHub Pages
 
-# Publishes lab-site/ at the root, brand-site/ under /brand/, and the
-# font-analysis app under /font-analysis/ on every push to main.
+# Publishes lab-site/ at the root, brand-site/ under /brand/, the BDSIS brand
+# system under /bdsis/, and the font-analysis app under /font-analysis/ on
+# every push to main.
 on:
   push:
     branches: [main]
     paths:
       - "lab-site/**"
       - "brand-site/**"
+      - "bdsis-web/**"
       - "font-analysis/**"
       - ".github/workflows/deploy-pages.yml"
   workflow_dispatch:
@@ -35,13 +37,43 @@ jobs:
       - name: Configure Pages
         uses: actions/configure-pages@v5
 
-      - name: Assemble site (lab at root, brand guideline at /brand/, font app at /font-analysis/)
+      - name: Assemble site (lab at root, brand guideline at /brand/, BDSIS at /bdsis/, font app at /font-analysis/)
         run: |
-          mkdir -p _site/brand _site/font-analysis
+          mkdir -p _site/brand _site/bdsis _site/font-analysis
           cp -R lab-site/. _site/
           cp -R brand-site/. _site/brand/
+          cp -R bdsis-web/. _site/bdsis/
           cp font-analysis/index.html font-analysis/fontdata.js _site/font-analysis/
           touch _site/.nojekyll
+          # Nothing here needs a font binary: every page sets Helvetica Neue by
+          # name and takes the reader's own copy. The directory is gitignored,
+          # so this only bites if someone commits it by mistake.
+          rm -rf _site/bdsis/fonts
+
+      - name: Check the assembled site
+        run: |
+          set -e
+          # This site is public, and Helvetica Neue is licensed. Publishing the
+          # files would redistribute them, so the build refuses rather than
+          # trusting .gitignore to have held.
+          if find _site \( -name '*.otf' -o -name '*.ttf' -o -name '*.woff' \
+                        -o -name '*.woff2' -o -name '*.psd' \) | grep -q .; then
+            echo "licensed binaries found in the artifact; refusing to publish:"
+            find _site \( -name '*.otf' -o -name '*.ttf' -o -name '*.woff' \
+                       -o -name '*.woff2' -o -name '*.psd' \)
+            exit 1
+          fi
+          for f in index.html site.html guidelines.html artifacts.html web.css \
+                   svgexport.js hashgen.js cellhash.js favicon.ico; do
+            test -f "_site/bdsis/$f" || { echo "missing _site/bdsis/$f"; exit 1; }
+          done
+          # the download pack is the point of the artifacts page; a silently
+          # empty tree would publish a site full of dead buttons
+          svg=$(find _site/bdsis/downloads -name '*.svg' | wc -l)
+          ai=$(find _site/bdsis/downloads -name '*.ai' | wc -l)
+          test "$svg" -ge 40 || { echo "expected >=40 svg, found $svg"; exit 1; }
+          test "$ai"  -ge 40 || { echo "expected >=40 ai, found $ai"; exit 1; }
+          echo "bdsis: $svg svg, $ai ai, $(du -sh _site/bdsis | cut -f1) total"
 
       - name: Upload assembled site as the Pages artifact
         uses: actions/upload-pages-artifact@v3
