@@ -1769,3 +1769,26 @@ body.show-guides .artifact {
 }
 .pixel-ctl input:focus-visible { outline: 2px solid var(--is-crimson-ink); outline-offset: 1px; }
 .pixel-ctl input[type="number"] { width: 5.5em; }
+
+/* ── card control panel: three labelled groups instead of one long bar ──── */
+.piece__ctl--panel { align-items: stretch; }
+.ctlgrp {
+  border: 1px solid var(--line); background: var(--paper);
+  padding: var(--s-4); display: grid; gap: var(--s-3); align-content: start;
+}
+.ctlgrp__title {
+  font-size: var(--fs-label); letter-spacing: var(--tr-label);
+  text-transform: uppercase; color: var(--meta); font-weight: var(--fw-medium);
+}
+.ctlgrp__row { display: flex; gap: var(--s-4); flex-wrap: wrap; align-items: flex-end; }
+.ctl { display: grid; gap: 6px; align-content: end; }
+.ctl__label { font-size: var(--fs-xs); color: var(--ink-muted); }
+.ctl input[type="text"], .ctl input[type="number"] {
+  font: inherit; font-size: var(--fs-sm); color: var(--ink);
+  background: var(--paper); border: 1px solid var(--line);
+  border-radius: var(--r-0); padding: 0.3rem 0.55rem;
+}
+.ctl input[type="text"] { width: 11ch; }
+.ctl input[type="number"] { width: 5.5em; }
+/* pixel-only controls sleep while the accent is hashed */
+.ctlgrp.is-hashed .ctl--pixel { opacity: 0.35; pointer-events: none; }

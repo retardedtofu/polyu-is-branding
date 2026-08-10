@@ -480,54 +480,68 @@
       <p>90 × 54&nbsp;mm, the Hong Kong standard. The face stays typographic. The reverse carries a cell field generated from the holder's own name, so every card in a department is recognisably the same system and no two are the same picture.</p>
     </div>
 
-    <div class="piece__ctl">
-      <span class="piece__ctl__label">Hash · lead</span>
-      <div class="fam-pick" data-fam-pick="bc-hash bc-hash-dark bc-hash-gold" data-fam-role="lead">
-        <button type="button" data-fam="auto" class="on" aria-pressed="true">Auto</button>
-        <button type="button" data-fam="0" aria-pressed="false" aria-label="Red" title="Red"><i style="background:linear-gradient(90deg,#A02337,#861C2C)"></i></button>
-        <button type="button" data-fam="1" aria-pressed="false" aria-label="Tangerine" title="Tangerine"><i style="background:linear-gradient(45deg,#F2A03B,#E14729)"></i></button>
-        <button type="button" data-fam="2" aria-pressed="false" aria-label="Olive" title="Olive"><i style="background:linear-gradient(135deg,#C2C684,#A8B468)"></i></button>
-        <button type="button" data-fam="3" aria-pressed="false" aria-label="Ocean" title="Ocean"><i style="background:linear-gradient(180deg,#54ABBB,#3A8FA3)"></i></button>
-      </div>
-      <span class="piece__ctl__label">Hash · accent</span>
-      <div class="fam-pick" data-fam-pick="bc-hash bc-hash-dark bc-hash-gold" data-fam-role="accent">
-        <button type="button" data-fam="auto" class="on" aria-pressed="true">Auto</button>
-        <button type="button" data-fam="0" aria-pressed="false" aria-label="Red" title="Red"><i style="background:linear-gradient(90deg,#A02337,#861C2C)"></i></button>
-        <button type="button" data-fam="1" aria-pressed="false" aria-label="Tangerine" title="Tangerine"><i style="background:linear-gradient(45deg,#F2A03B,#E14729)"></i></button>
-        <button type="button" data-fam="2" aria-pressed="false" aria-label="Olive" title="Olive"><i style="background:linear-gradient(135deg,#C2C684,#A8B468)"></i></button>
-        <button type="button" data-fam="3" aria-pressed="false" aria-label="Ocean" title="Ocean"><i style="background:linear-gradient(180deg,#54ABBB,#3A8FA3)"></i></button>
-      </div>
-      <span class="piece__ctl__label">Accent placement</span>
-      <div class="pixel-ctl" data-pixel-for="bc-hash bc-hash-dark bc-hash-gold">
-        <div class="seg">
-          <button type="button" data-pixel-mode="hash" class="on" aria-pressed="true">Hashed</button>
-          <button type="button" data-pixel-mode="pixel" aria-pressed="false">Pixel type</button>
-        </div>
-        <input type="text" data-pixel-text value="IS" maxlength="24" spellcheck="false" autocomplete="off" aria-label="Pixel text">
-        <div class="seg" role="group" aria-label="Pixel font">
-          <button type="button" data-pixel-font="dot" class="on" aria-pressed="true">5×7</button>
-          <button type="button" data-pixel-font="micro" aria-pressed="false">3×5</button>
-          <button type="button" data-pixel-font="geist" aria-pressed="false">Geist</button>
-        </div>
-        <div class="seg" role="group" aria-label="Pixel density">
-          <button type="button" data-pixel-density="1" aria-pressed="false">1×</button>
-          <button type="button" data-pixel-density="2" class="on" aria-pressed="true">2×</button>
-          <button type="button" data-pixel-density="3" aria-pressed="false">3×</button>
+    <div class="piece__ctl piece__ctl--panel">
+      <div class="ctlgrp">
+        <span class="ctlgrp__title">Families</span>
+        <div class="ctlgrp__row">
+          <div class="ctl"><span class="ctl__label">Lead</span>
+          <div class="fam-pick" data-fam-pick="bc-hash bc-hash-dark bc-hash-gold" data-fam-role="lead">
+            <button type="button" data-fam="auto" class="on" aria-pressed="true">Auto</button>
+            <button type="button" data-fam="0" aria-pressed="false" aria-label="Red" title="Red"><i style="background:linear-gradient(90deg,#A02337,#861C2C)"></i></button>
+            <button type="button" data-fam="1" aria-pressed="false" aria-label="Tangerine" title="Tangerine"><i style="background:linear-gradient(45deg,#F2A03B,#E14729)"></i></button>
+            <button type="button" data-fam="2" aria-pressed="false" aria-label="Olive" title="Olive"><i style="background:linear-gradient(135deg,#C2C684,#A8B468)"></i></button>
+            <button type="button" data-fam="3" aria-pressed="false" aria-label="Ocean" title="Ocean"><i style="background:linear-gradient(180deg,#54ABBB,#3A8FA3)"></i></button>
+          </div></div>
+          <div class="ctl"><span class="ctl__label">Accent</span>
+          <div class="fam-pick" data-fam-pick="bc-hash bc-hash-dark bc-hash-gold" data-fam-role="accent">
+            <button type="button" data-fam="auto" class="on" aria-pressed="true">Auto</button>
+            <button type="button" data-fam="0" aria-pressed="false" aria-label="Red" title="Red"><i style="background:linear-gradient(90deg,#A02337,#861C2C)"></i></button>
+            <button type="button" data-fam="1" aria-pressed="false" aria-label="Tangerine" title="Tangerine"><i style="background:linear-gradient(45deg,#F2A03B,#E14729)"></i></button>
+            <button type="button" data-fam="2" aria-pressed="false" aria-label="Olive" title="Olive"><i style="background:linear-gradient(135deg,#C2C684,#A8B468)"></i></button>
+            <button type="button" data-fam="3" aria-pressed="false" aria-label="Ocean" title="Ocean"><i style="background:linear-gradient(180deg,#54ABBB,#3A8FA3)"></i></button>
+          </div></div>
         </div>
       </div>
-      <span class="piece__ctl__label">Outline</span>
-      <div class="pixel-ctl" data-outline-for="bc-hash bc-hash-dark bc-hash-gold">
-        <div class="seg">
-          <button type="button" data-outline-mode="none" class="on" aria-pressed="true">Filled</button>
-          <button type="button" data-outline-mode="accent" aria-pressed="false">Accent</button>
-          <button type="button" data-outline-mode="lead" aria-pressed="false">Lead</button>
-          <button type="button" data-outline-mode="both" aria-pressed="false">Both</button>
+      <div class="ctlgrp is-hashed" data-pixel-for="bc-hash bc-hash-dark bc-hash-gold">
+        <span class="ctlgrp__title">Accent placement</span>
+        <div class="ctlgrp__row">
+          <div class="ctl"><span class="ctl__label">Mode</span>
+            <div class="seg">
+              <button type="button" data-pixel-mode="hash" class="on" aria-pressed="true">Hashed</button>
+              <button type="button" data-pixel-mode="pixel" aria-pressed="false">Pixel type</button>
+            </div></div>
+          <div class="ctl ctl--pixel"><span class="ctl__label">Text</span>
+            <input type="text" data-pixel-text value="IS" maxlength="24" spellcheck="false" autocomplete="off" aria-label="Pixel text"></div>
+          <div class="ctl ctl--pixel"><span class="ctl__label">Face</span>
+            <div class="seg" role="group" aria-label="Pixel font">
+              <button type="button" data-pixel-font="dot" class="on" aria-pressed="true">5×7</button>
+              <button type="button" data-pixel-font="micro" aria-pressed="false">3×5</button>
+              <button type="button" data-pixel-font="geist" aria-pressed="false">Geist</button>
+            </div></div>
+          <div class="ctl"><span class="ctl__label">Density</span>
+            <div class="seg" role="group" aria-label="Pixel density">
+              <button type="button" data-pixel-density="1" aria-pressed="false">1×</button>
+              <button type="button" data-pixel-density="2" class="on" aria-pressed="true">2×</button>
+              <button type="button" data-pixel-density="3" aria-pressed="false">3×</button>
+            </div></div>
         </div>
-        <input type="number" data-outline-w value="0.8" min="0.2" max="3" step="0.1" aria-label="Stroke weight, millimetres">
-        <span class="piece__ctl__label">mm</span>
+      </div>
+      <div class="ctlgrp" data-outline-for="bc-hash bc-hash-dark bc-hash-gold">
+        <span class="ctlgrp__title">Outline</span>
+        <div class="ctlgrp__row">
+          <div class="ctl"><span class="ctl__label">Cells</span>
+            <div class="seg">
+              <button type="button" data-outline-mode="none" class="on" aria-pressed="true">Filled</button>
+              <button type="button" data-outline-mode="accent" aria-pressed="false">Accent</button>
+              <button type="button" data-outline-mode="lead" aria-pressed="false">Lead</button>
+              <button type="button" data-outline-mode="both" aria-pressed="false">Both</button>
+            </div></div>
+          <div class="ctl"><span class="ctl__label">Weight · mm</span>
+            <input type="number" data-outline-w value="0.8" min="0.2" max="3" step="0.1" aria-label="Stroke weight, millimetres"></div>
+        </div>
       </div>
     </div>
-    <p class="export-note">Click any line on the face to edit it. The field on the reverse regenerates from the name as you type, and Auto returns the colour the name hashed to. Lead is the family that carries the field, accent the one in about one cell in eight. Both move every register at once, and each renders the chosen <em>slot</em> in its own ink. Setting accent to match lead gives a single-family field.</p>
+    <p class="export-note">Click any line on any face to edit it, in every colourway; the registers move together. The field on the reverse regenerates from the name as you type, and Auto returns the colour the name hashed to. Lead is the family that carries the field, accent the one in about one cell in eight. Both move every register at once, and each renders the chosen <em>slot</em> in its own ink. Setting accent to match lead gives a single-family field.</p>
     <p class="export-note"><strong>Pixel type</strong> places the accent deliberately instead of by the die: the text starts one cell in from the field's top-left, flush against the cut without being trimmed by it, the lattice standing in for the font's grid, shapes still chosen by the hash and the ground drawn at the documented shares, exactly as a hashed field would be. Three faces: the <strong>3×5</strong> fits this card's six rows at 1×, the <strong>5×7</strong> dot matrix at 2×, and <strong>Geist Pixel</strong> only in lowercase at 3× — its 19-subcell capitals outgrow this field. Density subdivides each documented cell into 4 (2×) or 9 (3×), in Hashed and Pixel type alike. <strong>Outline</strong> turns the chosen role's cells into rings instead of fills, stroked on the inside at the millimetre weight you set; split squares ring as plain squares.</p>
 
     <div class="piece__stage">
@@ -550,9 +564,9 @@
           </div>
           <div style="position:absolute; left:8em; bottom:8.5em"><div style="font-size:2.15em; line-height:1.5; color:#453F38">
             <span id="bc-name" data-edit style="display:block; font-weight:500; font-size:1.35em; color:#14110E; line-height:1.2">Prof. Alan P.T. Lau</span>
-            <span data-edit style="display:block; margin-bottom:0.7em">Associate Dean · Programme Director</span>
-            <span data-edit style="display:block">alan.lau@polyu.edu.hk</span>
-            <span data-edit style="display:block">(852) 2766 0000</span>
+            <span id="bc-role" data-edit style="display:block; margin-bottom:0.7em">Associate Dean · Programme Director</span>
+            <span id="bc-mail" data-edit style="display:block">alan.lau@polyu.edu.hk</span>
+            <span id="bc-tel" data-edit style="display:block">(852) 2766 0000</span>
           </div></div>
         </div>
         <p class="piece__label">Face · click any line to edit it</p>
@@ -598,9 +612,9 @@
           </div>
           <div style="position:absolute; left:8em; bottom:8.5em"><div style="font-size:2.15em; line-height:1.5; color:#C6C0B3">
             <span data-mirror="bc-name" style="display:block; font-weight:500; font-size:1.35em; color:#F4EFE4; line-height:1.2">Prof. Alan P.T. Lau</span>
-            <span style="display:block; margin-bottom:0.7em">Associate Dean · Programme Director</span>
-            <span style="display:block">alan.lau@polyu.edu.hk</span>
-            <span style="display:block">(852) 2766 0000</span>
+            <span data-mirror="bc-role" style="display:block; margin-bottom:0.7em">Associate Dean · Programme Director</span>
+            <span data-mirror="bc-mail" style="display:block">alan.lau@polyu.edu.hk</span>
+            <span data-mirror="bc-tel" style="display:block">(852) 2766 0000</span>
           </div></div>
         </div>
         <p class="piece__label">Face · reversed</p>
@@ -637,9 +651,9 @@
           </div>
           <div style="position:absolute; left:8em; bottom:8.5em"><div style="font-size:2.15em; line-height:1.5; color:#B3AA99">
             <span data-mirror="bc-name" style="display:block; font-weight:500; font-size:1.35em; color:#F0D08A; line-height:1.2">Prof. Alan P.T. Lau</span>
-            <span style="display:block; margin-bottom:0.7em">Associate Dean · Programme Director</span>
-            <span style="display:block">alan.lau@polyu.edu.hk</span>
-            <span style="display:block">(852) 2766 0000</span>
+            <span data-mirror="bc-role" style="display:block; margin-bottom:0.7em">Associate Dean · Programme Director</span>
+            <span data-mirror="bc-mail" style="display:block">alan.lau@polyu.edu.hk</span>
+            <span data-mirror="bc-tel" style="display:block">(852) 2766 0000</span>
           </div></div>
         </div>
         <p class="piece__label">Face · endorsed lockup in Gold</p>
@@ -699,54 +713,68 @@
       <p>85.6 × 54&nbsp;mm, the ISO/IEC 7810 ID-1 format every access system expects. The University card design governs; BDSIS contributes the mark, the scheme line, and a 6&nbsp;mm column down the left edge generated from the holder's name. On a card whose whole job is identity, the stripe may as well be the student's own.</p>
     </div>
 
-    <div class="piece__ctl">
-      <span class="piece__ctl__label">Hash · lead</span>
-      <div class="fam-pick" data-fam-pick="id-hash id-hash-dark id-hash-gold" data-fam-role="lead">
-        <button type="button" data-fam="auto" class="on" aria-pressed="true">Auto</button>
-        <button type="button" data-fam="0" aria-pressed="false" aria-label="Red" title="Red"><i style="background:linear-gradient(90deg,#A02337,#861C2C)"></i></button>
-        <button type="button" data-fam="1" aria-pressed="false" aria-label="Tangerine" title="Tangerine"><i style="background:linear-gradient(45deg,#F2A03B,#E14729)"></i></button>
-        <button type="button" data-fam="2" aria-pressed="false" aria-label="Olive" title="Olive"><i style="background:linear-gradient(135deg,#C2C684,#A8B468)"></i></button>
-        <button type="button" data-fam="3" aria-pressed="false" aria-label="Ocean" title="Ocean"><i style="background:linear-gradient(180deg,#54ABBB,#3A8FA3)"></i></button>
-      </div>
-      <span class="piece__ctl__label">Hash · accent</span>
-      <div class="fam-pick" data-fam-pick="id-hash id-hash-dark id-hash-gold" data-fam-role="accent">
-        <button type="button" data-fam="auto" class="on" aria-pressed="true">Auto</button>
-        <button type="button" data-fam="0" aria-pressed="false" aria-label="Red" title="Red"><i style="background:linear-gradient(90deg,#A02337,#861C2C)"></i></button>
-        <button type="button" data-fam="1" aria-pressed="false" aria-label="Tangerine" title="Tangerine"><i style="background:linear-gradient(45deg,#F2A03B,#E14729)"></i></button>
-        <button type="button" data-fam="2" aria-pressed="false" aria-label="Olive" title="Olive"><i style="background:linear-gradient(135deg,#C2C684,#A8B468)"></i></button>
-        <button type="button" data-fam="3" aria-pressed="false" aria-label="Ocean" title="Ocean"><i style="background:linear-gradient(180deg,#54ABBB,#3A8FA3)"></i></button>
-      </div>
-      <span class="piece__ctl__label">Accent placement</span>
-      <div class="pixel-ctl" data-pixel-for="id-hash id-hash-dark id-hash-gold">
-        <div class="seg">
-          <button type="button" data-pixel-mode="hash" class="on" aria-pressed="true">Hashed</button>
-          <button type="button" data-pixel-mode="pixel" aria-pressed="false">Pixel type</button>
-        </div>
-        <input type="text" data-pixel-text value="is" maxlength="24" spellcheck="false" autocomplete="off" aria-label="Pixel text">
-        <div class="seg" role="group" aria-label="Pixel font">
-          <button type="button" data-pixel-font="dot" aria-pressed="false">5×7</button>
-          <button type="button" data-pixel-font="micro" class="on" aria-pressed="true">3×5</button>
-          <button type="button" data-pixel-font="geist" aria-pressed="false">Geist</button>
-        </div>
-        <div class="seg" role="group" aria-label="Pixel density">
-          <button type="button" data-pixel-density="1" aria-pressed="false">1×</button>
-          <button type="button" data-pixel-density="2" class="on" aria-pressed="true">2×</button>
-          <button type="button" data-pixel-density="3" aria-pressed="false">3×</button>
+    <div class="piece__ctl piece__ctl--panel">
+      <div class="ctlgrp">
+        <span class="ctlgrp__title">Families</span>
+        <div class="ctlgrp__row">
+          <div class="ctl"><span class="ctl__label">Lead</span>
+          <div class="fam-pick" data-fam-pick="id-hash id-hash-dark id-hash-gold" data-fam-role="lead">
+            <button type="button" data-fam="auto" class="on" aria-pressed="true">Auto</button>
+            <button type="button" data-fam="0" aria-pressed="false" aria-label="Red" title="Red"><i style="background:linear-gradient(90deg,#A02337,#861C2C)"></i></button>
+            <button type="button" data-fam="1" aria-pressed="false" aria-label="Tangerine" title="Tangerine"><i style="background:linear-gradient(45deg,#F2A03B,#E14729)"></i></button>
+            <button type="button" data-fam="2" aria-pressed="false" aria-label="Olive" title="Olive"><i style="background:linear-gradient(135deg,#C2C684,#A8B468)"></i></button>
+            <button type="button" data-fam="3" aria-pressed="false" aria-label="Ocean" title="Ocean"><i style="background:linear-gradient(180deg,#54ABBB,#3A8FA3)"></i></button>
+          </div></div>
+          <div class="ctl"><span class="ctl__label">Accent</span>
+          <div class="fam-pick" data-fam-pick="id-hash id-hash-dark id-hash-gold" data-fam-role="accent">
+            <button type="button" data-fam="auto" class="on" aria-pressed="true">Auto</button>
+            <button type="button" data-fam="0" aria-pressed="false" aria-label="Red" title="Red"><i style="background:linear-gradient(90deg,#A02337,#861C2C)"></i></button>
+            <button type="button" data-fam="1" aria-pressed="false" aria-label="Tangerine" title="Tangerine"><i style="background:linear-gradient(45deg,#F2A03B,#E14729)"></i></button>
+            <button type="button" data-fam="2" aria-pressed="false" aria-label="Olive" title="Olive"><i style="background:linear-gradient(135deg,#C2C684,#A8B468)"></i></button>
+            <button type="button" data-fam="3" aria-pressed="false" aria-label="Ocean" title="Ocean"><i style="background:linear-gradient(180deg,#54ABBB,#3A8FA3)"></i></button>
+          </div></div>
         </div>
       </div>
-      <span class="piece__ctl__label">Outline</span>
-      <div class="pixel-ctl" data-outline-for="id-hash id-hash-dark id-hash-gold">
-        <div class="seg">
-          <button type="button" data-outline-mode="none" class="on" aria-pressed="true">Filled</button>
-          <button type="button" data-outline-mode="accent" aria-pressed="false">Accent</button>
-          <button type="button" data-outline-mode="lead" aria-pressed="false">Lead</button>
-          <button type="button" data-outline-mode="both" aria-pressed="false">Both</button>
+      <div class="ctlgrp is-hashed" data-pixel-for="id-hash id-hash-dark id-hash-gold">
+        <span class="ctlgrp__title">Accent placement</span>
+        <div class="ctlgrp__row">
+          <div class="ctl"><span class="ctl__label">Mode</span>
+            <div class="seg">
+              <button type="button" data-pixel-mode="hash" class="on" aria-pressed="true">Hashed</button>
+              <button type="button" data-pixel-mode="pixel" aria-pressed="false">Pixel type</button>
+            </div></div>
+          <div class="ctl ctl--pixel"><span class="ctl__label">Text</span>
+            <input type="text" data-pixel-text value="is" maxlength="24" spellcheck="false" autocomplete="off" aria-label="Pixel text"></div>
+          <div class="ctl ctl--pixel"><span class="ctl__label">Face</span>
+            <div class="seg" role="group" aria-label="Pixel font">
+              <button type="button" data-pixel-font="dot" aria-pressed="false">5×7</button>
+              <button type="button" data-pixel-font="micro" class="on" aria-pressed="true">3×5</button>
+              <button type="button" data-pixel-font="geist" aria-pressed="false">Geist</button>
+            </div></div>
+          <div class="ctl"><span class="ctl__label">Density</span>
+            <div class="seg" role="group" aria-label="Pixel density">
+              <button type="button" data-pixel-density="1" aria-pressed="false">1×</button>
+              <button type="button" data-pixel-density="2" class="on" aria-pressed="true">2×</button>
+              <button type="button" data-pixel-density="3" aria-pressed="false">3×</button>
+            </div></div>
         </div>
-        <input type="number" data-outline-w value="0.8" min="0.2" max="3" step="0.1" aria-label="Stroke weight, millimetres">
-        <span class="piece__ctl__label">mm</span>
+      </div>
+      <div class="ctlgrp" data-outline-for="id-hash id-hash-dark id-hash-gold">
+        <span class="ctlgrp__title">Outline</span>
+        <div class="ctlgrp__row">
+          <div class="ctl"><span class="ctl__label">Cells</span>
+            <div class="seg">
+              <button type="button" data-outline-mode="none" class="on" aria-pressed="true">Filled</button>
+              <button type="button" data-outline-mode="accent" aria-pressed="false">Accent</button>
+              <button type="button" data-outline-mode="lead" aria-pressed="false">Lead</button>
+              <button type="button" data-outline-mode="both" aria-pressed="false">Both</button>
+            </div></div>
+          <div class="ctl"><span class="ctl__label">Weight · mm</span>
+            <input type="number" data-outline-w value="0.8" min="0.2" max="3" step="0.1" aria-label="Stroke weight, millimetres"></div>
+        </div>
       </div>
     </div>
-    <p class="export-note">Click any line on the face to edit it. The column regenerates from the name as you type, and the scheme line follows it. Lead carries the field, accent appears in about one cell in eight, and both move every register at once. <strong>Pixel type</strong> spells its text in the accent instead, one cell in from the top-left so the knife never touches it. This field is only 4 cells deep: the <strong>3×5</strong> and <strong>5×7</strong> faces both want 2×, and Geist Pixel does not fit it at any density. The magnetic stripe still overprints the middle of the field, as the reverse documents, so the setting reads as texture in the bands the stripe leaves rather than as a caption.</p>
+    <p class="export-note">Click any line on any face to edit it, in every colourway. The column regenerates from the name as you type, and the scheme line follows it. Lead carries the field, accent appears in about one cell in eight, and both move every register at once. <strong>Pixel type</strong> spells its text in the accent instead, one cell in from the top-left so the knife never touches it. This field is only 4 cells deep: the <strong>3×5</strong> and <strong>5×7</strong> faces both want 2×, and Geist Pixel does not fit it at any density. The magnetic stripe still overprints the middle of the field, as the reverse documents, so the setting reads as texture in the bands the stripe leaves rather than as a caption.</p>
 
     <div class="piece__stage">
       <div class="piece__frame" style="width:min(340px, 100%)">
@@ -776,14 +804,14 @@
             <span id="id-name" data-edit style="display:block; font-size:1.55em; font-weight:500; color:#14110E; line-height:1.15">CHEUNG Ka Yan</span>
             <!-- CJK carries far more stroke per em than Latin, so the Chinese
                  name sets larger than the English rather than matching it -->
-            <span data-edit style="display:block; font-size:1.7em; color:#453F38; line-height:1.3">張嘉恩</span>
+            <span id="id-zh" data-edit style="display:block; font-size:1.7em; color:#453F38; line-height:1.3">張嘉恩</span>
           </div></div>
 
           <div style="position:absolute; left:12em; bottom:6.5em"><div style="font-size:1.75em; line-height:1.6; color:#6E665C">
             <!-- the scheme line follows the column's lead family into its
                  text-safe darkening, so the two never disagree -->
             <span data-hash-ink="id-hash" style="display:block; letter-spacing:.1em; text-transform:uppercase; color:#B8390F; font-weight:500">Interdisciplinary Studies · JS3000</span>
-            <span data-edit>Student No. 24012345&nbsp;&nbsp;·&nbsp;&nbsp;Valid to 08 / 2029</span>
+            <span id="id-num" data-edit>Student No. 24012345&nbsp;&nbsp;·&nbsp;&nbsp;Valid to 08 / 2029</span>
           </div></div>
         </div>
         <p class="piece__label">Face · click any line to edit it</p>
@@ -844,11 +872,11 @@
           </span>
           <div style="position:absolute; left:12em; top:23em"><div style="font-size:2.1em; line-height:1.45; color:#C6C0B3">
             <span data-mirror="id-name" style="display:block; font-size:1.55em; font-weight:500; color:#F4EFE4; line-height:1.15">CHEUNG Ka Yan</span>
-            <span style="display:block; font-size:1.7em; color:#D3CCBE; line-height:1.3">張嘉恩</span>
+            <span data-mirror="id-zh" style="display:block; font-size:1.7em; color:#D3CCBE; line-height:1.3">張嘉恩</span>
           </div></div>
           <div style="position:absolute; left:12em; bottom:6.5em"><div style="font-size:1.75em; line-height:1.6; color:#A39C8E">
             <span data-hash-ink="id-hash-dark" style="display:block; letter-spacing:.1em; text-transform:uppercase; font-weight:500">Interdisciplinary Studies · JS3000</span>
-            <span>Student No. 24012345&nbsp;&nbsp;·&nbsp;&nbsp;Valid to 08 / 2029</span>
+            <span data-mirror="id-num">Student No. 24012345&nbsp;&nbsp;·&nbsp;&nbsp;Valid to 08 / 2029</span>
           </div></div>
         </div>
         <p class="piece__label">Face · reversed</p>
@@ -895,11 +923,11 @@
           </span>
           <div style="position:absolute; left:12em; top:23em"><div style="font-size:2.1em; line-height:1.45; color:#B3AA99">
             <span data-mirror="id-name" style="display:block; font-size:1.55em; font-weight:500; color:#F0D08A; line-height:1.15">CHEUNG Ka Yan</span>
-            <span style="display:block; font-size:1.7em; color:#E0C878; line-height:1.3">張嘉恩</span>
+            <span data-mirror="id-zh" style="display:block; font-size:1.7em; color:#E0C878; line-height:1.3">張嘉恩</span>
           </div></div>
           <div style="position:absolute; left:12em; bottom:6.5em"><div style="font-size:1.75em; line-height:1.6; color:#B3AA99">
             <span data-hash-ink="id-hash-gold" style="display:block; letter-spacing:.1em; text-transform:uppercase; font-weight:500">Interdisciplinary Studies · JS3000</span>
-            <span>Student No. 24012345&nbsp;&nbsp;·&nbsp;&nbsp;Valid to 08 / 2029</span>
+            <span data-mirror="id-num">Student No. 24012345&nbsp;&nbsp;·&nbsp;&nbsp;Valid to 08 / 2029</span>
           </div></div>
         </div>
         <p class="piece__label">Face · Gold on rich black</p>
@@ -948,51 +976,65 @@
       <p>100 × 55&nbsp;mm, for the exchange cohort and for staff travelling to recruitment fairs. A tag is read at a glance on a moving belt, so the face is nothing but the name and the return address, and the whole of the reverse is the holder's signature field. One corner takes the house radius, the same move as <code class="tok">--r-cell</code> on screen.</p>
     </div>
 
-    <div class="piece__ctl">
-      <span class="piece__ctl__label">Hash · lead</span>
-      <div class="fam-pick" data-fam-pick="tag-hash tag-hash-dark tag-hash-gold" data-fam-role="lead">
-        <button type="button" data-fam="auto" class="on" aria-pressed="true">Auto</button>
-        <button type="button" data-fam="0" aria-pressed="false" aria-label="Red" title="Red"><i style="background:linear-gradient(90deg,#A02337,#861C2C)"></i></button>
-        <button type="button" data-fam="1" aria-pressed="false" aria-label="Tangerine" title="Tangerine"><i style="background:linear-gradient(45deg,#F2A03B,#E14729)"></i></button>
-        <button type="button" data-fam="2" aria-pressed="false" aria-label="Olive" title="Olive"><i style="background:linear-gradient(135deg,#C2C684,#A8B468)"></i></button>
-        <button type="button" data-fam="3" aria-pressed="false" aria-label="Ocean" title="Ocean"><i style="background:linear-gradient(180deg,#54ABBB,#3A8FA3)"></i></button>
-      </div>
-      <span class="piece__ctl__label">Hash · accent</span>
-      <div class="fam-pick" data-fam-pick="tag-hash tag-hash-dark tag-hash-gold" data-fam-role="accent">
-        <button type="button" data-fam="auto" class="on" aria-pressed="true">Auto</button>
-        <button type="button" data-fam="0" aria-pressed="false" aria-label="Red" title="Red"><i style="background:linear-gradient(90deg,#A02337,#861C2C)"></i></button>
-        <button type="button" data-fam="1" aria-pressed="false" aria-label="Tangerine" title="Tangerine"><i style="background:linear-gradient(45deg,#F2A03B,#E14729)"></i></button>
-        <button type="button" data-fam="2" aria-pressed="false" aria-label="Olive" title="Olive"><i style="background:linear-gradient(135deg,#C2C684,#A8B468)"></i></button>
-        <button type="button" data-fam="3" aria-pressed="false" aria-label="Ocean" title="Ocean"><i style="background:linear-gradient(180deg,#54ABBB,#3A8FA3)"></i></button>
-      </div>
-      <span class="piece__ctl__label">Accent placement</span>
-      <div class="pixel-ctl" data-pixel-for="tag-hash tag-hash-dark tag-hash-gold">
-        <div class="seg">
-          <button type="button" data-pixel-mode="hash" class="on" aria-pressed="true">Hashed</button>
-          <button type="button" data-pixel-mode="pixel" aria-pressed="false">Pixel type</button>
-        </div>
-        <input type="text" data-pixel-text value="BDSIS" maxlength="24" spellcheck="false" autocomplete="off" aria-label="Pixel text">
-        <div class="seg" role="group" aria-label="Pixel font">
-          <button type="button" data-pixel-font="dot" class="on" aria-pressed="true">5×7</button>
-          <button type="button" data-pixel-font="micro" aria-pressed="false">3×5</button>
-          <button type="button" data-pixel-font="geist" aria-pressed="false">Geist</button>
-        </div>
-        <div class="seg" role="group" aria-label="Pixel density">
-          <button type="button" data-pixel-density="1" aria-pressed="false">1×</button>
-          <button type="button" data-pixel-density="2" class="on" aria-pressed="true">2×</button>
-          <button type="button" data-pixel-density="3" aria-pressed="false">3×</button>
+    <div class="piece__ctl piece__ctl--panel">
+      <div class="ctlgrp">
+        <span class="ctlgrp__title">Families</span>
+        <div class="ctlgrp__row">
+          <div class="ctl"><span class="ctl__label">Lead</span>
+          <div class="fam-pick" data-fam-pick="tag-hash tag-hash-dark tag-hash-gold" data-fam-role="lead">
+            <button type="button" data-fam="auto" class="on" aria-pressed="true">Auto</button>
+            <button type="button" data-fam="0" aria-pressed="false" aria-label="Red" title="Red"><i style="background:linear-gradient(90deg,#A02337,#861C2C)"></i></button>
+            <button type="button" data-fam="1" aria-pressed="false" aria-label="Tangerine" title="Tangerine"><i style="background:linear-gradient(45deg,#F2A03B,#E14729)"></i></button>
+            <button type="button" data-fam="2" aria-pressed="false" aria-label="Olive" title="Olive"><i style="background:linear-gradient(135deg,#C2C684,#A8B468)"></i></button>
+            <button type="button" data-fam="3" aria-pressed="false" aria-label="Ocean" title="Ocean"><i style="background:linear-gradient(180deg,#54ABBB,#3A8FA3)"></i></button>
+          </div></div>
+          <div class="ctl"><span class="ctl__label">Accent</span>
+          <div class="fam-pick" data-fam-pick="tag-hash tag-hash-dark tag-hash-gold" data-fam-role="accent">
+            <button type="button" data-fam="auto" class="on" aria-pressed="true">Auto</button>
+            <button type="button" data-fam="0" aria-pressed="false" aria-label="Red" title="Red"><i style="background:linear-gradient(90deg,#A02337,#861C2C)"></i></button>
+            <button type="button" data-fam="1" aria-pressed="false" aria-label="Tangerine" title="Tangerine"><i style="background:linear-gradient(45deg,#F2A03B,#E14729)"></i></button>
+            <button type="button" data-fam="2" aria-pressed="false" aria-label="Olive" title="Olive"><i style="background:linear-gradient(135deg,#C2C684,#A8B468)"></i></button>
+            <button type="button" data-fam="3" aria-pressed="false" aria-label="Ocean" title="Ocean"><i style="background:linear-gradient(180deg,#54ABBB,#3A8FA3)"></i></button>
+          </div></div>
         </div>
       </div>
-      <span class="piece__ctl__label">Outline</span>
-      <div class="pixel-ctl" data-outline-for="tag-hash tag-hash-dark tag-hash-gold">
-        <div class="seg">
-          <button type="button" data-outline-mode="none" class="on" aria-pressed="true">Filled</button>
-          <button type="button" data-outline-mode="accent" aria-pressed="false">Accent</button>
-          <button type="button" data-outline-mode="lead" aria-pressed="false">Lead</button>
-          <button type="button" data-outline-mode="both" aria-pressed="false">Both</button>
+      <div class="ctlgrp is-hashed" data-pixel-for="tag-hash tag-hash-dark tag-hash-gold">
+        <span class="ctlgrp__title">Accent placement</span>
+        <div class="ctlgrp__row">
+          <div class="ctl"><span class="ctl__label">Mode</span>
+            <div class="seg">
+              <button type="button" data-pixel-mode="hash" class="on" aria-pressed="true">Hashed</button>
+              <button type="button" data-pixel-mode="pixel" aria-pressed="false">Pixel type</button>
+            </div></div>
+          <div class="ctl ctl--pixel"><span class="ctl__label">Text</span>
+            <input type="text" data-pixel-text value="BDSIS" maxlength="24" spellcheck="false" autocomplete="off" aria-label="Pixel text"></div>
+          <div class="ctl ctl--pixel"><span class="ctl__label">Face</span>
+            <div class="seg" role="group" aria-label="Pixel font">
+              <button type="button" data-pixel-font="dot" class="on" aria-pressed="true">5×7</button>
+              <button type="button" data-pixel-font="micro" aria-pressed="false">3×5</button>
+              <button type="button" data-pixel-font="geist" aria-pressed="false">Geist</button>
+            </div></div>
+          <div class="ctl"><span class="ctl__label">Density</span>
+            <div class="seg" role="group" aria-label="Pixel density">
+              <button type="button" data-pixel-density="1" aria-pressed="false">1×</button>
+              <button type="button" data-pixel-density="2" class="on" aria-pressed="true">2×</button>
+              <button type="button" data-pixel-density="3" aria-pressed="false">3×</button>
+            </div></div>
         </div>
-        <input type="number" data-outline-w value="0.8" min="0.2" max="3" step="0.1" aria-label="Stroke weight, millimetres">
-        <span class="piece__ctl__label">mm</span>
+      </div>
+      <div class="ctlgrp" data-outline-for="tag-hash tag-hash-dark tag-hash-gold">
+        <span class="ctlgrp__title">Outline</span>
+        <div class="ctlgrp__row">
+          <div class="ctl"><span class="ctl__label">Cells</span>
+            <div class="seg">
+              <button type="button" data-outline-mode="none" class="on" aria-pressed="true">Filled</button>
+              <button type="button" data-outline-mode="accent" aria-pressed="false">Accent</button>
+              <button type="button" data-outline-mode="lead" aria-pressed="false">Lead</button>
+              <button type="button" data-outline-mode="both" aria-pressed="false">Both</button>
+            </div></div>
+          <div class="ctl"><span class="ctl__label">Weight · mm</span>
+            <input type="number" data-outline-w value="0.8" min="0.2" max="3" step="0.1" aria-label="Stroke weight, millimetres"></div>
+        </div>
       </div>
     </div>
     <p class="export-note"><strong>Pixel type</strong> spells its text across the reverse in the accent family, one cell in from the top-left so the knife never touches it. On the tag's 4&nbsp;mm lattice the <strong>5×7</strong> face fits at 1×, though a word as long as BDSIS wants 2× for width; the <strong>3×5</strong> is narrower still; <strong>Geist Pixel</strong> needs 3×. Density subdivides each cell into 4 (2×) or 9 (3×).</p>
@@ -1010,8 +1052,8 @@
           </div>
           <div style="position:absolute; left:24em; top:19em"><div style="font-size:3.4em; line-height:1.45; color:#453F38">
             <span id="tag-name" data-edit style="display:block; font-weight:500; font-size:2em; color:#14110E; line-height:1.15">Dr Priya Raghavan</span>
-            <span data-edit style="display:block; margin-bottom:0.5em">Exchange Coordinator</span>
-            <span data-edit style="display:block">bdsis@polyu.edu.hk · (852) 2766 0000</span>
+            <span id="tag-role" data-edit style="display:block; margin-bottom:0.5em">Exchange Coordinator</span>
+            <span id="tag-contact" data-edit style="display:block">bdsis@polyu.edu.hk · (852) 2766 0000</span>
           </div></div>
           <div style="position:absolute; left:24em; bottom:6em"><div style="font-size:2.6em; letter-spacing:.08em; text-transform:uppercase; color:#6E665C">
             Hung Hom · Kowloon · Hong Kong
@@ -1057,8 +1099,8 @@
           </div>
           <div style="position:absolute; left:24em; top:19em"><div style="font-size:3.4em; line-height:1.45; color:#C6C0B3">
             <span data-mirror="tag-name" style="display:block; font-weight:500; font-size:2em; color:#F4EFE4; line-height:1.15">Dr Priya Raghavan</span>
-            <span style="display:block; margin-bottom:0.5em">Exchange Coordinator</span>
-            <span style="display:block">bdsis@polyu.edu.hk · (852) 2766 0000</span>
+            <span data-mirror="tag-role" style="display:block; margin-bottom:0.5em">Exchange Coordinator</span>
+            <span data-mirror="tag-contact" style="display:block">bdsis@polyu.edu.hk · (852) 2766 0000</span>
           </div></div>
           <div style="position:absolute; left:24em; bottom:6em"><div style="font-size:2.6em; letter-spacing:.08em; text-transform:uppercase; color:#A39C8E">
             Hung Hom · Kowloon · Hong Kong
@@ -1100,8 +1142,8 @@
           </div>
           <div style="position:absolute; left:24em; top:19em"><div style="font-size:3.4em; line-height:1.45; color:#B3AA99">
             <span data-mirror="tag-name" style="display:block; font-weight:500; font-size:2em; color:#F0D08A; line-height:1.15">Dr Priya Raghavan</span>
-            <span style="display:block; margin-bottom:0.5em">Exchange Coordinator</span>
-            <span style="display:block">bdsis@polyu.edu.hk · (852) 2766 0000</span>
+            <span data-mirror="tag-role" style="display:block; margin-bottom:0.5em">Exchange Coordinator</span>
+            <span data-mirror="tag-contact" style="display:block">bdsis@polyu.edu.hk · (852) 2766 0000</span>
           </div></div>
           <div style="position:absolute; left:24em; bottom:6em"><div style="font-size:2.6em; letter-spacing:.08em; text-transform:uppercase; color:#B3AA99">
             Hung Hom · Kowloon · Hong Kong

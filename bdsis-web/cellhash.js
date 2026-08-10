@@ -283,7 +283,7 @@
      The pieces are edited in place rather than through a form: a card is a
      layout, and typing into the layout is the only way to find out that a
      long name pushes into the safety margin. */
-  document.querySelectorAll('[data-edit]').forEach(el => {
+  document.querySelectorAll('[data-edit], [data-mirror]').forEach(el => {
     /* plaintext-only keeps pasted markup out of a piece that gets cloned
        into the PDF. Where it is unsupported, fall back to plain editing. */
     el.contentEditable = 'plaintext-only';
@@ -292,12 +292,19 @@
     /* Every field here is a single line; Enter would silently add a second. */
     el.addEventListener('keydown', e => { if (e.key === 'Enter') { e.preventDefault(); el.blur(); } });
     el.addEventListener('input', () => {
-      /* The dark registers show the same person, so their copy follows the
-         one editable original rather than being separately editable. */
-      document.querySelectorAll(`[data-mirror="${el.id}"]`)
-        .forEach(m => m.textContent = el.textContent);
-      fields.filter(f => f.dataset.hashFrom === el.id).forEach(f => {
-        f.dataset.hash = el.textContent.trim();
+      /* The registers show the same person, so a line edited on ANY face
+         flows to the original, to every other register's copy of it, and to
+         any field keyed on it. The edited element itself is left alone, or
+         the caret would jump to the start on every keystroke. */
+      const srcId = el.dataset.mirror || el.id;
+      if (!srcId) return;
+      const text = el.textContent;
+      const src = document.getElementById(srcId);
+      if (src && src !== el) src.textContent = text;
+      document.querySelectorAll(`[data-mirror="${srcId}"]`)
+        .forEach(m => { if (m !== el) m.textContent = text; });
+      fields.filter(f => f.dataset.hashFrom === srcId).forEach(f => {
+        f.dataset.hash = text.trim();
         paint(f);
       });
     });
@@ -356,6 +363,7 @@
     });
 
     const apply = () => {
+      ctl.classList.toggle('is-hashed', state['data-pixel-mode'] !== 'pixel');
       hosts.forEach(host => {
         /* Density stands on its own: it re-grains a hashed field too. */
         host.dataset.hashDensity = state['data-pixel-density'] || '1';
