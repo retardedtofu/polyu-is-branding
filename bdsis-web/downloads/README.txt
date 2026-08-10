@@ -13,19 +13,31 @@ WHAT IS HERE
     bdsis-logo.zip     all 17, both formats
 
   print/
-    svg/letterhead/        A4, two versions
+    svg/letterhead/        A4, four versions, colour and one colour
     svg/business-card/     90 x 54 mm, three colourways, face and reverse
     svg/id-card/           85.6 x 54 mm, three colourways, face and reverse
     svg/luggage-tag/       100 x 55 mm, three colourways, face and reverse
     svg/display-board/     850 x 2000 mm, three panels
     ai/                    the same five folders, as Illustrator files
-    bdsis-print.zip        all 23, both formats
+    bdsis-print.zip        all 29, both formats
+
+    Every file carries four named layers: Artwork, and the guide lines
+    Bleeding, Cutting and Safety, styled exactly as the site draws them.
+    Delete the three guide layers before sending to press. No ink crosses
+    the Cutting line: shapes end exactly on the cut. The Illustrator files
+    also set TrimBox and BleedBox, trim 3 mm inside the canvas.
 
   word/
-    BDSIS-letterhead-A.docx         endorsed lockup, University logo in the foot
-    BDSIS-letterhead-B.docx         the two logos paired in the masthead
-    BDSIS-letterhead-A-mono.docx    the same sheet, both marks on one plate
-    BDSIS-letterhead-B-mono.docx    the same sheet, both marks on one plate
+    colour/
+      BDSIS-letterhead-A.docx       endorsed lockup, University logo in the foot
+      BDSIS-letterhead-B.docx       the two logos paired in the masthead
+      BDSIS-letterhead-C.docx       B with the corner wedge, at full strength
+      BDSIS-letterhead-D.docx       the endorsed lockup alone, no University
+                                    logo, with the corner wedge
+    mono/
+      the same four sheets with both marks on one plate, for one-colour
+      print, fax and photocopy; C and D run the wedge in the ink with a
+      uniform 0.9 mm channel between every shape
 
     A4 at 210 x 297 mm. Masthead and foot are anchored to the page rather than
     flowed in the header, so they hold position while the letter is typed and

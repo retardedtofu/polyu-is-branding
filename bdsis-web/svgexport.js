@@ -245,18 +245,12 @@
     const w = r.width * ctx.S, h = r.height * ctx.S;
     const rad = radiiOf(cs, w, h, ctx.S);
 
-    /* Bleed. A box sitting on a trim edge is carried out to the bleed edge,
-       which is what makes the 3 mm real rather than decorative: the lattice
-       fields are already drawn oversized for exactly this, and extending the
-       clip reveals the overhang instead of inventing artwork. Radii are
-       resolved against the original box and then kept, so a quarter circle
-       bleeding off a corner keeps its arc and grows only its straight sides.
-       Content keeps its own position; only the fill and the clip grow. */
-    const e = 0.05;
-    const tx = (r.left - ctx.left) * ctx.S, ty = (r.top - ctx.top) * ctx.S;
-    const oL = tx <= e ? BLEED : 0, oT = ty <= e ? BLEED : 0;
-    const oR = tx + w >= ctx.W - e ? BLEED : 0, oB = ty + h >= ctx.H - e ? BLEED : 0;
-    const fx = x - oL, fy = y - oT, fw = w + oL + oR, fh = h + oT + oB;
+    /* No ink crosses the trim. Every element is serialised at its true box:
+       the cut lands exactly on the edge of whatever touches it, and nothing
+       is cut through. The only thing in the bleed ring is the ground colour,
+       painted separately around the art, so the sheet still trims clean
+       without any shape continuing past the knife. */
+    const fx = x, fy = y, fw = w, fh = h;
 
     const group = [];
     const mask = (cs.maskImage && cs.maskImage !== 'none') ? cs.maskImage : cs.webkitMaskImage;
@@ -358,14 +352,24 @@
     return new Promise(res => { const f = new FileReader(); f.onload = () => res(f.result); f.readAsDataURL(b); });
   };
 
-  /* ── the guide layer ───────────────────────────────────────────────────── */
+  /* ── the guide layers ──────────────────────────────────────────────────
+     Three named layers, one line each, styled exactly as the site's guide
+     toggle draws them: Bleeding is the solid teal line, Cutting the dashed
+     ink line the knife follows, Safety the dashed red inset. Illustrator
+     reads the group ids as layer names, so they land in the Layers panel
+     as Bleeding / Cutting / Safety over Artwork. */
   const guides = (W, H, rad) => {
     const t = 0.2;
     const g = [];
-    g.push(`<g id="guides" fill="none" data-note="delete this layer before printing">`);
+    g.push(`<g id="Bleeding" fill="none" data-note="delete before printing">`);
     g.push(`<path d="${boxPath(0, 0, W + 2 * BLEED, H + 2 * BLEED, null)}" ` +
-      `stroke="#2C7183" stroke-width="${t}" stroke-dasharray="2 1.4" opacity=".85"/>`);
-    g.push(`<path d="${boxPath(BLEED, BLEED, W, H, rad)}" stroke="#111111" stroke-width="${t}"/>`);
+      `stroke="#2C7183" stroke-width="${t}" opacity=".85"/>`);
+    g.push(`</g>`);
+    g.push(`<g id="Cutting" fill="none" data-note="delete before printing">`);
+    g.push(`<path d="${boxPath(BLEED, BLEED, W, H, rad)}" ` +
+      `stroke="#111111" stroke-width="${t}" stroke-dasharray="2 1.4" opacity=".85"/>`);
+    g.push(`</g>`);
+    g.push(`<g id="Safety" fill="none" data-note="delete before printing">`);
     g.push(`<path d="${boxPath(BLEED + SAFE, BLEED + SAFE, W - 2 * SAFE, H - 2 * SAFE, null)}" ` +
       `stroke="#E03C3C" stroke-width="${t}" stroke-dasharray="2 1.4" opacity=".85"/>`);
     g.push(`</g>`);
@@ -408,10 +412,9 @@
 <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink"
      width="${CW}mm" height="${CH}mm" viewBox="0 0 ${CW} ${CH}">
 <title>${esc(label)}</title>
-<desc>Drawn at true size: one user unit is one millimetre. The artwork sits inside the trim rectangle; the guides layer can be deleted.</desc>
+<desc>Drawn at true size: one user unit is one millimetre. The artwork sits inside the trim rectangle; the Bleeding, Cutting and Safety layers can be deleted before printing.</desc>
 <defs>${defs.join('')}</defs>
-${bleedFill}
-<g id="artwork">${out.join('')}</g>
+<g id="Artwork">${bleedFill}${out.join('')}</g>
 ${guides(W, H, rad)}
 </svg>
 `;

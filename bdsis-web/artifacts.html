@@ -64,11 +64,12 @@
       <button class="guide-toggle" data-guides aria-pressed="false">Show bleed and safety guides</button>
       <button class="btn btn--export" data-export="all">Export all as PDF</button>
       <div class="guide-key">
-        <span><i style="border-color:rgba(44,113,131,.9)"></i> 3&nbsp;mm bleed</span>
+        <span><i style="border-color:rgba(44,113,131,.9); border-top-style:solid"></i> 3&nbsp;mm bleed</span>
+        <span><i style="border-color:rgba(17,17,17,.85)"></i> cut</span>
         <span><i style="border-color:rgba(224,60,60,.9)"></i> 8&nbsp;mm safety margin</span>
       </div>
     </div>
-    <p style="font-size:var(--fs-sm); color:var(--ink-muted); max-width:62ch; margin-top:var(--s-4)">Every piece also saves or copies as SVG from the buttons under it. Those files are drawn at trim plus 3&nbsp;mm bleed, one user unit to the millimetre, with the trim, bleed and safety lines in a <code class="tok">guides</code> layer you delete before sending to press. Art that sits on a trim edge is carried out into the bleed.</p>
+    <p style="font-size:var(--fs-sm); color:var(--ink-muted); max-width:62ch; margin-top:var(--s-4)">Every piece also saves or copies as SVG from the buttons under it. Those files are drawn at trim plus 3&nbsp;mm bleed, one user unit to the millimetre, with the guide lines in named layers, <code class="tok">Bleeding</code>, <code class="tok">Cutting</code> and <code class="tok">Safety</code>, styled exactly as this page draws them, which you delete before sending to press. The Illustrator files carry the same four layers, Artwork underneath. No ink crosses the trim: art that sits on a trim edge ends exactly on the cut, and the bleed ring carries only the ground colour.</p>
     <div class="piece__actions">
       <a class="btn btn--export" href="downloads/print/bdsis-print.zip" download>All 23 pieces, SVG + AI (.zip)</a>
       <a class="btn btn--export" href="downloads/bdsis-brand-assets.zip" download>Everything, including the logo (.zip)</a>
@@ -83,11 +84,11 @@
     <div class="section-head" style="--marker: var(--grad-crimson)">
       <div class="section-head__rule"></div>
       <h2>Letterhead</h2>
-      <p>A4, two versions. <strong>A</strong> puts the endorsed lockup in the masthead and the University logo in the footer as the institutional signature. <strong>B</strong> pairs the two logos across the masthead at the 90% ratio in §02 and leaves the foot to the address alone. Neither bleeds, so both run on an office press.</p>
+      <p>A4, four versions. <strong>A</strong> puts the endorsed lockup in the masthead and the University logo in the footer as the institutional signature. <strong>B</strong> pairs the two logos across the masthead at the 90% ratio in §02 and leaves the foot to the address alone. Neither bleeds, so both run on an office press.</p>
     </div>
 
-    <div class="piece__stage">
-      <div class="piece__frame" style="width:min(420px, 100%)">
+    <div class="piece__stage" style="gap:1rem">
+      <div class="piece__frame" style="width:min(260px, 100%)">
         <div class="artifact artifact--a4">
           <span class="artifact__guide"></span>
 
@@ -138,7 +139,7 @@
         <p class="piece__label">A · endorsed lockup, University logo in the foot</p>
       </div>
 
-      <div class="piece__frame" style="width:min(420px, 100%)">
+      <div class="piece__frame" style="width:min(260px, 100%)">
         <div class="artifact artifact--a4">
           <span class="artifact__guide"></span>
 
@@ -188,6 +189,255 @@
         </div>
         <p class="piece__label">B · the two logos paired in the masthead</p>
       </div>
+
+      <div class="piece__frame" style="width:min(260px, 100%)">
+        <div class="artifact artifact--a4">
+          <span class="artifact__guide"></span>
+
+          <!-- C is B with a wedge of kit cells falling into the bottom-right
+               corner: a 12 mm module, five columns by four rows, the diagonal
+               edge all quarters bulging up the page. Hand-set, not hashed,
+               and at the kit's full printed strength: the correspondence
+               measure ends at 138 mm and the wedge starts at 150, so the
+               letter never runs into it. Drawn first so the text paints
+               over it, the same stacking the .docx uses. -->
+          <svg style="position:absolute; left:150em; top:249em; width:60em; height:48em" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 60.0 48.0"><defs><linearGradient id="orn-c-red" x1="0" y1="0" x2="1" y2="0"><stop offset="0" stop-color="#A02337"/><stop offset="1" stop-color="#861C2C"/></linearGradient><linearGradient id="orn-c-tang" x1="0" y1="1" x2="1" y2="0"><stop offset="0" stop-color="#F2A03B"/><stop offset="1" stop-color="#E14729"/></linearGradient><linearGradient id="orn-c-olive" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#C2C684"/><stop offset="1" stop-color="#A8B468"/></linearGradient><linearGradient id="orn-c-ocean" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#54ABBB"/><stop offset="1" stop-color="#3A8FA3"/></linearGradient></defs><path d="M48,0 A12,12 0 0,0 36,12 L48,12 Z" fill="url(#orn-c-ocean)"/><circle cx="54" cy="6" r="6" fill="url(#orn-c-red)"/><path d="M36,12 A12,12 0 0,0 24,24 L36,24 Z" fill="url(#orn-c-tang)"/><path d="M60,24 A12,12 0 0,1 48,12 L60,12 Z" fill="url(#orn-c-olive)"/><path d="M24,24 A12,12 0 0,0 12,36 L24,36 Z" fill="url(#orn-c-olive)"/><path d="M24,24 L36,24 L24,36 Z" fill="#A02337"/><path d="M36,24 L36,36 L24,36 Z" fill="#861C2C"/><path d="M36,24 H48 V36 H36 Z" fill="url(#orn-c-ocean)"/><path d="M60,24 A12,12 0 0,1 48,36 L48,24 Z" fill="url(#orn-c-tang)"/><path d="M12,36 A12,12 0 0,0 0,48 L12,48 Z" fill="url(#orn-c-red)"/><path d="M12,36 H24 V48 H12 Z" fill="url(#orn-c-ocean)"/><path d="M24,36 A12,12 0 0,1 36,48 L24,48 Z" fill="url(#orn-c-tang)"/><circle cx="42" cy="42" r="6" fill="url(#orn-c-olive)"/><path d="M48,36 H60 V48 H48 Z" fill="url(#orn-c-red)"/></svg>
+
+          <div style="position:absolute; left:18em; top:18em; display:flex; align-items:center; gap:10.8em; line-height:0">
+            <img src="assets/polyu-logo-colour.svg" alt="The Hong Kong Polytechnic University"
+                 style="width:62.64em; max-width:none; flex-shrink:0; display:block">
+            <span class="af-logo af-logo--is" style="--m:10.8; color:#14110E">
+              <img class="af-logo__mark" src="assets/mark-colour.svg" alt="">
+              <span class="af-logo__word"></span>
+            </span>
+          </div>
+
+          <div style="position:absolute; left:18em; top:58em; width:120em">
+            <div style="font-size:3.1em; line-height:1.5; color:#453F38">
+            <div style="font-weight:500; color:#14110E">Dr Chan Siu Ming</div>
+            <div>Director of Admissions</div>
+            <div>Hong Kong Examinations and Assessment Authority</div>
+            <div style="margin-top:1.4em">6 August 2026</div>
+            <div style="margin-top:1.6em; color:#14110E">Dear Dr Chan,</div>
+            <div style="margin-top:1em">
+              Thank you for your enquiry regarding the Bachelor's Degree Scheme in
+              Interdisciplinary Studies (JUPAS JS3000). I am glad to confirm that the
+              scheme will admit thirty students for September 2027 entry, recruited
+              through JUPAS, the Mainland JEE and international qualifications.
+            </div>
+            <div style="margin-top:1em">
+              Each student is matched one-on-one with a Personal Academic Mentor and
+              designs sixty credits of self-determined curriculum drawn from any
+              department across our ten Faculties and Schools.
+            </div>
+            </div>
+          </div>
+
+          <div style="position:absolute; left:18em; bottom:15em; right:18em">
+            <div style="font-size:2.4em; line-height:1.55; color:#6E665C">
+              <span style="display:block; color:#14110E; font-weight:500">College of Undergraduate Studies</span>
+              Hung Hom, Kowloon, Hong Kong · bdsis@polyu.edu.hk · (852) 2766 0000 · polyu.edu.hk/cus
+            </div>
+          </div>
+        </div>
+        <p class="piece__label">C · the corner wedge</p>
+      </div>
+
+      <div class="piece__frame" style="width:min(260px, 100%)">
+        <div class="artifact artifact--a4">
+          <span class="artifact__guide"></span>
+          <svg style="position:absolute; left:150em; top:249em; width:60em; height:48em" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 60.0 48.0"><defs><linearGradient id="orn-c-red" x1="0" y1="0" x2="1" y2="0"><stop offset="0" stop-color="#A02337"/><stop offset="1" stop-color="#861C2C"/></linearGradient><linearGradient id="orn-c-tang" x1="0" y1="1" x2="1" y2="0"><stop offset="0" stop-color="#F2A03B"/><stop offset="1" stop-color="#E14729"/></linearGradient><linearGradient id="orn-c-olive" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#C2C684"/><stop offset="1" stop-color="#A8B468"/></linearGradient><linearGradient id="orn-c-ocean" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#54ABBB"/><stop offset="1" stop-color="#3A8FA3"/></linearGradient></defs><path d="M48,0 A12,12 0 0,0 36,12 L48,12 Z" fill="url(#orn-c-ocean)"/><circle cx="54" cy="6" r="6" fill="url(#orn-c-red)"/><path d="M36,12 A12,12 0 0,0 24,24 L36,24 Z" fill="url(#orn-c-tang)"/><path d="M60,24 A12,12 0 0,1 48,12 L60,12 Z" fill="url(#orn-c-olive)"/><path d="M24,24 A12,12 0 0,0 12,36 L24,36 Z" fill="url(#orn-c-olive)"/><path d="M24,24 L36,24 L24,36 Z" fill="#A02337"/><path d="M36,24 L36,36 L24,36 Z" fill="#861C2C"/><path d="M36,24 H48 V36 H36 Z" fill="url(#orn-c-ocean)"/><path d="M60,24 A12,12 0 0,1 48,36 L48,24 Z" fill="url(#orn-c-tang)"/><path d="M12,36 A12,12 0 0,0 0,48 L12,48 Z" fill="url(#orn-c-red)"/><path d="M12,36 H24 V48 H12 Z" fill="url(#orn-c-ocean)"/><path d="M24,36 A12,12 0 0,1 36,48 L24,48 Z" fill="url(#orn-c-tang)"/><circle cx="42" cy="42" r="6" fill="url(#orn-c-olive)"/><path d="M48,36 H60 V48 H48 Z" fill="url(#orn-c-red)"/></svg>
+          <!-- D drops the University logo entirely. The endorsed lockup's own
+               wordmark says PolyU, which is what §02 requires before the mark
+               may hold a surface without the logo beside it. -->
+          <div style="position:absolute; left:18em; top:18em">
+            <span class="af-logo" style="--m:13; color:#14110E">
+              <img class="af-logo__mark" src="assets/mark-colour.svg" alt="">
+              <span class="af-logo__word"></span>
+            </span>
+          </div>
+          <div style="position:absolute; left:18em; top:58em; width:120em">
+            <div style="font-size:3.1em; line-height:1.5; color:#453F38">
+            <div style="font-weight:500; color:#14110E">Dr Chan Siu Ming</div>
+            <div>Director of Admissions</div>
+            <div>Hong Kong Examinations and Assessment Authority</div>
+            <div style="margin-top:1.4em">6 August 2026</div>
+            <div style="margin-top:1.6em; color:#14110E">Dear Dr Chan,</div>
+            <div style="margin-top:1em">
+              Thank you for your enquiry regarding the Bachelor's Degree Scheme in
+              Interdisciplinary Studies (JUPAS JS3000). I am glad to confirm that the
+              scheme will admit thirty students for September 2027 entry, recruited
+              through JUPAS, the Mainland JEE and international qualifications.
+            </div>
+            <div style="margin-top:1em">
+              Each student is matched one-on-one with a Personal Academic Mentor and
+              designs sixty credits of self-determined curriculum drawn from any
+              department across our ten Faculties and Schools.
+            </div>
+            </div>
+          </div>
+          <div style="position:absolute; left:18em; bottom:15em; right:18em">
+            <div style="font-size:2.4em; line-height:1.55; color:#6E665C">
+              <span style="display:block; color:#14110E; font-weight:500">College of Undergraduate Studies</span>
+              Hung Hom, Kowloon, Hong Kong · bdsis@polyu.edu.hk · (852) 2766 0000 · polyu.edu.hk/cus
+            </div>
+          </div>
+        </div>
+        <p class="piece__label">D · the lockup alone, with the wedge</p>
+      </div>
+
+    </div>
+
+    
+    <h3 style="margin-top:var(--s-7)">One colour</h3>
+    <p>Both marks on one plate, for one-colour print, fax and photocopy. The programme mark uses its own separated artwork, not a silhouette of the colour one (§02); C's wedge runs the same cells in the ink, every shape cut back to hold a uniform 0.9&nbsp;mm channel of stock to its neighbour, the mono mark's own device, while any side on the trim stays flush to the cut.</p>
+
+    <div class="piece__stage" style="margin-top:var(--s-5); gap:1rem">
+      <div class="piece__frame" style="width:min(260px, 100%)">
+        <div class="artifact artifact--a4">
+          <span class="artifact__guide"></span>
+          <img src="assets/lockup-a-mono.png" alt="PolyU Interdisciplinary Studies"
+               style="position:absolute; left:18em; top:18em; width:78.988em; max-width:none; display:block">
+          <div style="position:absolute; left:18em; top:58em; width:120em">
+            <div style="font-size:3.1em; line-height:1.5; color:#453F38">
+            <div style="font-weight:500; color:#14110E">Dr Chan Siu Ming</div>
+            <div>Director of Admissions</div>
+            <div>Hong Kong Examinations and Assessment Authority</div>
+            <div style="margin-top:1.4em">6 August 2026</div>
+            <div style="margin-top:1.6em; color:#14110E">Dear Dr Chan,</div>
+            <div style="margin-top:1em">
+              Thank you for your enquiry regarding the Bachelor's Degree Scheme in
+              Interdisciplinary Studies (JUPAS JS3000). I am glad to confirm that the
+              scheme will admit thirty students for September 2027 entry, recruited
+              through JUPAS, the Mainland JEE and international qualifications.
+            </div>
+            <div style="margin-top:1em">
+              Each student is matched one-on-one with a Personal Academic Mentor and
+              designs sixty credits of self-determined curriculum drawn from any
+              department across our ten Faculties and Schools.
+            </div>
+            </div>
+          </div>
+          <img src="assets/polyu-foot-mono.png" alt="The Hong Kong Polytechnic University"
+               style="position:absolute; left:18em; bottom:15em; width:47em; max-width:none; display:block">
+          <div style="position:absolute; right:18em; bottom:15em; text-align:right">
+            <div style="font-size:2.4em; line-height:1.55; color:#6E665C">
+              <span style="display:block; color:#14110E; font-weight:500">College of Undergraduate Studies</span>
+              Hung Hom, Kowloon, Hong Kong<br>
+              bdsis@polyu.edu.hk · (852) 2766 0000 · polyu.edu.hk/cus
+            </div>
+          </div>
+        </div>
+        <p class="piece__label">A · one colour</p>
+      </div>
+
+      <div class="piece__frame" style="width:min(260px, 100%)">
+        <div class="artifact artifact--a4">
+          <span class="artifact__guide"></span>
+          <img src="assets/lockup-b-mono.png" alt="The Hong Kong Polytechnic University and Interdisciplinary Studies"
+               style="position:absolute; left:18em; top:18em; width:121.608em; max-width:none; display:block">
+          <div style="position:absolute; left:18em; top:58em; width:120em">
+            <div style="font-size:3.1em; line-height:1.5; color:#453F38">
+            <div style="font-weight:500; color:#14110E">Dr Chan Siu Ming</div>
+            <div>Director of Admissions</div>
+            <div>Hong Kong Examinations and Assessment Authority</div>
+            <div style="margin-top:1.4em">6 August 2026</div>
+            <div style="margin-top:1.6em; color:#14110E">Dear Dr Chan,</div>
+            <div style="margin-top:1em">
+              Thank you for your enquiry regarding the Bachelor's Degree Scheme in
+              Interdisciplinary Studies (JUPAS JS3000). I am glad to confirm that the
+              scheme will admit thirty students for September 2027 entry, recruited
+              through JUPAS, the Mainland JEE and international qualifications.
+            </div>
+            <div style="margin-top:1em">
+              Each student is matched one-on-one with a Personal Academic Mentor and
+              designs sixty credits of self-determined curriculum drawn from any
+              department across our ten Faculties and Schools.
+            </div>
+            </div>
+          </div>
+          <div style="position:absolute; left:18em; bottom:15em; right:18em">
+            <div style="font-size:2.4em; line-height:1.55; color:#6E665C">
+              <span style="display:block; color:#14110E; font-weight:500">College of Undergraduate Studies</span>
+              Hung Hom, Kowloon, Hong Kong · bdsis@polyu.edu.hk · (852) 2766 0000 · polyu.edu.hk/cus
+            </div>
+          </div>
+        </div>
+        <p class="piece__label">B · one colour</p>
+      </div>
+
+      <div class="piece__frame" style="width:min(260px, 100%)">
+        <div class="artifact artifact--a4">
+          <span class="artifact__guide"></span>
+          <svg style="position:absolute; left:150em; top:249em; width:60em; height:48em" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 60.0 48.0"><path d="M47.55,0.45 A11.1,11.1 0 0,0 36.45,11.55 L47.55,11.55 Z" fill="#14110E"/><circle cx="54" cy="6" r="5.55" fill="#14110E"/><path d="M35.55,12.45 A11.1,11.1 0 0,0 24.45,23.55 L35.55,23.55 Z" fill="#14110E"/><path d="M60,23.55 A11.1,11.1 0 0,1 48.9,12.45 L60,12.45 Z" fill="#14110E"/><path d="M23.55,24.45 A11.1,11.1 0 0,0 12.45,35.55 L23.55,35.55 Z" fill="#14110E"/><path d="M24.45,24.45 L34.914,24.45 L24.45,34.914 Z" fill="#14110E"/><path d="M35.55,25.086 L35.55,35.55 L25.086,35.55 Z" fill="#14110E"/><path d="M36.45,24.45 H47.55 V35.55 H36.45 Z" fill="#14110E"/><path d="M59.55,24.45 A11.1,11.1 0 0,1 48.45,35.55 L48.45,24.45 Z" fill="#14110E"/><path d="M11.55,36.9 A11.1,11.1 0 0,0 0.45,48 L11.55,48 Z" fill="#14110E"/><path d="M12.45,36.45 H23.55 V48 H12.45 Z" fill="#14110E"/><path d="M24.45,36.9 A11.1,11.1 0 0,1 35.55,48 L24.45,48 Z" fill="#14110E"/><circle cx="42" cy="42" r="5.55" fill="#14110E"/><path d="M48.45,36.45 H60 V48 H48.45 Z" fill="#14110E"/></svg>
+          <img src="assets/lockup-b-mono.png" alt="The Hong Kong Polytechnic University and Interdisciplinary Studies"
+               style="position:absolute; left:18em; top:18em; width:121.608em; max-width:none; display:block">
+          <div style="position:absolute; left:18em; top:58em; width:120em">
+            <div style="font-size:3.1em; line-height:1.5; color:#453F38">
+            <div style="font-weight:500; color:#14110E">Dr Chan Siu Ming</div>
+            <div>Director of Admissions</div>
+            <div>Hong Kong Examinations and Assessment Authority</div>
+            <div style="margin-top:1.4em">6 August 2026</div>
+            <div style="margin-top:1.6em; color:#14110E">Dear Dr Chan,</div>
+            <div style="margin-top:1em">
+              Thank you for your enquiry regarding the Bachelor's Degree Scheme in
+              Interdisciplinary Studies (JUPAS JS3000). I am glad to confirm that the
+              scheme will admit thirty students for September 2027 entry, recruited
+              through JUPAS, the Mainland JEE and international qualifications.
+            </div>
+            <div style="margin-top:1em">
+              Each student is matched one-on-one with a Personal Academic Mentor and
+              designs sixty credits of self-determined curriculum drawn from any
+              department across our ten Faculties and Schools.
+            </div>
+            </div>
+          </div>
+          <div style="position:absolute; left:18em; bottom:15em; right:18em">
+            <div style="font-size:2.4em; line-height:1.55; color:#6E665C">
+              <span style="display:block; color:#14110E; font-weight:500">College of Undergraduate Studies</span>
+              Hung Hom, Kowloon, Hong Kong · bdsis@polyu.edu.hk · (852) 2766 0000 · polyu.edu.hk/cus
+            </div>
+          </div>
+        </div>
+        <p class="piece__label">C · one colour</p>
+      </div>
+
+      <div class="piece__frame" style="width:min(260px, 100%)">
+        <div class="artifact artifact--a4">
+          <span class="artifact__guide"></span>
+          <svg style="position:absolute; left:150em; top:249em; width:60em; height:48em" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 60.0 48.0"><path d="M47.55,0.45 A11.1,11.1 0 0,0 36.45,11.55 L47.55,11.55 Z" fill="#14110E"/><circle cx="54" cy="6" r="5.55" fill="#14110E"/><path d="M35.55,12.45 A11.1,11.1 0 0,0 24.45,23.55 L35.55,23.55 Z" fill="#14110E"/><path d="M60,23.55 A11.1,11.1 0 0,1 48.9,12.45 L60,12.45 Z" fill="#14110E"/><path d="M23.55,24.45 A11.1,11.1 0 0,0 12.45,35.55 L23.55,35.55 Z" fill="#14110E"/><path d="M24.45,24.45 L34.914,24.45 L24.45,34.914 Z" fill="#14110E"/><path d="M35.55,25.086 L35.55,35.55 L25.086,35.55 Z" fill="#14110E"/><path d="M36.45,24.45 H47.55 V35.55 H36.45 Z" fill="#14110E"/><path d="M59.55,24.45 A11.1,11.1 0 0,1 48.45,35.55 L48.45,24.45 Z" fill="#14110E"/><path d="M11.55,36.9 A11.1,11.1 0 0,0 0.45,48 L11.55,48 Z" fill="#14110E"/><path d="M12.45,36.45 H23.55 V48 H12.45 Z" fill="#14110E"/><path d="M24.45,36.9 A11.1,11.1 0 0,1 35.55,48 L24.45,48 Z" fill="#14110E"/><circle cx="42" cy="42" r="5.55" fill="#14110E"/><path d="M48.45,36.45 H60 V48 H48.45 Z" fill="#14110E"/></svg>
+          <img src="assets/lockup-a-mono.png" alt="PolyU Interdisciplinary Studies"
+               style="position:absolute; left:18em; top:18em; width:78.988em; max-width:none; display:block">
+          <div style="position:absolute; left:18em; top:58em; width:120em">
+            <div style="font-size:3.1em; line-height:1.5; color:#453F38">
+            <div style="font-weight:500; color:#14110E">Dr Chan Siu Ming</div>
+            <div>Director of Admissions</div>
+            <div>Hong Kong Examinations and Assessment Authority</div>
+            <div style="margin-top:1.4em">6 August 2026</div>
+            <div style="margin-top:1.6em; color:#14110E">Dear Dr Chan,</div>
+            <div style="margin-top:1em">
+              Thank you for your enquiry regarding the Bachelor's Degree Scheme in
+              Interdisciplinary Studies (JUPAS JS3000). I am glad to confirm that the
+              scheme will admit thirty students for September 2027 entry, recruited
+              through JUPAS, the Mainland JEE and international qualifications.
+            </div>
+            <div style="margin-top:1em">
+              Each student is matched one-on-one with a Personal Academic Mentor and
+              designs sixty credits of self-determined curriculum drawn from any
+              department across our ten Faculties and Schools.
+            </div>
+            </div>
+          </div>
+          <div style="position:absolute; left:18em; bottom:15em; right:18em">
+            <div style="font-size:2.4em; line-height:1.55; color:#6E665C">
+              <span style="display:block; color:#14110E; font-weight:500">College of Undergraduate Studies</span>
+              Hung Hom, Kowloon, Hong Kong · bdsis@polyu.edu.hk · (852) 2766 0000 · polyu.edu.hk/cus
+            </div>
+          </div>
+        </div>
+        <p class="piece__label">D · one colour</p>
+      </div>
+
     </div>
 
     <dl class="piece__meta">
@@ -201,18 +451,23 @@
       <div><dt>Colour</dt><dd>Four-colour process. Run as spot it needs the mark's Red and Tangerine plus PMS 194&nbsp;C and Cool Gray 11&nbsp;C for the University logo</dd></div>
       <div><dt>Stock</dt><dd>Warm uncoated 100&nbsp;gsm. The cream is the paper, not a flood tint</dd></div>
       <div><dt>Correspondence</dt><dd>Starts at 58&nbsp;mm on both, clear of either masthead</dd></div>
-      <div><dt>Which one</dt><dd>A for correspondence leaving the University, where the endorsed lockup names the programme in one mark. B where the letter is co-signed or the University needs equal billing</dd></div>
+      <div><dt>Ornament · C and D</dt><dd>A 60 × 48&nbsp;mm wedge of kit cells at the bottom-right trim corner, 12&nbsp;mm module, at the kit’s full strength, behind the text layer and clear of the 120&nbsp;mm measure</dd></div>
+      <div><dt>Which one</dt><dd>A for correspondence leaving the University, where the endorsed lockup names the programme in one mark. B where the letter is co-signed or the University needs equal billing. C is B with the corner wedge, for covers, invitations and anything a little less formal. D carries no University logo at all, only the endorsed lockup and the corner wedge, for programme-internal paper where the endorsed wordmark is enough</dd></div>
     </dl>
 
     <div class="piece__actions">
       <button class="btn btn--export" data-export="letterhead">Export PDF</button>
-      <a class="btn btn--export" href="downloads/word/BDSIS-letterhead-A.docx" download>A (.docx)</a>
-      <a class="btn btn--export" href="downloads/word/BDSIS-letterhead-B.docx" download>B (.docx)</a>
-      <a class="btn btn--export" href="downloads/word/BDSIS-letterhead-A-mono.docx" download>A mono (.docx)</a>
-      <a class="btn btn--export" href="downloads/word/BDSIS-letterhead-B-mono.docx" download>B mono (.docx)</a>
+      <a class="btn btn--export" href="downloads/word/colour/BDSIS-letterhead-A.docx" download>A (.docx)</a>
+      <a class="btn btn--export" href="downloads/word/colour/BDSIS-letterhead-B.docx" download>B (.docx)</a>
+      <a class="btn btn--export" href="downloads/word/colour/BDSIS-letterhead-C.docx" download>C (.docx)</a>
+      <a class="btn btn--export" href="downloads/word/colour/BDSIS-letterhead-D.docx" download>D (.docx)</a>
+      <a class="btn btn--export" href="downloads/word/mono/BDSIS-letterhead-A-mono.docx" download>A mono (.docx)</a>
+      <a class="btn btn--export" href="downloads/word/mono/BDSIS-letterhead-B-mono.docx" download>B mono (.docx)</a>
+      <a class="btn btn--export" href="downloads/word/mono/BDSIS-letterhead-C-mono.docx" download>C mono (.docx)</a>
+      <a class="btn btn--export" href="downloads/word/mono/BDSIS-letterhead-D-mono.docx" download>D mono (.docx)</a>
     </div>
-    <p class="export-note">2 pages · A4 · 216 × 303&nbsp;mm with bleed. Both versions export together. Opens your browser's print dialog, where you choose <strong>Save as PDF</strong>. Set the destination scale to 100% and leave margins at none.</p>
-    <p class="export-note">The Word files are the same two sheets set to type at 210 × 297&nbsp;mm, for letters written in the office rather than sent to a printer. Masthead and foot are anchored to the page, so they hold position while the letter is typed over the sample text and cannot be clipped by Word's header frame on the way to the printer. Logos are embedded at 600&nbsp;dpi; the body is ordinary editable text. The <strong>mono</strong> pair puts both marks on one plate for one-colour print, fax and photocopy: the programme mark uses its own separated artwork, not a silhouette of the colour one (§02).</p>
+    <p class="export-note">8 pages · A4 · 216 × 303&nbsp;mm with bleed. All four versions export together, colour then one colour. Opens your browser's print dialog, where you choose <strong>Save as PDF</strong>. Set the destination scale to 100% and leave margins at none.</p>
+    <p class="export-note">The Word files are the same four sheets set to type at 210 × 297&nbsp;mm, for letters written in the office rather than sent to a printer. Masthead and foot are anchored to the page, so they hold position while the letter is typed over the sample text and cannot be clipped by Word's header frame on the way to the printer. Logos are embedded at 600&nbsp;dpi; the body is ordinary editable text. The <strong>mono</strong> versions put both marks on one plate for one-colour print, fax and photocopy: the programme mark uses its own separated artwork, not a silhouette of the colour one (§02). <strong>C</strong> is B with a wedge of kit cells falling into the bottom-right corner of the sheet, let down toward the paper and pinned behind the text layer, so a letter typed to the bottom margin stays legible over any cell it reaches.</p>
   </div>
 </section>
 
@@ -242,8 +497,38 @@
         <button type="button" data-fam="2" aria-pressed="false" aria-label="Olive" title="Olive"><i style="background:linear-gradient(135deg,#C2C684,#A8B468)"></i></button>
         <button type="button" data-fam="3" aria-pressed="false" aria-label="Ocean" title="Ocean"><i style="background:linear-gradient(180deg,#54ABBB,#3A8FA3)"></i></button>
       </div>
+      <span class="piece__ctl__label">Accent placement</span>
+      <div class="pixel-ctl" data-pixel-for="bc-hash bc-hash-dark bc-hash-gold">
+        <div class="seg">
+          <button type="button" data-pixel-mode="hash" class="on" aria-pressed="true">Hashed</button>
+          <button type="button" data-pixel-mode="pixel" aria-pressed="false">Pixel type</button>
+        </div>
+        <input type="text" data-pixel-text value="IS" maxlength="24" spellcheck="false" autocomplete="off" aria-label="Pixel text">
+        <div class="seg" role="group" aria-label="Pixel font">
+          <button type="button" data-pixel-font="dot" class="on" aria-pressed="true">5×7</button>
+          <button type="button" data-pixel-font="micro" aria-pressed="false">3×5</button>
+          <button type="button" data-pixel-font="geist" aria-pressed="false">Geist</button>
+        </div>
+        <div class="seg" role="group" aria-label="Pixel density">
+          <button type="button" data-pixel-density="1" aria-pressed="false">1×</button>
+          <button type="button" data-pixel-density="2" class="on" aria-pressed="true">2×</button>
+          <button type="button" data-pixel-density="3" aria-pressed="false">3×</button>
+        </div>
+      </div>
+      <span class="piece__ctl__label">Outline</span>
+      <div class="pixel-ctl" data-outline-for="bc-hash bc-hash-dark bc-hash-gold">
+        <div class="seg">
+          <button type="button" data-outline-mode="none" class="on" aria-pressed="true">Filled</button>
+          <button type="button" data-outline-mode="accent" aria-pressed="false">Accent</button>
+          <button type="button" data-outline-mode="lead" aria-pressed="false">Lead</button>
+          <button type="button" data-outline-mode="both" aria-pressed="false">Both</button>
+        </div>
+        <input type="number" data-outline-w value="0.8" min="0.2" max="3" step="0.1" aria-label="Stroke weight, millimetres">
+        <span class="piece__ctl__label">mm</span>
+      </div>
     </div>
     <p class="export-note">Click any line on the face to edit it. The field on the reverse regenerates from the name as you type, and Auto returns the colour the name hashed to. Lead is the family that carries the field, accent the one in about one cell in eight. Both move every register at once, and each renders the chosen <em>slot</em> in its own ink. Setting accent to match lead gives a single-family field.</p>
+    <p class="export-note"><strong>Pixel type</strong> places the accent deliberately instead of by the die: the text starts one cell in from the field's top-left, flush against the cut without being trimmed by it, the lattice standing in for the font's grid, shapes still chosen by the hash and the ground drawn at the documented shares, exactly as a hashed field would be. Three faces: the <strong>3×5</strong> fits this card's six rows at 1×, the <strong>5×7</strong> dot matrix at 2×, and <strong>Geist Pixel</strong> only in lowercase at 3× — its 19-subcell capitals outgrow this field. Density subdivides each documented cell into 4 (2×) or 9 (3×), in Hashed and Pixel type alike. <strong>Outline</strong> turns the chosen role's cells into rings instead of fills, stroked on the inside at the millimetre weight you set; split squares ring as plain squares.</p>
 
     <div class="piece__stage">
       <div class="piece__frame" style="width:min(340px, 100%)">
@@ -276,11 +561,10 @@
       <div class="piece__frame" style="width:min(340px, 100%)">
         <div class="artifact artifact--card">
           <span class="artifact__guide" style="inset:5em"></span>
-          <!-- The holder's own signature field. 6 mm cells: six clean rows down to the
-               band at 36 mm, a seventh row and a seventeenth column held in
-               reserve so the field has something to bleed with. -->
-          <div class="af-field" id="bc-hash" style="bottom:18em; --cell:6; --cols:17; --rows:7"
-               data-hash="Prof. Alan P.T. Lau" data-hash-cols="17" data-hash-rows="7"
+          <!-- The holder's own signature field. 6 mm cells, 15 x 6: whole cells to
+               every trim edge, so nothing is cut through at the knife. -->
+          <div class="af-field" id="bc-hash" style="bottom:18em; --cell:6; --cols:15; --rows:6"
+               data-hash="Prof. Alan P.T. Lau" data-hash-cols="15" data-hash-rows="6"
                data-hash-from="bc-name"></div>
           <!-- line-height:0 — the lockup is inline-flex, so without it the line
                box adds descender space below and the 5 mm sits at 5.6 mm -->
@@ -325,8 +609,8 @@
       <div class="piece__frame" style="width:min(340px, 100%)">
         <div class="artifact artifact--card" style="background:#14110E; color:#F4EFE4">
           <span class="artifact__guide" style="inset:5em"></span>
-          <div class="af-field" id="bc-hash-dark" style="bottom:18em; --cell:6; --cols:17; --rows:7"
-               data-hash="Prof. Alan P.T. Lau" data-hash-cols="17" data-hash-rows="7"
+          <div class="af-field" id="bc-hash-dark" style="bottom:18em; --cell:6; --cols:15; --rows:6"
+               data-hash="Prof. Alan P.T. Lau" data-hash-cols="15" data-hash-rows="6"
                data-hash-palette="dark" data-hash-from="bc-name"></div>
           <div style="position:absolute; left:8em; bottom:5em; line-height:0">
             <span class="af-logo af-logo--mono" style="--m:8; color:#F4EFE4">
@@ -364,8 +648,8 @@
       <div class="piece__frame" style="width:min(340px, 100%)">
         <div class="artifact artifact--card" style="background:#0F0D0A; color:#F0D08A">
           <span class="artifact__guide" style="inset:5em"></span>
-          <div class="af-field" id="bc-hash-gold" style="bottom:18em; --cell:6; --cols:17; --rows:7"
-               data-hash="Prof. Alan P.T. Lau" data-hash-cols="17" data-hash-rows="7"
+          <div class="af-field" id="bc-hash-gold" style="bottom:18em; --cell:6; --cols:15; --rows:6"
+               data-hash="Prof. Alan P.T. Lau" data-hash-cols="15" data-hash-rows="6"
                data-hash-palette="gold" data-hash-from="bc-name"></div>
           <div style="position:absolute; left:8em; bottom:5em; line-height:0">
             <span class="af-logo af-logo--mono" style="--m:8; color:#F0D08A">
@@ -387,7 +671,7 @@
       <div><dt>Bleed</dt><dd>3&nbsp;mm; safety 5&nbsp;mm on this format</dd></div>
       <div><dt>Face lockup</dt><dd>University logo 6&nbsp;mm high, then the standalone lockup at a 7&nbsp;mm mark, 6&nbsp;mm apart. Same ground, same colourway, no rule between them</dd></div>
       <div><dt>Reverse lockup</dt><dd>Standalone, 8&nbsp;mm mark, in the band below the field</dd></div>
-      <div><dt>Cell field</dt><dd>6&nbsp;mm cells, six rows, generated from the holder's name. Bleeds off three edges and stops square on the band</dd></div>
+      <div><dt>Cell field</dt><dd>6&nbsp;mm cells, 15 × 6, generated from the holder's name. Whole cells to every trim edge, nothing cut through at the knife, square on the band below</dd></div>
       <div><dt>Type</dt><dd>Name 8.5&nbsp;pt Medium, detail 6.5&nbsp;pt Roman. Never over the field</dd></div>
       <div><dt>Stock</dt><dd>350&nbsp;gsm uncoated, unlaminated. Both sides print on the stock, with no flood tint</dd></div>
       <div><dt>Corners</dt><dd>Square. No rounded die.</dd></div>
@@ -432,8 +716,37 @@
         <button type="button" data-fam="2" aria-pressed="false" aria-label="Olive" title="Olive"><i style="background:linear-gradient(135deg,#C2C684,#A8B468)"></i></button>
         <button type="button" data-fam="3" aria-pressed="false" aria-label="Ocean" title="Ocean"><i style="background:linear-gradient(180deg,#54ABBB,#3A8FA3)"></i></button>
       </div>
+      <span class="piece__ctl__label">Accent placement</span>
+      <div class="pixel-ctl" data-pixel-for="id-hash id-hash-dark id-hash-gold">
+        <div class="seg">
+          <button type="button" data-pixel-mode="hash" class="on" aria-pressed="true">Hashed</button>
+          <button type="button" data-pixel-mode="pixel" aria-pressed="false">Pixel type</button>
+        </div>
+        <input type="text" data-pixel-text value="is" maxlength="24" spellcheck="false" autocomplete="off" aria-label="Pixel text">
+        <div class="seg" role="group" aria-label="Pixel font">
+          <button type="button" data-pixel-font="dot" aria-pressed="false">5×7</button>
+          <button type="button" data-pixel-font="micro" class="on" aria-pressed="true">3×5</button>
+          <button type="button" data-pixel-font="geist" aria-pressed="false">Geist</button>
+        </div>
+        <div class="seg" role="group" aria-label="Pixel density">
+          <button type="button" data-pixel-density="1" aria-pressed="false">1×</button>
+          <button type="button" data-pixel-density="2" class="on" aria-pressed="true">2×</button>
+          <button type="button" data-pixel-density="3" aria-pressed="false">3×</button>
+        </div>
+      </div>
+      <span class="piece__ctl__label">Outline</span>
+      <div class="pixel-ctl" data-outline-for="id-hash id-hash-dark id-hash-gold">
+        <div class="seg">
+          <button type="button" data-outline-mode="none" class="on" aria-pressed="true">Filled</button>
+          <button type="button" data-outline-mode="accent" aria-pressed="false">Accent</button>
+          <button type="button" data-outline-mode="lead" aria-pressed="false">Lead</button>
+          <button type="button" data-outline-mode="both" aria-pressed="false">Both</button>
+        </div>
+        <input type="number" data-outline-w value="0.8" min="0.2" max="3" step="0.1" aria-label="Stroke weight, millimetres">
+        <span class="piece__ctl__label">mm</span>
+      </div>
     </div>
-    <p class="export-note">Click any line on the face to edit it. The column regenerates from the name as you type, and the scheme line follows it. Lead carries the field, accent appears in about one cell in eight, and both move every register at once.</p>
+    <p class="export-note">Click any line on the face to edit it. The column regenerates from the name as you type, and the scheme line follows it. Lead carries the field, accent appears in about one cell in eight, and both move every register at once. <strong>Pixel type</strong> spells its text in the accent instead, one cell in from the top-left so the knife never touches it. This field is only 4 cells deep: the <strong>3×5</strong> and <strong>5×7</strong> faces both want 2×, and Geist Pixel does not fit it at any density. The magnetic stripe still overprints the middle of the field, as the reverse documents, so the setting reads as texture in the bands the stripe leaves rather than as a caption.</p>
 
     <div class="piece__stage">
       <div class="piece__frame" style="width:min(340px, 100%)">
@@ -482,8 +795,8 @@
           <!-- The hash runs the full width and stops at 24 mm. The magnetic
                stripe is laid over it: an encoding surface, not artwork, so it
                overprints rather than making room for itself. -->
-          <div class="af-field" id="id-hash" style="bottom:30em; --cell:6; --cols:16; --rows:5"
-               data-hash="CHEUNG Ka Yan" data-hash-cols="16" data-hash-rows="5"
+          <div class="af-field" id="id-hash" style="bottom:32.6em; --cell:5.35; --cols:16; --rows:4"
+               data-hash="CHEUNG Ka Yan" data-hash-cols="16" data-hash-rows="4"
                data-hash-from="id-name"></div>
           <span class="af-band" style="top:9em; height:11em; background:#14110E"></span>
           <div style="position:absolute; left:7em; top:28em; right:7em; line-height:0">
@@ -507,7 +820,7 @@
       <div><dt>Corners</dt><dd>3.18&nbsp;mm radius, set by the standard and the one exception to the corner rule</dd></div>
       <div><dt>Stripe</dt><dd>3&nbsp;mm family band on the face, full bleed on the left edge. Takes the lead family the reverse hashed to</dd></div>
       <div><dt>Portrait</dt><dd>22 × 29.3&nbsp;mm, 3:2 crop, square container</dd></div>
-      <div><dt>Reverse</dt><dd>Hash field 0–24&nbsp;mm, full bleed. The magnetic stripe overprints it at 9–20&nbsp;mm</dd></div>
+      <div><dt>Reverse</dt><dd>Hash field 0–21.4&nbsp;mm, 5.35&nbsp;mm cells, 16 × 4, whole cells to the cut. The magnetic stripe overprints it at 9–20&nbsp;mm</dd></div>
       <div><dt>Type</dt><dd>Name 9.5&nbsp;pt Medium, Chinese name 10.4&nbsp;pt, data 5.5&nbsp;pt Roman. CJK sets larger than the Latin, never to match it</dd></div>
       <div><dt>Colour</dt><dd>One lead family per card, chosen by the hash. The scheme line takes that family's ink from §07, never its flat value</dd></div>
       <div><dt>Personal data</dt><dd>Student number appears on the card only, never in artwork sent to a supplier</dd></div>
@@ -544,8 +857,8 @@
       <div class="piece__frame" style="width:min(340px, 100%)">
         <div class="artifact artifact--id" style="background:#14110E; color:#F4EFE4">
           <span class="artifact__guide" style="inset:4em"></span>
-          <div class="af-field" id="id-hash-dark" style="bottom:30em; --cell:6; --cols:16; --rows:5"
-               data-hash="CHEUNG Ka Yan" data-hash-cols="16" data-hash-rows="5"
+          <div class="af-field" id="id-hash-dark" style="bottom:32.6em; --cell:5.35; --cols:16; --rows:4"
+               data-hash="CHEUNG Ka Yan" data-hash-cols="16" data-hash-rows="4"
                data-hash-palette="dark" data-hash-from="id-name"></div>
           <span class="af-band" style="top:9em; height:11em; background:#0B0A08"></span>
           <div style="position:absolute; left:7em; top:28em; right:7em; line-height:0">
@@ -595,8 +908,8 @@
       <div class="piece__frame" style="width:min(340px, 100%)">
         <div class="artifact artifact--id" style="background:#0F0D0A; color:#F0D08A">
           <span class="artifact__guide" style="inset:4em"></span>
-          <div class="af-field" id="id-hash-gold" style="bottom:30em; --cell:6; --cols:16; --rows:5"
-               data-hash="CHEUNG Ka Yan" data-hash-cols="16" data-hash-rows="5"
+          <div class="af-field" id="id-hash-gold" style="bottom:32.6em; --cell:5.35; --cols:16; --rows:4"
+               data-hash="CHEUNG Ka Yan" data-hash-cols="16" data-hash-rows="4"
                data-hash-palette="gold" data-hash-from="id-name"></div>
           <span class="af-band" style="top:9em; height:11em; background:#000000"></span>
           <div style="position:absolute; left:7em; top:28em; right:7em; line-height:0">
@@ -652,7 +965,37 @@
         <button type="button" data-fam="2" aria-pressed="false" aria-label="Olive" title="Olive"><i style="background:linear-gradient(135deg,#C2C684,#A8B468)"></i></button>
         <button type="button" data-fam="3" aria-pressed="false" aria-label="Ocean" title="Ocean"><i style="background:linear-gradient(180deg,#54ABBB,#3A8FA3)"></i></button>
       </div>
+      <span class="piece__ctl__label">Accent placement</span>
+      <div class="pixel-ctl" data-pixel-for="tag-hash tag-hash-dark tag-hash-gold">
+        <div class="seg">
+          <button type="button" data-pixel-mode="hash" class="on" aria-pressed="true">Hashed</button>
+          <button type="button" data-pixel-mode="pixel" aria-pressed="false">Pixel type</button>
+        </div>
+        <input type="text" data-pixel-text value="BDSIS" maxlength="24" spellcheck="false" autocomplete="off" aria-label="Pixel text">
+        <div class="seg" role="group" aria-label="Pixel font">
+          <button type="button" data-pixel-font="dot" class="on" aria-pressed="true">5×7</button>
+          <button type="button" data-pixel-font="micro" aria-pressed="false">3×5</button>
+          <button type="button" data-pixel-font="geist" aria-pressed="false">Geist</button>
+        </div>
+        <div class="seg" role="group" aria-label="Pixel density">
+          <button type="button" data-pixel-density="1" aria-pressed="false">1×</button>
+          <button type="button" data-pixel-density="2" class="on" aria-pressed="true">2×</button>
+          <button type="button" data-pixel-density="3" aria-pressed="false">3×</button>
+        </div>
+      </div>
+      <span class="piece__ctl__label">Outline</span>
+      <div class="pixel-ctl" data-outline-for="tag-hash tag-hash-dark tag-hash-gold">
+        <div class="seg">
+          <button type="button" data-outline-mode="none" class="on" aria-pressed="true">Filled</button>
+          <button type="button" data-outline-mode="accent" aria-pressed="false">Accent</button>
+          <button type="button" data-outline-mode="lead" aria-pressed="false">Lead</button>
+          <button type="button" data-outline-mode="both" aria-pressed="false">Both</button>
+        </div>
+        <input type="number" data-outline-w value="0.8" min="0.2" max="3" step="0.1" aria-label="Stroke weight, millimetres">
+        <span class="piece__ctl__label">mm</span>
+      </div>
     </div>
+    <p class="export-note"><strong>Pixel type</strong> spells its text across the reverse in the accent family, one cell in from the top-left so the knife never touches it. On the tag's 4&nbsp;mm lattice the <strong>5×7</strong> face fits at 1×, though a word as long as BDSIS wants 2× for width; the <strong>3×5</strong> is narrower still; <strong>Geist Pixel</strong> needs 3×. Density subdivides each cell into 4 (2×) or 9 (3×).</p>
 
     <div class="piece__stage">
       <div class="piece__frame" style="width:min(380px, 100%)">
@@ -683,8 +1026,8 @@
              once the tag is turned over -->
         <div class="artifact artifact--tag" style="border-bottom-right-radius:0; border-bottom-left-radius:14em">
           <span class="artifact__guide" style="inset:5em"></span>
-          <div class="af-field" id="tag-hash" style="bottom:19em; --cell:6; --cols:18; --rows:7"
-               data-hash="Dr Priya Raghavan" data-hash-cols="18" data-hash-rows="7"
+          <div class="af-field" id="tag-hash" style="bottom:19em; --cell:4; --cols:25; --rows:9"
+               data-hash="Dr Priya Raghavan" data-hash-cols="25" data-hash-rows="9"
                data-hash-from="tag-name"></div>
           <!-- the hole is one piece of card, so on the reverse it mirrors to 88 mm -->
           <span class="af-hole" style="left:88em; top:27.5em; width:5em; height:5em"></span>
@@ -727,8 +1070,8 @@
       <div class="piece__frame" style="width:min(380px, 100%)">
         <div class="artifact artifact--tag" style="background:#14110E; color:#F4EFE4; border-bottom-right-radius:0; border-bottom-left-radius:14em">
           <span class="artifact__guide" style="inset:5em"></span>
-          <div class="af-field" id="tag-hash-dark" style="bottom:19em; --cell:6; --cols:18; --rows:7"
-               data-hash="Dr Priya Raghavan" data-hash-cols="18" data-hash-rows="7"
+          <div class="af-field" id="tag-hash-dark" style="bottom:19em; --cell:4; --cols:25; --rows:9"
+               data-hash="Dr Priya Raghavan" data-hash-cols="25" data-hash-rows="9"
                data-hash-palette="dark" data-hash-from="tag-name"></div>
           <span class="af-hole" style="left:88em; top:27.5em; width:5em; height:5em"></span>
           <div style="position:absolute; left:8em; bottom:5em; line-height:0">
@@ -770,8 +1113,8 @@
       <div class="piece__frame" style="width:min(380px, 100%)">
         <div class="artifact artifact--tag" style="background:#0F0D0A; color:#F0D08A; border-bottom-right-radius:0; border-bottom-left-radius:14em">
           <span class="artifact__guide" style="inset:5em"></span>
-          <div class="af-field" id="tag-hash-gold" style="bottom:19em; --cell:6; --cols:18; --rows:7"
-               data-hash="Dr Priya Raghavan" data-hash-cols="18" data-hash-rows="7"
+          <div class="af-field" id="tag-hash-gold" style="bottom:19em; --cell:4; --cols:25; --rows:9"
+               data-hash="Dr Priya Raghavan" data-hash-cols="25" data-hash-rows="9"
                data-hash-palette="gold" data-hash-from="tag-name"></div>
           <span class="af-hole" style="left:88em; top:27.5em; width:5em; height:5em"></span>
           <div style="position:absolute; left:8em; bottom:5em; line-height:0">
@@ -791,7 +1134,7 @@
       <div><dt>Strap hole</dt><dd>5&nbsp;mm, centred 12&nbsp;mm from the leading edge. A die line in artwork, carrying no ink</dd></div>
       <div><dt>Hole clearance</dt><dd>Nothing but the field within 24&nbsp;mm of that edge. A reinforcing eyelet lands there</dd></div>
       <div><dt>Lockup</dt><dd>Endorsed on both faces, 6&nbsp;mm mark on the face and 7&nbsp;mm on the reverse</dd></div>
-      <div><dt>Cell field</dt><dd>6&nbsp;mm cells, six rows, generated from the holder's name</dd></div>
+      <div><dt>Cell field</dt><dd>4&nbsp;mm cells, 25 × 9, generated from the holder's name, whole cells to the cut</dd></div>
       <div><dt>Stock</dt><dd>600&nbsp;micron polypropylene, or 400&nbsp;gsm board laminated both sides. Paper will not survive a carousel</dd></div>
       <div><dt>Type</dt><dd>Name 6.8&nbsp;mm Medium, role and contact 3.4&nbsp;mm, location line 2.6&nbsp;mm. Sized to be read at arm's length on a moving belt, not held up close</dd></div>
     </dl>
@@ -817,8 +1160,8 @@
       <div class="piece__frame" style="width:min(300px, 100%)">
         <div class="artifact artifact--panel">
           <span class="artifact__guide" style="inset:60em"></span>
-          <div class="af-field" id="board-hash" style="bottom:1400em; --cell:100; --cols:9; --rows:7"
-               data-hash="Interdisciplinary Studies" data-hash-cols="9" data-hash-rows="7"></div>
+          <div class="af-field" id="board-hash" style="bottom:1400em; --cell:50; --cols:17; --rows:12"
+               data-hash="Interdisciplinary Studies" data-hash-cols="17" data-hash-rows="12"></div>
           <div style="position:absolute; left:70em; top:680em; line-height:0">
             <span class="af-logo" style="--m:90; color:#14110E">
               <img class="af-logo__mark" src="assets/mark-colour.svg" alt="">
@@ -848,8 +1191,8 @@
                hash field on panel one so the three read as a set. -->
           <!-- Same generator as panel one, seeded on the panel's own title and
                held to one family so the three panels read as a set. -->
-          <div class="af-field" id="board-hash-two" style="bottom:1400em; --cell:100; --cols:9; --rows:7"
-               data-hash="What you actually study" data-hash-cols="9" data-hash-rows="7"
+          <div class="af-field" id="board-hash-two" style="bottom:1400em; --cell:50; --cols:17; --rows:12"
+               data-hash="What you actually study" data-hash-cols="17" data-hash-rows="12"
                data-hash-lead="3"></div>
 
           <div style="position:absolute; left:70em; top:680em; right:70em">
@@ -887,8 +1230,8 @@
       <div class="piece__frame" style="width:min(300px, 100%)">
         <div class="artifact artifact--panel">
           <span class="artifact__guide" style="inset:60em"></span>
-          <div class="af-field" id="board-hash-three" style="bottom:1400em; --cell:100; --cols:9; --rows:7"
-               data-hash="How to apply" data-hash-cols="9" data-hash-rows="7"
+          <div class="af-field" id="board-hash-three" style="bottom:1400em; --cell:50; --cols:17; --rows:12"
+               data-hash="How to apply" data-hash-cols="17" data-hash-rows="12"
                data-hash-lead="0"></div>
 
           <div style="position:absolute; left:70em; top:680em; right:70em">
@@ -988,6 +1331,7 @@
 </footer>
 
 <script src="web.js"></script>
+<script src="pixelfont.js"></script>
 <script src="cellhash.js"></script>
 <script src="qr.js"></script>
 <script src="export.js"></script>

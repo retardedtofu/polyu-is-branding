@@ -1383,9 +1383,16 @@ section[id] { scroll-margin-top: calc(var(--nav-h) + var(--s-5)); }
   display: none;
 }
 body.show-guides .artifact__guide { display: block; }
+/* The same three lines the exported files carry, in the same styles.
+   Cutting is the dashed ink line ON the trim, which on screen is the
+   artifact's own edge; Bleeding sits 3 mm outside it, drawn with the
+   artifact's outline so the overflow clip cannot swallow it. */
 body.show-guides .artifact::before {
-  content: ""; position: absolute; inset: 3em; z-index: 9; pointer-events: none;
-  outline: 1px solid rgba(44,113,131,.5);   /* 3 mm bleed line */
+  content: ""; position: absolute; inset: 0; z-index: 9; pointer-events: none;
+  outline: 1px dashed rgba(17,17,17,.85); outline-offset: -1px;   /* Cutting */
+}
+body.show-guides .artifact {
+  outline: 1px solid rgba(44,113,131,.6); outline-offset: 3em;    /* Bleeding */
 }
 
 /* The scale is set with container-query units. `100%` cannot be used here:
@@ -1717,16 +1724,10 @@ body.show-guides .artifact::before {
 
   /* Bleed: push the corner devices 3 mm past the trim so the printer has
      something to cut into. On screen they stop at the trim. */
-  #print-root .af-bleed--br { right: -3mm; bottom: -3mm; }
-  #print-root .af-bleed--bl { left: -3mm;  bottom: -3mm; }
-  #print-root .af-bleed--tr { right: -3mm; top: -3mm; }
-  #print-root .af-bleed--tl { left: -3mm;  top: -3mm; }
   /* Same for an art field: three sides out, the fourth pinned to its band. */
-  #print-root .af-field { left: -3mm; right: -3mm; top: -3mm; }
-  /* The column keeps its inline `right`, which is measured from the artifact
-     and so still lands on 6 mm once the left edge has moved into the bleed. */
-  #print-root .af-field--left { bottom: -3mm; }
-  #print-root .af-band { left: -3mm; right: -3mm; }
+  /* Fields no longer bleed: the lattices fit the trim exactly, whole cells
+     to the cut, so at print they stay where the screen shows them. */
+  /* Bands end at the trim like everything else: no ink crosses the cut. */
 
   /* The editing affordance belongs to the screen. */
   #print-root [contenteditable] { outline: none !important; background: none !important; box-shadow: none !important; }
@@ -1758,3 +1759,13 @@ body.show-guides .artifact::before {
   image-rendering: -moz-crisp-edges;
   transform-origin: left center;
 }
+
+/* ── pixel type controls (artifacts: business card, ID card, luggage tag) ── */
+.pixel-ctl { display: flex; flex-wrap: wrap; align-items: center; gap: var(--s-3); }
+.pixel-ctl input {
+  font: inherit; font-size: var(--fs-sm); color: var(--ink);
+  background: var(--paper); border: 1px solid var(--line);
+  border-radius: var(--r-0); padding: 0.3rem 0.55rem; width: 11ch;
+}
+.pixel-ctl input:focus-visible { outline: 2px solid var(--is-crimson-ink); outline-offset: 1px; }
+.pixel-ctl input[type="number"] { width: 5.5em; }
