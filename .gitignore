@@ -1,6 +1,7 @@
 # Local tooling / environments
 .venv/
-.claude/
+**/.claude/*
+!/.claude/skills
 __pycache__/
 
 # OS junk
