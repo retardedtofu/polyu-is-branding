@@ -121,14 +121,45 @@
         </div>
 
         <div class="maker__actions">
-          <button type="button" class="btn btn--primary" id="mk-png" disabled>Save PNG</button>
-          <button type="button" class="btn btn--export" id="mk-jpg" disabled>Save JPG</button>
+          <button type="button" class="btn btn--primary" id="mk-print" data-export="maker" disabled>Print card</button>
           <button type="button" class="btn btn--export" id="mk-svg" disabled>Save SVG</button>
-          <button type="button" class="btn btn--export" id="mk-print" data-export="maker" disabled>Print</button>
         </div>
-        <p class="maker__note">PNG and JPG are written at 300 dpi and trim size, 1012 × 638 px, which is what a CR80 card printer expects for an edge-to-edge print. SVG carries the artwork at true size with the bleed, cutting and safety layers. Print sends the card to the browser at 91.6 × 60 mm, the trim plus 3 mm of bleed.</p>
+        <p class="maker__note">Print sends the card to the printer at exactly 85.6 × 54 mm with no margin, the CR80 page the Evolis driver expects; the driver takes the colour to the edge. Enter in the name field prints too. After each print the form clears for the next visitor. SVG carries the artwork at true size with the bleed, cutting and safety layers, for a designer or an outside printer.</p>
       </div>
 
+    </div>
+  </div>
+</section>
+
+<section class="section">
+  <div class="wrap">
+    <div class="batch">
+      <div class="batch__form">
+        <h2>Print a list</h2>
+        <p>For visitors who registered ahead, or to keep the printer busy in a quiet spell. One name per line. Each card takes the area of interest and lettering set above, and its initials from its own name.</p>
+        <label class="maker__field">
+          <span class="maker__label">Names</span>
+          <textarea id="mk-batch-names" class="maker__input" rows="8" spellcheck="false" placeholder="Cheung Ka Yan&#10;Wong Tsz Ching&#10;Priya Raghavan"></textarea>
+        </label>
+        <div class="maker__actions">
+          <button type="button" class="btn btn--primary" id="mk-batch-print" data-export="mk-batch" disabled>Print all</button>
+          <span class="batch__count" id="mk-batch-count" aria-live="polite">No names yet</span>
+        </div>
+      </div>
+      <!-- The batch cards are drawn here, off screen but laid out, since
+           the type has to be measured to fit before the print clone is made. -->
+      <div class="batch__pile" id="mk-batch" aria-hidden="true"></div>
+    </div>
+  </div>
+</section>
+
+<section class="section section--tint">
+  <div class="wrap wrap--narrow">
+    <div class="callout">
+      <div class="callout__title">Setting up the booth</div>
+      <p>Install the Evolis driver, set the card printer as the default printer, and in its preferences choose the CR80 card, portrait or landscape as the printer loads it, with no margin. Then start Chrome with the flag below so Print goes straight to the printer with no dialog:</p>
+      <pre class="batch__code">chrome --kiosk-printing "https://&lt;site&gt;/bdsis/infoday.html"</pre>
+      <p style="margin-top:var(--s-3)">Print one test card first and check the edges: if the driver asks for its own bleed, the page size is one number in <code>web.css</code>. Names are never stored, so a reprint means typing the name again; the same name always draws the same card.</p>
     </div>
   </div>
 </section>

@@ -3,8 +3,8 @@
    One card, drawn by the same pipeline as the print artifacts: cellhash.js
    lays out the field from the visitor's name, and svgexport.js serialises the
    piece at true size. Nothing here reimplements either. This file only binds
-   the form to the card and turns the exported SVG into the raster a PVC card
-   printer wants.
+   the form to the card, sends the card to the printer at CR80 size, and
+   prints a list of names as a batch.
 
    Everything runs in the browser. The name never leaves the page: it is not
    sent anywhere, not logged and not stored. */
@@ -20,7 +20,7 @@
   const styleBar = $('mk-style');
   const cardName = $('mk-card-name'), cardLine = $('mk-card-line'), cardMeta = $('mk-card-meta');
   const caption = $('mk-caption');
-  const btns = { png: $('mk-png'), jpg: $('mk-jpg'), svg: $('mk-svg'), print: $('mk-print') };
+  const btns = { svg: $('mk-svg'), print: $('mk-print') };
 
   /* The event, as it is set on the card. */
   const EVENT = 'Info Day 10.10.2026';
@@ -163,81 +163,121 @@
     setTimeout(() => URL.revokeObjectURL(url), 1000);
   };
 
-  const fileBase = () => 'polyu-infoday-' + slug(last.name) + '-' + last.tag;
-
   /* The piece, serialised by the same exporter the artifacts page uses:
      true millimetres, the bleed ring in the ground colour, and the three
      guide layers. */
-  const pieceSVG = () => window.BDSIS.artifactSVG(card);
-
-  /* Trim and bleed in millimetres, as svgexport draws them, and the pixel
-     size a CR80 card is at 300 dpi: 3.375 x 2.125 inches, which every card
-     printer's software rounds to 1012 x 638. */
-  const TRIM = [85.6, 54], BLEED = 3, CR80_PX = [1012, 638];
-
-  /* The raster a card printer takes: the trim area alone, at 300 dpi. The
-     exported SVG is parsed, its guide layers dropped, and its intrinsic size
-     set to the target pixel size before it is drawn, so every browser
-     rasterises the vector at that resolution instead of scaling a small
-     bitmap up. The bleed ring is drawn off the canvas, which leaves exactly
-     the trim, corner to corner, with the ground colour into the corners. */
-  async function raster(type) {
-    const doc = new DOMParser().parseFromString(await pieceSVG(), 'image/svg+xml');
-    ['Bleeding', 'Cutting', 'Safety'].forEach(id => {
-      const g = doc.getElementById(id); if (g) g.remove();
-    });
-    const sx = CR80_PX[0] / TRIM[0], sy = CR80_PX[1] / TRIM[1];   /* px per mm */
-    const full = [(TRIM[0] + 2 * BLEED) * sx, (TRIM[1] + 2 * BLEED) * sy];
-    const root = doc.documentElement;
-    root.setAttribute('width', full[0]);
-    root.setAttribute('height', full[1]);
-
-    const blob = new Blob([new XMLSerializer().serializeToString(doc)], { type: 'image/svg+xml' });
-    const url = URL.createObjectURL(blob);
-    try {
-      const img = new Image();
-      img.src = url;
-      await img.decode();
-      const cv = document.createElement('canvas');
-      cv.width = CR80_PX[0];
-      cv.height = CR80_PX[1];
-      const ctx = cv.getContext('2d');
-      /* JPEG has no alpha: paint the paper first so nothing lands black. */
-      ctx.fillStyle = '#F8F2E7';
-      ctx.fillRect(0, 0, cv.width, cv.height);
-      ctx.drawImage(img, -BLEED * sx, -BLEED * sy, full[0], full[1]);
-      return new Promise((res, rej) => cv.toBlob(b => b ? res(b) : rej(new Error('toBlob')),
-        type, type === 'image/jpeg' ? 0.95 : undefined));
-    } finally {
-      URL.revokeObjectURL(url);
-    }
-  }
-
-  const run = async (btn, job) => {
-    if (!btn || btn.disabled) return;
+  btns.svg.addEventListener('click', async () => {
+    const btn = btns.svg;
+    if (btn.disabled) return;
     btn.disabled = true;
     btn.dataset.was = btn.dataset.was || btn.textContent;
     btn.textContent = 'Saving';
-    try { await job(); flash(btn, 'Saved'); }
-    catch (e) { console.error(e); flash(btn, 'Could not save'); }
+    try {
+      const svg = await window.BDSIS.artifactSVG(card);
+      download(new Blob([svg], { type: 'image/svg+xml' }),
+        'polyu-infoday-' + slug(last.name) + '-' + last.tag + '.svg');
+      flash(btn, 'Saved');
+    } catch (e) { console.error(e); flash(btn, 'Could not save'); }
     finally { btn.disabled = false; }
-  };
-
-  btns.png.addEventListener('click', () => run(btns.png, async () =>
-    download(await raster('image/png'), fileBase() + '.png')));
-  btns.jpg.addEventListener('click', () => run(btns.jpg, async () =>
-    download(await raster('image/jpeg'), fileBase() + '.jpg')));
-  btns.svg.addEventListener('click', () => run(btns.svg, async () =>
-    download(new Blob([await pieceSVG()], { type: 'image/svg+xml' }), fileBase() + '.svg')));
-  /* Print is handled by export.js through the button's data-export. */
-
-  /* Enter in the name moves on to saving, which is the kiosk's whole loop. */
-  nameIn.addEventListener('keydown', e => {
-    if (e.key === 'Enter') { e.preventDefault(); if (!btns.png.disabled) btns.png.focus(); }
   });
+
+  /* ── printing ──────────────────────────────────────────────────────────
+     export.js clones the card into its print root and hands it to the
+     browser. It sets every piece up with 3 mm of bleed; a card printer
+     wants none. The Evolis driver takes a CR80 page of exactly 85.6 x 54 mm
+     and carries the ink to the edge itself, so this page redeclares the
+     ID-1 page at trim and drops the bleed margin. The rules land after
+     export.js's own in the cascade, which is what makes them win. */
+  document.body.classList.add('print-trim');
+  const pageStyle = document.createElement('style');
+  pageStyle.textContent = '@page id-piece { size: 85.6mm 54mm; margin: 0; }';
+  document.head.appendChild(pageStyle);
+
+  /* Enter in the name prints: with the browser in kiosk printing mode that
+     is the whole loop, type and Enter. */
+  nameIn.addEventListener('keydown', e => {
+    if (e.key === 'Enter') { e.preventDefault(); if (!btns.print.disabled) btns.print.click(); }
+  });
+
+  /* After a single card prints, the form clears for the next visitor. The
+     batch list is left standing, since a jammed card is reprinted from it. */
+  let printing = null;
+  document.addEventListener('click', e => {
+    const b = e.target.closest('[data-export]');
+    if (b) printing = b.dataset.export;
+  });
+  addEventListener('afterprint', () => {
+    if (printing === 'maker') {
+      nameIn.value = ''; initialsIn.value = ''; initialsTouched = false;
+      draw();
+      nameIn.focus();
+    }
+    printing = null;
+  });
+
+  /* ── batch ─────────────────────────────────────────────────────────────
+     A list of names, one card each, drawn off screen by cloning the live
+     card so the two can never disagree. Each clone is painted with the
+     settings in force and its own initials, then fitted like the original.
+     export.js prints everything inside the pile, one page per card. */
+  const batchIn = $('mk-batch-names'), pile = $('mk-batch');
+  const batchBtn = $('mk-batch-print'), batchCount = $('mk-batch-count');
+
+  const fitIn = root => root.querySelectorAll('[data-fit]').forEach(el => {
+    const [max, min] = el.dataset.fit.split(' ').map(Number);
+    const box = el.parentElement;
+    let fs = max;
+    el.style.fontSize = fs + 'em';
+    while (el.scrollWidth > box.clientWidth + 0.5 && fs > min) {
+      fs = Math.round((fs - 0.1) * 10) / 10;
+      el.style.fontSize = fs + 'em';
+    }
+  });
+
+  function drawBatch() {
+    if (!batchIn || !pile) return;
+    const names = batchIn.value.split(/\r?\n/).map(v => v.trim()).filter(Boolean);
+    const area = areaIn.value === '' ? null : AREAS[+areaIn.value];
+    const st = STYLES[style];
+    pile.textContent = '';
+    names.forEach((name, i) => {
+      const c = card.cloneNode(true);
+      c.removeAttribute('id');
+      const h = c.querySelector('.af-field');
+      h.id = 'mk-batch-hash-' + i;
+      c.querySelectorAll('[id]').forEach(el => { if (el !== h) el.removeAttribute('id'); });
+      const line = c.querySelector('[data-hash-ink]');
+      line.dataset.hashInk = h.id;
+      const nm = c.querySelector('[data-fit^="3.2"]');
+      const meta = c.querySelector('[data-fit="1.6 1.2"]');
+      pile.appendChild(c);
+
+      h.dataset.hash = name;
+      if (area) h.dataset.hashLead = area.fam; else delete h.dataset.hashLead;
+      h.dataset.hashDensity = st ? st.density : 1;
+      const ini = initialsOf(name);
+      if (st && ini) { h.dataset.hashPixel = ini; h.dataset.hashPixelFont = st.font; }
+      else { delete h.dataset.hashPixel; delete h.dataset.hashPixelFont; }
+      const res = CH.paint(h);
+      nm.textContent = name; nm.style.color = '#14110E';
+      line.textContent = area ? area.label : 'Interdisciplinary Studies · JS3000';
+      meta.textContent = EVENT + ' · Mark ' + res.tag;
+      fitIn(c);
+    });
+    const n = names.length;
+    batchCount.textContent = n ? n + (n === 1 ? ' card ready' : ' cards ready') : 'No names yet';
+    batchBtn.disabled = !n;
+  }
+
+  if (batchIn) {
+    let t = null;
+    batchIn.addEventListener('input', () => { clearTimeout(t); t = setTimeout(drawBatch, 150); });
+    areaIn.addEventListener('change', drawBatch);
+    styleBar.addEventListener('click', drawBatch);
+  }
 
   initialsIn.value = '';
   draw();
 
-  window.BDSIS = Object.assign(window.BDSIS || {}, { infoday: { draw, raster, initialsOf } });
+  window.BDSIS = Object.assign(window.BDSIS || {}, { infoday: { draw, drawBatch, initialsOf } });
 })();

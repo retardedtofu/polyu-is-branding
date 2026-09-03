@@ -1841,7 +1841,34 @@ select.maker__input {
 /* The browser's own surfaces on this page take the brand's ink: the caret
    and the selection are the two a visitor sees on every keystroke. */
 .maker__input { caret-color: var(--is-crimson-ink); }
-.maker ::selection { background: var(--is-orange); color: var(--ink); }
+.maker ::selection, .batch ::selection { background: var(--is-orange); color: var(--ink); }
+
+.maker__input[rows] { resize: vertical; min-height: 8rem; line-height: var(--lh-snug); }
+
+/* Batch printing: the list, and an off-screen pile of drawn cards. The pile
+   is laid out at a real width, never display:none, because each card's
+   type is measured to fit before it is cloned for print. */
+.batch { display: grid; grid-template-columns: minmax(0, 1fr); }
+.batch__form { max-width: var(--maxw-narrow); display: grid; gap: var(--s-4); }
+.batch__form h2 { margin-bottom: 0; }
+.batch__form p { color: var(--ink-muted); }
+.batch__count { font-size: var(--fs-sm); color: var(--ink-muted); align-self: center; }
+.batch__pile {
+  position: absolute; left: -9999px; top: 0; width: 680px;
+  container-type: inline-size; pointer-events: none;
+}
+.batch__pile .artifact { margin-bottom: 8px; }
+.batch__code {
+  font-family: var(--font-mono); font-size: var(--fs-xs); color: var(--ink);
+  background: var(--paper); border: 1px solid var(--line);
+  padding: var(--s-3) var(--s-4); margin: var(--s-3) 0 0; overflow-x: auto;
+}
+
+/* The Info Day card prints at trim size, no bleed. An Evolis driver takes a
+   CR80 page of exactly 85.6 x 54 mm and carries the ink to the edge itself,
+   so the bleed ring the other pieces print with would only be scaled away.
+   These come after export.js's own rules in the cascade and override them. */
+body.print-trim #print-root .artifact--id { margin: 0; overflow: hidden; }
 
 @media (max-width: 860px) {
   .maker { grid-template-columns: 1fr; }
