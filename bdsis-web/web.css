@@ -1832,12 +1832,16 @@ select.maker__input {
   padding: clamp(1.5rem, 4vw, 3.5rem);
   display: grid; justify-items: center; gap: var(--s-4);
 }
-.maker__card { container-type: inline-size; width: min(600px, 100%); }
+.maker__card { container-type: inline-size; width: min(680px, 100%); }
 .maker__caption { font-size: var(--fs-xs); color: var(--ink-muted); text-align: center; margin: 0; }
 .maker__actions { display: flex; gap: var(--s-3); flex-wrap: wrap; }
 .maker__actions .btn[disabled] { opacity: .45; cursor: not-allowed; }
 .maker__actions .btn--primary[disabled]:hover { filter: none; }
 .maker__note { font-size: var(--fs-xs); color: var(--ink-muted); max-width: 64ch; }
+/* The browser's own surfaces on this page take the brand's ink: the caret
+   and the selection are the two a visitor sees on every keystroke. */
+.maker__input { caret-color: var(--is-crimson-ink); }
+.maker ::selection { background: var(--is-orange); color: var(--ink); }
 
 @media (max-width: 860px) {
   .maker { grid-template-columns: 1fr; }

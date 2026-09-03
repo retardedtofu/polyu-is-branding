@@ -85,16 +85,18 @@
         <div class="maker__stage">
           <div class="maker__card" id="maker">
             <div class="artifact artifact--id" id="mk-card">
-              <!-- The visitor's own signature field. 5.35 mm cells, 16 x 6: whole
-                   cells to the top and both side edges, so the knife never cuts
-                   through a shape. The field stops at 32.1 mm; the rest of the
-                   card is the paper. -->
-              <div class="af-field" id="mk-hash" style="bottom:21.9em; --cell:5.35; --cols:16; --rows:6"
-                   data-hash=" " data-hash-cols="16" data-hash-rows="6"></div>
+              <!-- The visitor's own signature field. 4.28 mm cells, 20 x 6:
+                   whole cells to the top and both side edges, so the knife
+                   never cuts through a shape. The field stops at 25.68 mm; the
+                   rest of the card is the paper. -->
+              <div class="af-field" id="mk-hash" style="bottom:28.32em; --cell:4.28; --cols:20; --rows:6"
+                   data-hash=" " data-hash-cols="20" data-hash-rows="6"></div>
 
-              <!-- Name block, centred in the lower band. The name shrinks to
-                   fit its 41 mm column rather than running under the lockup. -->
-              <div style="position:absolute; left:6em; top:32.1em; bottom:0; width:41em; display:flex; flex-direction:column; justify-content:center; color:#453F38">
+              <!-- The lower band is one left-aligned column: the name block
+                   under the field, the lockup under that. Nothing sits beside
+                   anything, so no line can run into the mark; each line still
+                   shrinks to the 73.6 mm column for the rare name that needs it. -->
+              <div style="position:absolute; left:6em; right:6em; top:29.7em; color:#453F38">
                 <span id="mk-card-name" data-fit="3.2 2" style="display:block; font-size:3.2em; font-weight:500; color:#14110E; line-height:1.2; white-space:nowrap">Your name</span>
                 <!-- the scheme line follows the field's lead family into its
                      text-safe darkening, so the two never disagree. The lockup
@@ -104,10 +106,10 @@
                 <span id="mk-card-meta" data-fit="1.6 1.2" style="display:block; font-size:1.6em; line-height:1.5; color:#6E665C; white-space:nowrap">Info Day 10.10.2026</span>
               </div>
 
-              <!-- Endorsed lockup at the card minimum of 6.5 mm, centred on the
-                   same band. Endorsed, not standalone: this face carries no
-                   University logo of its own. -->
-              <div style="position:absolute; right:6em; top:32.1em; bottom:0; display:flex; align-items:center; line-height:0">
+              <!-- Endorsed lockup at the card minimum of 6.5 mm, on the same
+                   left axis as the type. Endorsed, not standalone: this face
+                   carries no University logo of its own. -->
+              <div style="position:absolute; left:6em; bottom:4.3em; line-height:0">
                 <span class="af-logo" style="--m:6.5; color:#14110E">
                   <img class="af-logo__mark" src="assets/mark-colour.svg" alt="">
                   <span class="af-logo__word"></span>

@@ -50,8 +50,8 @@
 
   /* Lettering: which pixel face writes the initials, and at what density.
      Fine is the 5 x 7 dot face on a 2x lattice, as the business card sets it;
-     Bold is the 3 x 5 face on the documented 1x lattice, where each letter is
-     three cells of 5.35 mm. None leaves the field entirely to the hash. */
+     Bold is the 3 x 5 face on the 1x lattice, where each letter is three
+     cells of 4.28 mm. None leaves the field entirely to the hash. */
   const STYLES = {
     fine: { font: 'dot',   density: 2 },
     bold: { font: 'micro', density: 1 },
@@ -216,8 +216,10 @@
   const run = async (btn, job) => {
     if (!btn || btn.disabled) return;
     btn.disabled = true;
+    btn.dataset.was = btn.dataset.was || btn.textContent;
+    btn.textContent = 'Saving';
     try { await job(); flash(btn, 'Saved'); }
-    catch (e) { console.error(e); flash(btn, 'Failed'); }
+    catch (e) { console.error(e); flash(btn, 'Could not save'); }
     finally { btn.disabled = false; }
   };
 
