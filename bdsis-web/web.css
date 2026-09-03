@@ -1792,3 +1792,55 @@ body.show-guides .artifact {
 .ctl input[type="number"] { width: 5.5em; }
 /* pixel-only controls sleep while the accent is hashed */
 .ctlgrp.is-hashed .ctl--pixel { opacity: 0.35; pointer-events: none; }
+
+/* ── 20. INFO DAY CARD MAKER (infoday.html) ────────────────────────────────
+   One form, one card. The stage borrows the artifacts page's tinted well,
+   and the frame is a container so the card's 1em === 1mm scale holds at any
+   width, exactly as .piece__frame does. */
+.maker-hero { padding-bottom: var(--s-6); }
+.maker {
+  display: grid; grid-template-columns: minmax(260px, 360px) minmax(0, 1fr);
+  gap: clamp(2rem, 5vw, 4rem); align-items: start;
+}
+.maker__form { display: grid; gap: var(--s-6); align-content: start; }
+.maker__field { display: grid; gap: var(--s-2); }
+.maker__label {
+  font-size: var(--fs-label); font-weight: var(--fw-medium);
+  letter-spacing: var(--tr-label); text-transform: uppercase; color: var(--meta);
+}
+.maker__input {
+  font: inherit; font-size: var(--fs-body); color: var(--ink);
+  background: var(--surface); border: 1px solid var(--line);
+  border-radius: var(--r-0); padding: 0.7rem 0.9rem; width: 100%;
+  -webkit-appearance: none; appearance: none;
+}
+.maker__input--lg { font-size: var(--fs-h3); font-weight: var(--fw-medium); padding: 0.8rem 1rem; }
+.maker__input::placeholder { color: var(--ink-muted); font-weight: var(--fw-roman); }
+.maker__input:focus-visible { outline: 2px solid var(--is-crimson-ink); outline-offset: 1px; }
+select.maker__input {
+  padding-right: 2.4rem; cursor: pointer;
+  background-image: linear-gradient(45deg, transparent 50%, currentColor 50%),
+                    linear-gradient(135deg, currentColor 50%, transparent 50%);
+  background-position: calc(100% - 1.15rem) 50%, calc(100% - 0.8rem) 50%;
+  background-size: 0.35rem 0.35rem; background-repeat: no-repeat;
+}
+.maker__hint { font-size: var(--fs-xs); color: var(--ink-muted); line-height: var(--lh-snug); }
+
+.maker__out { display: grid; gap: var(--s-5); min-width: 0; }
+.maker__stage {
+  background: var(--paper-tint); border: 1px solid var(--line);
+  padding: clamp(1.5rem, 4vw, 3.5rem);
+  display: grid; justify-items: center; gap: var(--s-4);
+}
+.maker__card { container-type: inline-size; width: min(600px, 100%); }
+.maker__caption { font-size: var(--fs-xs); color: var(--ink-muted); text-align: center; margin: 0; }
+.maker__actions { display: flex; gap: var(--s-3); flex-wrap: wrap; }
+.maker__actions .btn[disabled] { opacity: .45; cursor: not-allowed; }
+.maker__actions .btn--primary[disabled]:hover { filter: none; }
+.maker__note { font-size: var(--fs-xs); color: var(--ink-muted); max-width: 64ch; }
+
+@media (max-width: 860px) {
+  .maker { grid-template-columns: 1fr; }
+  /* The card is the point: on a phone it comes first, the form under it. */
+  .maker__out { order: -1; }
+}

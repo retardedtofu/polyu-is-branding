@@ -63,8 +63,8 @@ jobs:
                        -o -name '*.woff2' -o -name '*.psd' \)
             exit 1
           fi
-          for f in index.html site.html guidelines.html artifacts.html web.css \
-                   svgexport.js hashgen.js cellhash.js favicon.ico; do
+          for f in index.html site.html guidelines.html artifacts.html infoday.html web.css \
+                   svgexport.js hashgen.js cellhash.js infoday.js favicon.ico; do
             test -f "_site/bdsis/$f" || { echo "missing _site/bdsis/$f"; exit 1; }
           done
           # the download pack is the point of the artifacts page; a silently

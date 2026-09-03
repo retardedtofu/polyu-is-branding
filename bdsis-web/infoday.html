@@ -1,0 +1,165 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Make Your Mark | PolyU Info Day | BDSIS</title>
+<meta name="description" content="Type your name and the card draws itself: a signature field generated from the name, printed on a card to take home from PolyU Info Day.">
+<meta name="robots" content="noindex">
+<link rel="icon" href="assets/favicon.svg" type="image/svg+xml">
+<link rel="icon" href="assets/favicon-32.png" sizes="32x32" type="image/png">
+<link rel="apple-touch-icon" href="assets/apple-touch-icon.png">
+<link rel="stylesheet" href="web.css">
+</head>
+<body>
+
+<a class="skip-link" href="#main">Skip to main content</a>
+
+<header class="banner">
+  <div class="banner__inner">
+    <a class="logo logo--is lockup" href="index.html" aria-label="PolyU Interdisciplinary Studies, home">
+      <img class="logo__mark" src="assets/mark-colour.svg" alt="">
+      <span class="logo__word" role="img" aria-label="Interdisciplinary Studies"></span>
+    </a>
+    <div class="parent-unit">
+      <a href="https://www.polyu.edu.hk/cus/" aria-label="College of Undergraduate Studies">
+        <img class="cus-logo cus-logo--light" src="assets/cus-logo.png" alt="College of Undergraduate Studies 本科生學院">
+        <img class="cus-logo cus-logo--dark" src="assets/cus-logo-dark.png" alt="">
+      </a>
+    </div>
+    <div class="banner__polyu">
+      <a href="https://www.polyu.edu.hk/" aria-label="The Hong Kong Polytechnic University">
+        <img src="assets/polyu-logo-white.svg" alt="The Hong Kong Polytechnic University 香港理工大學">
+      </a>
+    </div>
+  </div>
+</header>
+
+<main id="main">
+
+<section class="section maker-hero">
+  <div class="wrap">
+    <span class="eyebrow">PolyU Info Day · 10 October 2026</span>
+    <h1 style="font-size:var(--fs-display); font-weight:var(--fw-roman); line-height:var(--lh-display); letter-spacing:var(--tr-display); max-width:16ch">Make your mark</h1>
+    <p style="font-size:var(--fs-lead); color:var(--ink-muted); max-width:56ch">Type your name and the card draws itself. The same name always draws the same field, and no two names draw the same picture. Take yours home on a printed card.</p>
+  </div>
+</section>
+
+<section class="section section--tint">
+  <div class="wrap">
+    <div class="maker">
+
+      <form class="maker__form" autocomplete="off" onsubmit="return false">
+        <label class="maker__field">
+          <span class="maker__label">Your name</span>
+          <input type="text" id="mk-name" class="maker__input maker__input--lg" placeholder="Type your name" maxlength="40" spellcheck="false" autocomplete="off" autofocus>
+          <span class="maker__hint">Everything runs in this browser. Nothing you type is sent anywhere or kept.</span>
+        </label>
+
+        <label class="maker__field">
+          <span class="maker__label">Initials</span>
+          <input type="text" id="mk-initials" class="maker__input" maxlength="4" spellcheck="false" autocomplete="off" aria-describedby="mk-initials-hint">
+          <span class="maker__hint" id="mk-initials-hint">Written into the field in the accent colour. Taken from the name, and yours to change.</span>
+        </label>
+
+        <label class="maker__field">
+          <span class="maker__label">Area of interest</span>
+          <select id="mk-area" class="maker__input">
+            <option value="">Let the name decide</option>
+          </select>
+          <span class="maker__hint">Chooses the colour that carries the field. Left alone, the name chooses it.</span>
+        </label>
+
+        <div class="maker__field" role="group" aria-labelledby="mk-style-label">
+          <span class="maker__label" id="mk-style-label">Lettering</span>
+          <div class="seg" id="mk-style">
+            <button type="button" data-v="fine" class="on" aria-pressed="true">Fine</button>
+            <button type="button" data-v="bold" aria-pressed="false">Bold</button>
+            <button type="button" data-v="none" aria-pressed="false">None</button>
+          </div>
+          <span class="maker__hint">Fine sets the initials on a 5 × 7 grid, Bold on 3 × 5. None leaves the field to the hash alone.</span>
+        </div>
+      </form>
+
+      <div class="maker__out">
+        <div class="maker__stage">
+          <div class="maker__card" id="maker">
+            <div class="artifact artifact--id" id="mk-card">
+              <!-- The visitor's own signature field. 5.35 mm cells, 16 x 6: whole
+                   cells to the top and both side edges, so the knife never cuts
+                   through a shape. The field stops at 32.1 mm; the rest of the
+                   card is the paper. -->
+              <div class="af-field" id="mk-hash" style="bottom:21.9em; --cell:5.35; --cols:16; --rows:6"
+                   data-hash=" " data-hash-cols="16" data-hash-rows="6"></div>
+
+              <!-- Name block, centred in the lower band. The name shrinks to
+                   fit its 41 mm column rather than running under the lockup. -->
+              <div style="position:absolute; left:6em; top:32.1em; bottom:0; width:41em; display:flex; flex-direction:column; justify-content:center; color:#453F38">
+                <span id="mk-card-name" data-fit="3.2 2" style="display:block; font-size:3.2em; font-weight:500; color:#14110E; line-height:1.2; white-space:nowrap">Your name</span>
+                <!-- the scheme line follows the field's lead family into its
+                     text-safe darkening, so the two never disagree. The lockup
+                     already says Interdisciplinary Studies, so this line gives
+                     way to the visitor's area of interest when one is chosen. -->
+                <span id="mk-card-line" data-hash-ink="mk-hash" data-fit="1.5 1.2" style="display:block; margin-top:0.9em; font-size:1.5em; line-height:1.5; letter-spacing:.08em; text-transform:uppercase; font-weight:500; color:#B8390F; white-space:nowrap">Interdisciplinary Studies · JS3000</span>
+                <span id="mk-card-meta" data-fit="1.6 1.2" style="display:block; font-size:1.6em; line-height:1.5; color:#6E665C; white-space:nowrap">Info Day 10.10.2026</span>
+              </div>
+
+              <!-- Endorsed lockup at the card minimum of 6.5 mm, centred on the
+                   same band. Endorsed, not standalone: this face carries no
+                   University logo of its own. -->
+              <div style="position:absolute; right:6em; top:32.1em; bottom:0; display:flex; align-items:center; line-height:0">
+                <span class="af-logo" style="--m:6.5; color:#14110E">
+                  <img class="af-logo__mark" src="assets/mark-colour.svg" alt="">
+                  <span class="af-logo__word"></span>
+                </span>
+              </div>
+            </div>
+          </div>
+          <p class="maker__caption" id="mk-caption">85.6 × 54 mm · CR80 card</p>
+        </div>
+
+        <div class="maker__actions">
+          <button type="button" class="btn btn--primary" id="mk-png" disabled>Save PNG</button>
+          <button type="button" class="btn btn--export" id="mk-jpg" disabled>Save JPG</button>
+          <button type="button" class="btn btn--export" id="mk-svg" disabled>Save SVG</button>
+          <button type="button" class="btn btn--export" id="mk-print" data-export="maker" disabled>Print</button>
+        </div>
+        <p class="maker__note">PNG and JPG are written at 300 dpi and trim size, 1012 × 638 px, which is what a CR80 card printer expects for an edge-to-edge print. SVG carries the artwork at true size with the bleed, cutting and safety layers. Print sends the card to the browser at 91.6 × 60 mm, the trim plus 3 mm of bleed.</p>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<section class="section">
+  <div class="wrap wrap--narrow">
+    <div class="callout">
+      <div class="callout__title">How the card is drawn</div>
+      <p>The name is hashed to 128 bits, and that number lays out every cell of the field in reading order: quarter circles, split squares, circles, squares and gaps, in the shares the brand guidelines document. One family of colour leads, chosen by the hash or by the visitor's area of interest, and a second appears in about one cell in eight. The initials are written into the field in that second colour, one cell in from the top-left corner, so the cut never touches them.</p>
+      <p style="margin-top:var(--s-3)">This is the same generator that draws the business card, the ID card and the luggage tag in the <a href="artifacts.html">print artifacts</a>, so a mark made here and a mark printed on a student's card from the same name are the same artwork.</p>
+    </div>
+  </div>
+</section>
+
+</main>
+
+<footer class="footer">
+  <div class="wrap">
+    <div class="footer__bar">
+      <nav aria-label="Legal">
+        <a href="site.html">BDSIS site</a>
+        <a href="guidelines.html">Brand guidelines</a>
+        <a href="artifacts.html">Print artifacts</a>
+      </nav>
+      <span class="copyright">BDSIS Brand System · Info Day · Copyright © 2026 The Hong Kong Polytechnic University.</span>
+    </div>
+  </div>
+</footer>
+
+<script src="pixelfont.js"></script>
+<script src="cellhash.js"></script>
+<script src="export.js"></script>
+<script src="svgexport.js"></script>
+<script src="infoday.js"></script>
+</body>
+</html>
