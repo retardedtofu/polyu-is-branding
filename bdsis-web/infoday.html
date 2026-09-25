@@ -1,0 +1,166 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Your Card | BDSIS at PolyU Info Day 2026</title>
+<meta name="description" content="Pick the disciplines you would cross and your name lays out the card. A personalised BDSIS souvenir, generated entirely in your browser.">
+<link rel="icon" href="assets/favicon.svg" type="image/svg+xml">
+<link rel="icon" href="assets/favicon-32.png" sizes="32x32" type="image/png">
+<link rel="apple-touch-icon" href="assets/apple-touch-icon.png">
+<link rel="stylesheet" href="web.css">
+<style>
+/* Edge-to-edge app layout: the disciplines live in a left sidebar, the card
+   holds the middle. The page ground is the tint; the card alone is white. */
+body { background: var(--paper-tint); }
+.if-app {
+  display: grid; grid-template-columns: minmax(272px, 340px) 1fr;
+  min-height: 100vh;
+}
+.if-side {
+  border-right: 1px solid var(--line);
+  padding: var(--s-6) var(--s-5);
+  display: grid; gap: var(--s-5); align-content: start;
+}
+.if-main {
+  padding: var(--s-6) clamp(1.25rem, 5vw, 4rem) var(--s-8);
+  display: grid; gap: var(--s-5); align-content: start; justify-items: start;
+}
+
+.if-lockup { display: flex; align-items: flex-start; gap: 11px; }
+.if-lockup img { width: 46px; display: block; margin-top: 0; }
+.if-lockup .if-word { line-height: 1.25; margin-top: 3px; }
+.if-word b {
+  display: block; font-size: 9px; font-weight: var(--fw-medium);
+  letter-spacing: 0.05em; color: var(--ink);
+}
+.if-word span { display: block; font-size: 10px; font-weight: var(--fw-medium); color: var(--body); border-top: 1px solid var(--line); padding-top: 2px; margin-top: 2px; }
+.if-word span i { font-style: normal; font-weight: var(--fw-medium); color: var(--is-crimson-ink); }
+
+.if-head h1 {
+  font-size: clamp(1.9rem, 4vw, 2.7rem); font-weight: var(--fw-regular);
+  letter-spacing: -0.015em; color: var(--ink); line-height: 1.06; margin: 0;
+}
+
+.if-stage { width: 100%; display: grid; justify-items: center; }
+#card-stage { position: relative; width: 100%; max-width: 680px; }
+#card-stage canvas { display: block; width: 100%; height: auto; }
+#card-flat svg { display: block; width: 100%; height: auto; box-shadow: 0 10px 30px rgba(20,17,14,.12); }
+#card-stage.is-3d #card-flat { display: none; }
+.if-note { max-width: 100%; overflow-wrap: anywhere; font-size: var(--fs-xs); font-family: var(--font-mono); color: var(--meta); margin: 0; }
+
+.if-row { display: flex; gap: var(--s-4); flex-wrap: wrap; align-items: flex-end; justify-content: center; width: 100%; max-width: 680px; }
+.if-ctl { display: grid; gap: 6px; }
+.if-ctl > label, .if-ctl > span {
+  font-size: var(--fs-label); letter-spacing: var(--tr-label);
+  text-transform: uppercase; color: var(--meta); font-weight: var(--fw-medium);
+}
+.if-ctl input[type="text"] {
+  font: inherit; font-size: var(--fs-base); color: var(--ink);
+  background: var(--paper); border: 1px solid var(--line);
+  border-radius: var(--r-0); padding: 0.55rem 0.7rem; width: min(320px, 78vw);
+}
+.if-ctl input:focus-visible { outline: 2px solid var(--is-crimson-ink); outline-offset: 1px; }
+/* the name field and the register run at one height, so their labels and
+   their bottom edges both sit on shared lines */
+.if-row .if-ctl input[type="text"] { height: 46px; padding: 0 0.7rem; }
+.if-row .seg button { height: 46px; padding: 0 0.95rem; }
+
+#if-tiles { display: grid; gap: 6px; }
+.if-tile {
+  display: flex; align-items: center; gap: 9px; text-align: left; width: 100%;
+  font: inherit; font-size: var(--fs-sm);
+  color: var(--ink); background: var(--paper);
+  border: 1px solid var(--line); padding: 8px 12px 8px 9px; cursor: pointer;
+}
+.if-tile svg { width: 20px; height: 20px; display: block; flex-shrink: 0; }
+.if-tile.on { border-color: var(--ink); box-shadow: inset 0 0 0 1px var(--ink); }
+.if-tile:focus-visible { outline: 2px solid var(--is-crimson-ink); outline-offset: 1px; }
+.if-tile__box {
+  margin-left: auto; flex-shrink: 0;
+  width: 15px; height: 15px; border: 1px solid var(--line);
+  display: inline-flex; align-items: center; justify-content: center;
+  color: transparent; background: var(--paper);
+}
+.if-tile__box svg { width: 9px; height: 9px; display: block; }
+.if-tile.on .if-tile__box { background: var(--ink); border-color: var(--ink); color: var(--paper); }
+
+.if-print { position: fixed; top: var(--s-5); right: var(--s-5); z-index: 20; }
+
+/* Print prints the card itself, at true size */
+#print-card { display: none; }
+@page { size: 90mm 54mm; margin: 0; }
+@media print {
+  body { background: #FFFFFF; }
+  .if-app, .if-print { display: none !important; }
+  #print-card { display: block; }
+  #print-card svg { display: block; width: 90mm; height: 54mm; }
+}
+
+
+@media (max-width: 880px) {
+  .if-app { grid-template-columns: 1fr; }
+  .if-side { border-right: 0; border-bottom: 1px solid var(--line); }
+  #if-tiles { grid-template-columns: 1fr 1fr; }
+}
+@media (max-width: 560px) {
+  #if-tiles { grid-template-columns: 1fr; }
+}
+</style>
+</head>
+<body>
+
+<button type="button" class="btn btn--export if-print" id="if-print">Print</button>
+
+<main class="if-app">
+  <aside class="if-side">
+    <!-- Our mark, our face, the College's bilingual naming for the programme -->
+    <div class="if-lockup">
+      <img src="assets/mark-colour.svg" alt="BDSIS">
+      <div class="if-word">
+        <b>BACHELOR'S DEGREE SCHEME IN<br>INTERDISCIPLINARY STUDIES</b>
+        <span>跨學科組合學士課程<i> · BDSIS</i></span>
+      </div>
+    </div>
+
+    <div class="if-ctl">
+      <span>Disciplines · pick 2 or 3</span>
+      <div id="if-tiles"></div>
+    </div>
+  </aside>
+
+  <section class="if-main">
+    <header class="if-head">
+      <h1>Your disciplines, your card.</h1>
+    </header>
+
+    <div class="if-stage">
+      <div id="card-stage" aria-label="Your card, live preview"><div id="card-flat"></div></div>
+    </div>
+
+    <div class="if-row">
+      <div class="if-ctl">
+        <label for="if-name">Your name</label>
+        <input type="text" id="if-name" maxlength="40" autocomplete="off" spellcheck="false" placeholder="Type your English name">
+      </div>
+      <div class="if-ctl">
+        <span>Register</span>
+        <div class="seg" id="if-theme">
+          <button type="button" data-t="light" aria-pressed="true">Light</button>
+          <button type="button" data-t="dark" aria-pressed="false">Dark</button>
+        </div>
+      </div>
+    </div>
+
+
+  </section>
+</main>
+<div id="print-card" aria-hidden="true"></div>
+
+<script type="importmap">{ "imports": { "three": "./vendor/three.module.js" } }</script>
+<script src="cellhash.js"></script>
+<script src="pixelfont.js"></script>
+<script src="infoday.js"></script>
+<script type="module" src="infoday-3d.js"></script>
+</body>
+</html>

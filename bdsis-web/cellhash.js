@@ -431,5 +431,8 @@
     if (winput) winput.addEventListener('input', apply);
   });
 
-  window.CellHash = { FAM, field, paint, pixelCells, QUARTER, U };
+  /* cyrb128 and sfc32 are exported for OTHER generators (the Info Day card)
+     that need the same deterministic stream; the functions themselves stay
+     parity-locked and unedited. */
+  window.CellHash = { FAM, field, paint, pixelCells, QUARTER, U, cyrb128, sfc32 };
 })();
