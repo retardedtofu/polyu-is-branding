@@ -231,7 +231,15 @@
     const { name, picked, initials, theme } = state;
     const T = THEMES[theme];
     const defs = [], defsSeen = new Set();
-    const field = buildField(name, picked, initials, theme, defs, defsSeen, T.ground);
+    const ok = picked.length >= 2 && picked.length <= 3;
+    /* Without a valid pick the field stays empty and the card says why. */
+    const message = ok ? '' :
+      `<text x="45" y="18.6" text-anchor="middle" font-family="Helvetica Neue, Helvetica, Arial, sans-serif" ` +
+      `font-size="3" fill="${T.meta}">` +
+      (picked.length < 2 ? 'Pick 2–3 disciplines to generate your card'
+                         : `That's ${picked.length}. Pick 2–3 disciplines`) +
+      `</text>`;
+    const field = ok ? buildField(name, picked, initials, theme, defs, defsSeen, T.ground) : message;
     const F = 'Helvetica Neue, Helvetica, Arial, sans-serif';
     const label = (name || '').trim();
     const nameBlock = label
@@ -256,6 +264,8 @@
     const svg = cardSVG(state);
     lastSVG = svg;
     $('card-flat').innerHTML = svg;
+    $('if-clear-stage').hidden = state.picked.length <= 3;
+    $('if-clear').hidden = state.picked.length === 0;
     document.dispatchEvent(new CustomEvent('if-cardchange'));
     location.hash = hashOf(state);
   }
@@ -275,7 +285,7 @@
     if (p.get('d')) {
       const keys = p.get('d').split(',');
       const idx = keys.map(k => FACULTIES.findIndex(f => f.key === k)).filter(i => i >= 0);
-      if (idx.length >= 2) state.picked = idx.slice(0, 3);
+      if (idx.length) state.picked = idx;
     }
     const t = p.get('t');
     if (t && THEMES[t]) state.theme = t;
@@ -305,10 +315,13 @@
       if (!b) return;
       const i = +b.dataset.i;
       const at = state.picked.indexOf(i);
-      if (at >= 0) { if (state.picked.length > 2) state.picked.splice(at, 1); }
-      else { if (state.picked.length >= 3) state.picked.shift(); state.picked.push(i); }
+      if (at >= 0) state.picked.splice(at, 1);
+      else state.picked.push(i);
       tiles(); render();
     });
+    const clear = () => { state.picked = []; tiles(); render(); };
+    $('if-clear').addEventListener('click', clear);
+    $('if-clear-stage').addEventListener('click', clear);
     document.querySelectorAll('#if-theme button').forEach(b =>
       b.addEventListener('click', () => {
         state.theme = b.dataset.t;

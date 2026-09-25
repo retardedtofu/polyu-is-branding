@@ -56,6 +56,13 @@ body { background: var(--paper-tint); }
   font-size: var(--fs-label); letter-spacing: var(--tr-label);
   text-transform: uppercase; color: var(--meta); font-weight: var(--fw-medium);
 }
+.if-ctl__head { display: flex; align-items: baseline; justify-content: space-between; gap: var(--s-3); }
+.if-ctl__head button {
+  font: inherit; letter-spacing: inherit; text-transform: inherit;
+  background: none; border: 0; padding: 0; cursor: pointer;
+  color: var(--is-crimson-ink);
+}
+.if-ctl__head button:focus-visible { outline: 2px solid var(--is-crimson-ink); outline-offset: 1px; }
 .if-ctl input[type="text"] {
   font: inherit; font-size: var(--fs-base); color: var(--ink);
   background: var(--paper); border: 1px solid var(--line);
@@ -125,7 +132,8 @@ body { background: var(--paper-tint); }
     </div>
 
     <div class="if-ctl">
-      <span>Disciplines · pick 2 or 3</span>
+      <span class="if-ctl__head">Disciplines · pick 2 or 3
+        <button type="button" id="if-clear" hidden>Clear</button></span>
       <div id="if-tiles"></div>
     </div>
   </aside>
@@ -137,6 +145,7 @@ body { background: var(--paper-tint); }
 
     <div class="if-stage">
       <div id="card-stage" aria-label="Your card, live preview"><div id="card-flat"></div></div>
+      <button type="button" class="btn btn--export" id="if-clear-stage" hidden>Clear selection</button>
     </div>
 
     <div class="if-row">
