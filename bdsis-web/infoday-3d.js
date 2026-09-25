@@ -117,6 +117,85 @@ import { RoomEnvironment } from './vendor/RoomEnvironment.js';
   face.map = tex;
 
   const STILL = location.hash.includes('still');   /* render per event, for checks */
+
+  /* ── regeneration: the old card glitches away cell by cell, top-left to
+     bottom-right, then the new one arrives the same way. Runs on the
+     texture canvas, so the 3D card and the flat maths never disagree. ── */
+  const GC = 15, GR = 9;                       /* the 6 mm grid over 90 x 54 */
+  const CW = TEXW / GC, CH2 = TEXH / GR;
+  const OUT_MS = 340, IN_MS = 380;
+  let anim = null, firstDraw = true;
+
+  function drawFull(img) {
+    ctx.clearRect(0, 0, TEXW, TEXH);
+    ctx.drawImage(img, 0, 0, TEXW, TEXH);
+    tex.needsUpdate = true;
+  }
+
+  function cellsInDiagonalOrder() {
+    const cells = [];
+    for (let r = 0; r < GR; r++)
+      for (let c = 0; c < GC; c++)
+        cells.push({ c, r, k: c + r + Math.random() * 1.4 });
+    cells.sort((a, b) => a.k - b.k);
+    return cells;
+  }
+
+  function startTransition(newImg) {
+    if (anim) { cancelAnimationFrame(anim.raf); anim = null; }
+    /* the incoming card's ground colour, for the emptied cells */
+    const s1 = document.createElement('canvas'); s1.width = s1.height = 1;
+    const sctx = s1.getContext('2d');
+    sctx.drawImage(newImg, 0, 0, 1, 1);
+    const d = sctx.getImageData(0, 0, 1, 1).data;
+    const ground = `rgb(${d[0]},${d[1]},${d[2]})`;
+    const outCells = cellsInDiagonalOrder();
+    const inCells = cellsInDiagonalOrder();
+    const nW = newImg.naturalWidth || 340, nH = newImg.naturalHeight || 204;
+    const t0 = performance.now();
+    const step = now => {
+      const t = now - t0;
+      if (t < OUT_MS) {
+        const n = Math.floor(outCells.length * (t / OUT_MS));
+        ctx.fillStyle = ground;
+        for (let i = 0; i < n; i++) {
+          const q = outCells[i];
+          ctx.fillRect(q.c * CW - 0.5, q.r * CH2 - 0.5, CW + 1, CH2 + 1);
+        }
+        /* the frontier tears sideways for a beat before it goes */
+        for (let i = n; i < Math.min(n + 5, outCells.length); i++) {
+          const q = outCells[i], x = q.c * CW, y = q.r * CH2;
+          const dx = (Math.random() * 14 - 7) | 0;
+          const band = CH2 * (0.25 + Math.random() * 0.4);
+          const by = y + Math.random() * (CH2 - band);
+          ctx.drawImage(cnv, x, by, CW, band, x + dx, by, CW, band);
+        }
+      } else if (t < OUT_MS + IN_MS) {
+        const n = Math.floor(inCells.length * ((t - OUT_MS) / IN_MS));
+        ctx.fillStyle = ground;
+        ctx.fillRect(0, 0, TEXW, TEXH);
+        const sx = nW / TEXW, sy = nH / TEXH;
+        for (let i = 0; i < n; i++) {
+          const q = inCells[i], x = q.c * CW, y = q.r * CH2;
+          ctx.drawImage(newImg, x * sx, y * sy, CW * sx, CH2 * sy, x, y, CW, CH2);
+        }
+        /* the frontier arrives with the same tear, then settles */
+        for (let i = n; i < Math.min(n + 5, inCells.length); i++) {
+          const q = inCells[i], x = q.c * CW, y = q.r * CH2;
+          const dx = (Math.random() * 14 - 7) | 0;
+          ctx.drawImage(newImg, x * sx, y * sy, CW * sx, CH2 * sy, x + dx, y, CW, CH2);
+        }
+      } else {
+        drawFull(newImg);
+        anim = null;
+        return;
+      }
+      tex.needsUpdate = true;
+      anim = { raf: requestAnimationFrame(step) };
+    };
+    anim = { raf: requestAnimationFrame(step) };
+  }
+
   let timer = null;
   function refresh() {
     clearTimeout(timer);
@@ -126,16 +205,19 @@ import { RoomEnvironment } from './vendor/RoomEnvironment.js';
       const img = new Image();
       const url = URL.createObjectURL(new Blob([svg], { type: 'image/svg+xml' }));
       img.onload = () => {
-        ctx.clearRect(0, 0, TEXW, TEXH);
-        ctx.drawImage(img, 0, 0, TEXW, TEXH);
         URL.revokeObjectURL(url);
-        tex.needsUpdate = true;
-        if (STILL) renderer.render(scene, camera);
+        if (STILL || firstDraw) {
+          firstDraw = false;
+          drawFull(img);
+          if (STILL) renderer.render(scene, camera);
+          return;
+        }
+        startTransition(img);
       };
       img.src = url;
     }, 90);
   }
-  document.addEventListener('if-cardchange', refresh);
+    document.addEventListener('if-cardchange', refresh);
   refresh();
 
   /* ── the lean: toward the pointer, and a slow breath when it leaves ───── */

@@ -72,7 +72,28 @@ body { background: var(--paper-tint); }
 /* the name field and the register run at one height, so their labels and
    their bottom edges both sit on shared lines */
 .if-row .if-ctl input[type="text"] { height: 46px; padding: 0 0.7rem; }
-.if-row .seg button { height: 46px; padding: 0 0.95rem; }
+
+/* Register: one segmented control; a tap anywhere flips it */
+.ifseg {
+  position: relative; display: grid; grid-template-columns: 1fr 1fr;
+  height: 46px; min-width: 172px; border: 1px solid var(--line);
+  background: var(--paper); cursor: pointer; user-select: none;
+}
+.ifseg__opt {
+  position: relative; z-index: 1;
+  display: inline-flex; align-items: center; justify-content: center;
+  padding: 0 1rem; font-size: var(--fs-label); letter-spacing: var(--tr-label);
+  text-transform: uppercase; font-weight: var(--fw-medium); color: var(--ink);
+  transition: color 0.18s ease;
+}
+.ifseg__thumb {
+  position: absolute; top: 0; bottom: 0; left: 0; width: 50%;
+  background: var(--ink); transition: transform 0.2s ease;
+}
+.ifseg[data-on="dark"] .ifseg__thumb { transform: translateX(100%); }
+.ifseg[data-on="light"] .ifseg__opt:first-child,
+.ifseg[data-on="dark"] .ifseg__opt:nth-child(2) { color: var(--paper); }
+.ifseg:focus-visible { outline: 2px solid var(--is-crimson-ink); outline-offset: 1px; }
 
 #if-tiles { display: grid; gap: 6px; }
 .if-tile {
@@ -155,9 +176,11 @@ body { background: var(--paper-tint); }
       </div>
       <div class="if-ctl">
         <span>Register</span>
-        <div class="seg" id="if-theme">
-          <button type="button" data-t="light" aria-pressed="true">Light</button>
-          <button type="button" data-t="dark" aria-pressed="false">Dark</button>
+        <div class="ifseg" id="if-theme" data-on="light" role="switch" aria-checked="false"
+             aria-label="Register: light or dark" tabindex="0">
+          <span class="ifseg__opt">Light</span>
+          <span class="ifseg__opt">Dark</span>
+          <span class="ifseg__thumb" aria-hidden="true"></span>
         </div>
       </div>
     </div>

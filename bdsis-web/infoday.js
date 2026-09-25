@@ -83,7 +83,8 @@
      Field 15 x 6 cells of 6 mm (whole cells to every trim edge, nothing cut
      through at the knife), band of 18 mm below for the lockup and the name. */
   const W = 90, H = 54, CELL = 6, COLS = 15, ROWS = 6;
-  const EMPTY = 0.18;   /* share of cells left to the stock, so the field breathes */
+  const EMPTY = 0.18;
+  const SQIN = 0.55;  /* squares sit a touch inside their cell, so they breathe */   /* share of cells left to the stock, so the field breathes */
 
   const n2 = v => Math.round(v * 100) / 100;
 
@@ -125,11 +126,13 @@
       parts.push(`<circle cx="${n2(x + CELL / 2)}" cy="${n2(y + CELL / 2)}" r="${CELL / 2}" fill="${fill}"/>`);
       overlayPath = 'circle';
     } else if (f.shape === 'square') {
-      parts.push(`<rect x="${x}" y="${y}" width="${CELL}" height="${CELL}" fill="${fill}"/>`);
-      overlayPath = `M${x},${y} H${x + CELL} V${y + CELL} H${x} Z`;
+      const x0 = n2(x + SQIN), y0 = n2(y + SQIN), s = n2(CELL - 2 * SQIN);
+      parts.push(`<rect x="${x0}" y="${y0}" width="${s}" height="${s}" fill="${fill}"/>`);
+      overlayPath = `M${x0},${y0} h${s} v${s} h-${s} Z`;
     } else if (f.shape === 'split') {
-      parts.push(`<path d="M${x},${y} L${x + CELL},${y} L${x + CELL},${y + CELL} Z" fill="${a}"/>`);
-      parts.push(`<path d="M${x},${y} L${x + CELL},${y + CELL} L${x},${y + CELL} Z" fill="${b}"/>`);
+      const x0 = n2(x + SQIN), y0 = n2(y + SQIN), x1 = n2(x + CELL - SQIN), y1 = n2(y + CELL - SQIN);
+      parts.push(`<path d="M${x0},${y0} L${x1},${y0} L${x1},${y1} Z" fill="${a}"/>`);
+      parts.push(`<path d="M${x0},${y0} L${x1},${y1} L${x0},${y1} Z" fill="${b}"/>`);
     } else if (f.shape === 'triangle') {
       const d = triangle(x, y, CELL, rot);
       parts.push(`<path d="${d}" fill="${fill}"/>`); overlayPath = d;
@@ -234,8 +237,8 @@
     const ok = picked.length >= 2 && picked.length <= 3;
     /* Without a valid pick the field stays empty and the card says why. */
     const message = ok ? '' :
-      `<text x="45" y="18.6" text-anchor="middle" font-family="Helvetica Neue, Helvetica, Arial, sans-serif" ` +
-      `font-size="3" fill="${T.meta}">` +
+      `<text x="45" y="19.4" text-anchor="middle" font-family="Helvetica Neue, Helvetica, Arial, sans-serif" ` +
+      `font-size="4.2" font-weight="700" fill="${T.body}">` +
       (picked.length < 2 ? 'Pick 2–3 disciplines to generate your card'
                          : `That's ${picked.length}. Pick 2–3 disciplines`) +
       `</text>`;
@@ -322,16 +325,19 @@
     const clear = () => { state.picked = []; tiles(); render(); };
     $('if-clear').addEventListener('click', clear);
     $('if-clear-stage').addEventListener('click', clear);
-    document.querySelectorAll('#if-theme button').forEach(b =>
-      b.addEventListener('click', () => {
-        state.theme = b.dataset.t;
-        document.querySelectorAll('#if-theme button').forEach(x => {
-          x.classList.toggle('on', x === b);
-          x.setAttribute('aria-pressed', String(x === b));
-        });
-        render();
-      }));
-    document.querySelector(`#if-theme button[data-t="${state.theme}"]`)?.classList.add('on');
+    const themeCtl = $('if-theme');
+    const syncTheme = () => {
+      themeCtl.dataset.on = state.theme;
+      themeCtl.setAttribute('aria-checked', String(state.theme === 'dark'));
+    };
+    themeCtl.addEventListener('click', () => {
+      state.theme = state.theme === 'light' ? 'dark' : 'light';
+      syncTheme(); render();
+    });
+    themeCtl.addEventListener('keydown', e => {
+      if (e.key === ' ' || e.key === 'Enter') { e.preventDefault(); themeCtl.click(); }
+    });
+    syncTheme();
     $('if-print').addEventListener('click', () => window.print());
     window.addEventListener('beforeprint', () => { $('print-card').innerHTML = lastSVG; });
     render();
