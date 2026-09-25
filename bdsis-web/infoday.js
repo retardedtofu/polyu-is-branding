@@ -29,44 +29,45 @@
      one, its near-black disc would vanish). */
   const FACULTIES = [
     { key: 'FB',   en: 'Faculty of Business',
-      zh: '工商管理學院', shape: 'quarter', texture: 'none',
-      a: '#6C3F92', b: '#4A2A66',
+      zh: '工商管理學院', shape: 'quarter', texture: 'none', rot: 0,
+      a: '#A080B8', b: '#603890',
       desc: 'Markets, management and the judgement to run things well.' },
     { key: 'FCMS', en: 'Faculty of Computer and Mathematical Sciences',
       zh: '電子計算及數學科學學院', shape: 'circle', texture: 'stripes-d',
-      a: '#00A356', b: '#007A40',
+      a: '#0BAD60', b: '#009150', t: '#88C8A0',
       desc: 'Computing, data and the mathematics underneath both.' },
     { key: 'FCE',  en: 'Faculty of Construction and Environment',
       zh: '建設及環境學院', shape: 'square', texture: 'stripes-d',
-      a: '#C40D3C', b: '#8E1F35',
+      a: '#A82850', b: '#981C42', t: '#E04068',
       desc: 'The built world: cities, structures and the environment they sit in.' },
     { key: 'FE',   en: 'Faculty of Engineering',
-      zh: '工程學院', shape: 'quarter', texture: 'none',
-      a: '#1F6FB2', b: '#134D80',
+      zh: '工程學院', shape: 'quarter', texture: 'none', rot: 2,
+      a: '#3089C7', b: '#045C8C',
       desc: 'Making things work: systems, machines and the physics of both.' },
     { key: 'FHSS', en: 'Faculty of Health and Social Sciences',
-      zh: '醫療及社會科學院', shape: 'triangle', texture: 'stripes-v',
-      a: '#6FBF73', b: '#3E9D5A',
+      zh: '醫療及社會科學院', shape: 'triangle', texture: 'stripes-d', rot: 3,
+      a: '#4FBD82', b: '#35A96C', t: '#98C890',
       desc: 'People and their wellbeing, from clinics to communities.' },
     { key: 'FH',   en: 'Faculty of Humanities',
       zh: '人文學院', shape: 'square', texture: 'dots',
-      a: '#5B67B8', b: '#3F4A94',
+      a: '#6B6BB2', b: '#5556A0', t: '#B0A8D0',
       desc: 'Language, culture and how humans make meaning.' },
     { key: 'FS',   en: 'Faculty of Science',
-      zh: '理學院', shape: 'quarter', texture: 'stripes-v',
-      a: '#F5A623', b: '#E3701A',
+      zh: '理學院', shape: 'quarter', texture: 'stripes-v', rot: 1,
+      a: '#F8A848', b: '#DF7A31', t: '#F8B048',
       desc: 'The natural world, questioned carefully.' },
     { key: 'SD',   en: 'School of Design',
       zh: '設計學院', shape: 'circle', texture: 'dots',
-      a: '#3A3A3A', b: '#232323', dark: { a: '#D8D4CB', b: '#B7B2A5' },
+      a: '#6A6A6A', b: '#3E3E3E', t: '#D0D0D0',
+      dark: { a: '#D8D4CB', b: '#B7B2A5', t: '#3A3A3A' },
       desc: 'Form, intent and the craft of making both visible.' },
     { key: 'SFT',  en: 'School of Fashion and Textiles',
-      zh: '時裝及紡織學院', shape: 'quarter', texture: 'stripes-v',
-      a: '#B0326E', b: '#7C2450',
+      zh: '時裝及紡織學院', shape: 'quarter', texture: 'stripes-v', rot: 1,
+      a: '#DA5A40', b: '#5F4890',
       desc: 'Material, body and identity, engineered and worn.' },
     { key: 'SHTM', en: 'School of Hotel and Tourism Management',
       zh: '酒店及旅遊業管理學院', shape: 'split', texture: 'none',
-      a: '#F7B733', b: '#E97C1A',
+      a: '#F8C870', b: '#EF8342',
       desc: 'Hospitality as a discipline: service, place and welcome.' },
   ];
 
@@ -127,23 +128,29 @@
       parts.push(`<rect x="${x}" y="${y}" width="${CELL}" height="${CELL}" fill="${fill}"/>`);
       overlayPath = `M${x},${y} H${x + CELL} V${y + CELL} H${x} Z`;
     } else if (f.shape === 'split') {
-      parts.push(`<path d="M${x},${y} L${x + CELL},${y} L${x},${y + CELL} Z" fill="${a}"/>`);
-      parts.push(`<path d="M${x + CELL},${y} L${x + CELL},${y + CELL} L${x},${y + CELL} Z" fill="${b}"/>`);
+      parts.push(`<path d="M${x},${y} L${x + CELL},${y} L${x + CELL},${y + CELL} Z" fill="${a}"/>`);
+      parts.push(`<path d="M${x},${y} L${x + CELL},${y + CELL} L${x},${y + CELL} Z" fill="${b}"/>`);
     } else if (f.shape === 'triangle') {
       const d = triangle(x, y, CELL, rot);
       parts.push(`<path d="${d}" fill="${fill}"/>`); overlayPath = d;
     }
     if (f.texture !== 'none' && overlayPath) {
-      const pid = `${idp || 'if'}x-${f.texture}-${theme}`;
+      /* In the source icons the stripes and dots are LIGHTER TINTS of the
+         fill, never punches to the ground. Each faculty carries its sampled
+         tint (t); a two-hue gradient (SFT) takes a translucent white so the
+         bands lighten whatever they cross. */
+      const fill2 = (theme === 'dark' && f.dark) ? f.dark : f;
+      const tint = fill2.t || 'rgba(255,255,255,0.32)';
+      const pid = `${idp || 'if'}x-${f.key}-${theme}`;
       if (!defsSeen.has(pid)) {
         defsSeen.add(pid);
         if (f.texture === 'dots')
-          defs.push(`<pattern id="${pid}" width="1.7" height="1.7" patternUnits="userSpaceOnUse">` +
-            `<circle cx="0.85" cy="0.85" r="0.42" fill="${ground}"/></pattern>`);
+          defs.push(`<pattern id="${pid}" width="0.85" height="0.85" patternUnits="userSpaceOnUse">` +
+            `<circle cx="0.425" cy="0.425" r="0.2" fill="${tint}"/></pattern>`);
         else
-          defs.push(`<pattern id="${pid}" width="1.6" height="1.6" patternUnits="userSpaceOnUse"` +
+          defs.push(`<pattern id="${pid}" width="0.9" height="0.9" patternUnits="userSpaceOnUse"` +
             (f.texture === 'stripes-d' ? ' patternTransform="rotate(45)"' : '') + '>' +
-            `<rect x="0" y="0" width="0.55" height="1.6" fill="${ground}"/></pattern>`);
+            `<rect x="0" y="0" width="0.34" height="0.9" fill="${tint}"/></pattern>`);
       }
       if (overlayPath === 'circle')
         parts.push(`<circle cx="${n2(x + CELL / 2)}" cy="${n2(y + CELL / 2)}" r="${CELL / 2}" fill="url(#${pid})"/>`);
@@ -279,7 +286,7 @@
     $('if-tiles').innerHTML = FACULTIES.map((f, i) => {
       const on = state.picked.includes(i);
       const defs = [], seen = new Set();
-      const sw = cell(f, i, 0, 0, 1, 'light', seen, defs, '#F8F2E7', 'ift' + i);
+      const sw = cell(f, i, 0, 0, f.rot ?? 1, 'light', seen, defs, '#F8F2E7', 'ift' + i);
       return `<button type="button" class="if-tile${on ? ' on' : ''}" data-i="${i}" ` +
         `aria-pressed="${on}" title="${esc(f.desc)}">` +
         `<svg viewBox="0 0 6 6" aria-hidden="true"><defs>${defs.join('')}</defs>${sw}</svg>` +
