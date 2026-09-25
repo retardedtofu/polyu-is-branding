@@ -118,12 +118,16 @@ import { RoomEnvironment } from './vendor/RoomEnvironment.js';
 
   const STILL = location.hash.includes('still');   /* render per event, for checks */
 
-  /* ── regeneration: the old card glitches away cell by cell, top-left to
-     bottom-right, then the new one arrives the same way. Runs on the
-     texture canvas, so the 3D card and the flat maths never disagree. ── */
-  const GC = 15, GR = 9;                       /* the 6 mm grid over 90 x 54 */
-  const CW = TEXW / GC, CH2 = TEXH / GR;
-  const OUT_MS = 340, IN_MS = 380;
+  /* ── regeneration: only the FIELD wipes. The band below swaps at once,
+     so every change answers immediately; the old shapes then tear away
+     cell by cell, top-left to bottom-right, and the new ones sweep in the
+     same way. A watchdog lands the final image even if animation frames
+     stall, and an interrupted transition completes before the next one
+     starts, so rapid toggling always makes forward progress. ── */
+  const GC = 15, FR = 6;                       /* the field's 6 mm grid */
+  const FIELD_H = Math.round(TEXH * 36 / 54);  /* field: top 36 of 54 mm */
+  const CW = TEXW / GC, CH2 = FIELD_H / FR;
+  const OUT_MS = 280, IN_MS = 300;
   let anim = null, firstDraw = true;
 
   function drawFull(img) {
@@ -132,9 +136,17 @@ import { RoomEnvironment } from './vendor/RoomEnvironment.js';
     tex.needsUpdate = true;
   }
 
-  function cellsInDiagonalOrder() {
+  function finishAnim() {
+    if (!anim) return;
+    cancelAnimationFrame(anim.raf);
+    clearTimeout(anim.guard);
+    drawFull(anim.img);
+    anim = null;
+  }
+
+  function fieldCellsInDiagonalOrder() {
     const cells = [];
-    for (let r = 0; r < GR; r++)
+    for (let r = 0; r < FR; r++)
       for (let c = 0; c < GC; c++)
         cells.push({ c, r, k: c + r + Math.random() * 1.4 });
     cells.sort((a, b) => a.k - b.k);
@@ -142,18 +154,24 @@ import { RoomEnvironment } from './vendor/RoomEnvironment.js';
   }
 
   function startTransition(newImg) {
-    if (anim) { cancelAnimationFrame(anim.raf); anim = null; }
-    /* the incoming card's ground colour, for the emptied cells */
+    finishAnim();                              /* the last change lands first */
+    const nW = newImg.naturalWidth || 340, nH = newImg.naturalHeight || 204;
+    const sx = nW / TEXW, sy = nH / TEXH;
+    /* the band answers immediately */
+    ctx.drawImage(newImg, 0, FIELD_H * sy, nW, nH - FIELD_H * sy,
+                  0, FIELD_H, TEXW, TEXH - FIELD_H);
+    tex.needsUpdate = true;
+    /* the incoming ground, from the true corner pixel */
     const s1 = document.createElement('canvas'); s1.width = s1.height = 1;
     const sctx = s1.getContext('2d');
-    sctx.drawImage(newImg, 0, 0, 1, 1);
+    sctx.drawImage(newImg, 1, 1, 1, 1, 0, 0, 1, 1);
     const d = sctx.getImageData(0, 0, 1, 1).data;
     const ground = `rgb(${d[0]},${d[1]},${d[2]})`;
-    const outCells = cellsInDiagonalOrder();
-    const inCells = cellsInDiagonalOrder();
-    const nW = newImg.naturalWidth || 340, nH = newImg.naturalHeight || 204;
+    const outCells = fieldCellsInDiagonalOrder();
+    const inCells = fieldCellsInDiagonalOrder();
     const t0 = performance.now();
     const step = now => {
+      if (!anim || anim.img !== newImg) return;
       const t = now - t0;
       if (t < OUT_MS) {
         const n = Math.floor(outCells.length * (t / OUT_MS));
@@ -167,14 +185,13 @@ import { RoomEnvironment } from './vendor/RoomEnvironment.js';
           const q = outCells[i], x = q.c * CW, y = q.r * CH2;
           const dx = (Math.random() * 14 - 7) | 0;
           const band = CH2 * (0.25 + Math.random() * 0.4);
-          const by = y + Math.random() * (CH2 - band);
+          const by = Math.min(y + Math.random() * (CH2 - band), FIELD_H - band);
           ctx.drawImage(cnv, x, by, CW, band, x + dx, by, CW, band);
         }
       } else if (t < OUT_MS + IN_MS) {
         const n = Math.floor(inCells.length * ((t - OUT_MS) / IN_MS));
         ctx.fillStyle = ground;
-        ctx.fillRect(0, 0, TEXW, TEXH);
-        const sx = nW / TEXW, sy = nH / TEXH;
+        ctx.fillRect(0, 0, TEXW, FIELD_H);
         for (let i = 0; i < n; i++) {
           const q = inCells[i], x = q.c * CW, y = q.r * CH2;
           ctx.drawImage(newImg, x * sx, y * sy, CW * sx, CH2 * sy, x, y, CW, CH2);
@@ -187,13 +204,18 @@ import { RoomEnvironment } from './vendor/RoomEnvironment.js';
         }
       } else {
         drawFull(newImg);
+        clearTimeout(anim.guard);
         anim = null;
         return;
       }
       tex.needsUpdate = true;
-      anim = { raf: requestAnimationFrame(step) };
+      anim.raf = requestAnimationFrame(step);
     };
-    anim = { raf: requestAnimationFrame(step) };
+    anim = {
+      img: newImg,
+      raf: requestAnimationFrame(step),
+      guard: setTimeout(finishAnim, OUT_MS + IN_MS + 300),
+    };
   }
 
   let timer = null;
@@ -217,6 +239,8 @@ import { RoomEnvironment } from './vendor/RoomEnvironment.js';
       img.src = url;
     }, 90);
   }
+  /* a fingerprint of the texture canvas, for the layout checks */
+  window.InfoDay3D = { snap: () => { let h = 0; const d = ctx.getImageData(0, 0, 64, 64).data; for (let i = 0; i < d.length; i += 97) h = (h * 31 + d[i]) | 0; return h; } };
     document.addEventListener('if-cardchange', refresh);
   refresh();
 

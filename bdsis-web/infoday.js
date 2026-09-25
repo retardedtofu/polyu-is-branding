@@ -84,7 +84,7 @@
      through at the knife), band of 18 mm below for the lockup and the name. */
   const W = 90, H = 54, CELL = 6, COLS = 15, ROWS = 6;
   const EMPTY = 0.18;
-  const SQIN = 0.55;  /* squares sit a touch inside their cell, so they breathe */   /* share of cells left to the stock, so the field breathes */
+  const SQIN = 0;  /* squares sit a touch inside their cell, so they breathe */   /* share of cells left to the stock, so the field breathes */
 
   const n2 = v => Math.round(v * 100) / 100;
 
