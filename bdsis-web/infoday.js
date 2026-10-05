@@ -8,8 +8,10 @@
    always draws the same card, on any machine.
 
    Everything runs in this page. The name is hashed locally, nothing is
-   transmitted or stored, and the QR code carries only the INPUTS as a link,
-   so a phone that scans it regenerates the identical card locally too.
+   transmitted or stored, and the share link carries only the INPUTS, so
+   another browser opening it regenerates the identical card locally too.
+   "Shuffle pattern" adds a variant number to the seed, so one name and one
+   set of picks can still hold several layouts, each of them repeatable.
 
    THE TEN PRIMITIVES are the iteration surface. Each Faculty or School is
    one token here: shape, two gradient stops (light register), an optional
@@ -71,20 +73,24 @@
       desc: 'Hospitality as a discipline: service, place and welcome.' },
   ];
 
-  /* The two registers, matching the print system. */
+  /* The two registers, matching the print system. The lockup is the
+     College's official programme-name logo: full colour on the light
+     ground, its white version on the dark. */
   const THEMES = {
-    light: { ground: '#FFFFFF', ink: '#14110E', body: '#453F38', meta: '#6E665C',
-             mark: 'colour', bdsis: '#A02337' },
-    dark:  { ground: '#14110E', ink: '#F4EFE4', body: '#C6C0B3', meta: '#9A9285',
-             mark: '#F4EFE4', bdsis: '#F2778C' },
+    light: { ground: '#FFFFFF', ink: '#14110E', body: '#453F38', meta: '#6E665C', mark: 'colour' },
+    dark:  { ground: '#14110E', ink: '#F4EFE4', body: '#C6C0B3', meta: '#9A9285', mark: 'white' },
   };
 
-  /* ── card geometry: 90 x 54 mm, the print system's card format ─────────
-     Field 15 x 6 cells of 6 mm (whole cells to every trim edge, nothing cut
-     through at the knife), band of 18 mm below for the lockup and the name. */
-  const W = 90, H = 54, CELL = 6, COLS = 15, ROWS = 6;
-  const EMPTY = 0.18;
-  const SQIN = 0;  /* squares sit a touch inside their cell, so they breathe */   /* share of cells left to the stock, so the field breathes */
+  /* ── card geometry: 86 x 54 mm, the card the College actually prints ────
+     Field 14 x 6 whole cells (86/14 = 6.14 mm) to every trim edge, nothing
+     cut through at the knife; the band below holds the lockup and the name. */
+  const W = 86, H = 54, COLS = 14, ROWS = 6;
+  const CELL = W / COLS;
+  const FIELD = ROWS * CELL;               /* 36.86 mm; the band is the rest */
+  const BAND_CY = FIELD + (H - FIELD) / 2; /* the band's centre line */
+  const MX = 5;                            /* side margin for the band */
+  const EMPTY = 0.18;                      /* share of cells left to the stock, so the field breathes */
+  const SQIN = 0;                          /* squares fill their cell */
 
   const n2 = v => Math.round(v * 100) / 100;
 
@@ -171,8 +177,10 @@
   /* ── the field ─────────────────────────────────────────────────────────
      Three draws per cell in the signature-field order (roll, faculty,
      rotation), always taken, so the layout never shifts between options. */
-  function buildField(name, picked, initials, theme, defs, defsSeen, ground) {
-    const seed = CH.cyrb128(name || ' ');
+  function buildField(name, picked, initials, theme, defs, defsSeen, ground, variant) {
+    /* variant 0 is the name alone, so the links already handed out keep
+       drawing exactly what they drew */
+    const seed = CH.cyrb128((name || ' ') + (variant ? `#${variant}` : ''));
     const rnd = CH.sfc32(seed[0], seed[1], seed[2], seed[3]);
     const px = initials ? CH.pixelCells(initials, COLS, ROWS, 'micro') : null;
     const out = [];
@@ -195,60 +203,69 @@
     return out.join('');
   }
 
-  /* ── the lockup: our mark, our face, the bilingual naming ────────────── */
-  let markColour = null, markMono = null;
+  /* ── the lockup: the College's official programme-name logo ──────────────
+     Vector artwork from the BDSIS Logo Pack (Horizontal 1), text outlined,
+     embedded as a nested <svg> so its own viewBox does the fitting. */
+  const LOCK_H = 6.6;                        /* mm tall in the band */
+  let lockColour = null, lockWhite = null;
   async function loadMarks() {
     const get = async u => (await fetch(u)).text();
-    const strip = t => {
+    const strip = (t, ns) => {
       const m = t.match(/<svg[^>]*viewBox="([\d.\s-]+)"[^>]*>([\s\S]*)<\/svg>/);
-      return { vb: m[1].trim().split(/\s+/).map(Number), inner: m[2] };
+      const vb = m[1].trim().split(/\s+/).map(Number);
+      /* every embedded copy gets its own id namespace or the gradients fight */
+      const inner = m[2].replace(/id="/g, `id="${ns}-`).replace(/url\(#/g, `url(#${ns}-`)
+        .replace(/xlink:href="#/g, `xlink:href="#${ns}-`).replace(/href="#/g, `href="#${ns}-`);
+      return { vb, inner, w: LOCK_H * vb[2] / vb[3] };
     };
-    markColour = strip(await get('assets/mark-colour.svg'));
-    /* every embedded copy gets its own id namespace or the gradients fight */
-    markColour.inner = markColour.inner.replace(/id="/g, 'id="ifmk-')
-      .replace(/url\(#/g, 'url(#ifmk-');
-    markMono = strip(await get('assets/mark-mono.svg'));
-    markMono.inner = markMono.inner
-      .replace(/fill="(?!none)[^"]*"/g, 'fill="__INK__"')
-      .replace(/id="/g, 'id="ifmm-').replace(/url\(#/g, 'url(#ifmm-');
+    lockColour = strip(await get('assets/bdsis-lockup-colour.svg'), 'ifmk');
+    lockWhite = strip(await get('assets/bdsis-lockup-white.svg'), 'ifmw');
   }
 
   function lockup(theme) {
-    const T = THEMES[theme];
-    const mm = 6.68, mx = 5, my = 42.31;
-    const mark = T.mark === 'colour'
-      ? `<g transform="translate(${mx},${my}) scale(${mm / markColour.vb[2]})">${markColour.inner}</g>`
-      : `<g transform="translate(${mx},${my}) scale(${mm / markMono.vb[2]})">${markMono.inner.split('__INK__').join(T.mark)}</g>`;
-    const tx = 14;
-    const F = 'Helvetica Neue, Helvetica, Arial, sans-serif';
-    const FZH = 'Helvetica Neue, PingFang TC, MHei, Heiti TC, sans-serif';
-    return mark +
-      `<text x="${tx}" y="43.97" font-family="${F}" font-size="1.376" font-weight="500" letter-spacing="0.048" fill="${T.ink}">BACHELOR'S DEGREE SCHEME IN</text>` +
-      `<text x="${tx}" y="45.69" font-family="${F}" font-size="1.376" font-weight="500" letter-spacing="0.048" fill="${T.ink}">INTERDISCIPLINARY STUDIES</text>` +
-      `<rect x="${tx}" y="46.33" width="19.4" height="0.11" fill="${T.meta}"/>` +
-      `<text x="${tx}" y="48.2" font-family="${FZH}" font-size="1.56" font-weight="500" fill="${T.body}">跨學科組合學士課程<tspan fill="${T.bdsis}" font-weight="500"> · BDSIS</tspan></text>`;
+    const L = THEMES[theme].mark === 'white' ? lockWhite : lockColour;
+    return `<svg x="${MX}" y="${n2(BAND_CY - LOCK_H / 2)}" width="${n2(L.w)}" height="${LOCK_H}" ` +
+      `viewBox="${L.vb.join(' ')}" overflow="visible">${L.inner}</svg>`;
+  }
+
+  /* ── the name, sized to its room ───────────────────────────────────────────
+     The name sits right of the lockup with a clear gap; a long name shrinks
+     to fit rather than running into the logo. Measured with the same face
+     the card sets, on a canvas, so what fits here fits in the picture. */
+  const NAME_FS = 2.9, NAME_MIN_FS = 1.9, GAP = 3;
+  const F = 'Helvetica Neue, Helvetica, Arial, sans-serif';
+  let meas = null;
+  function textWidthMM(s, fs, weight) {
+    if (!meas) { const c = document.createElement('canvas'); meas = c.getContext('2d'); }
+    if (!meas) return s.length * 0.58 * fs;
+    meas.font = `${weight} 100px ${F}`;
+    return meas.measureText(s).width / 100 * fs;
+  }
+  function nameSize(label) {
+    const room = (W - MX) - (MX + lockColour.w + GAP);
+    const w = textWidthMM(label, NAME_FS, 500);
+    return w <= room ? NAME_FS : Math.max(NAME_MIN_FS, n2(NAME_FS * room / w));
   }
 
   /* ── the whole card ────────────────────────────────────────────────────── */
   function cardSVG(state) {
-    const { name, picked, initials, theme } = state;
+    const { name, picked, initials, theme, variant } = state;
     const T = THEMES[theme];
     const defs = [], defsSeen = new Set();
     const ok = picked.length >= 2 && picked.length <= 3;
     /* Without a valid pick the field stays empty and the card says why. */
-    const message = ok ? '' :
-      `<text x="45" y="19.4" text-anchor="middle" font-family="Helvetica Neue, Helvetica, Arial, sans-serif" ` +
-      `font-size="4.2" font-weight="700" fill="${T.body}">` +
-      (picked.length < 2 ? 'Pick 2–3 disciplines to generate your card'
-                         : `That's ${picked.length}. Pick 2–3 disciplines`) +
-      `</text>`;
-    const field = ok ? buildField(name, picked, initials, theme, defs, defsSeen, T.ground) : message;
-    const F = 'Helvetica Neue, Helvetica, Arial, sans-serif';
+    const line = (y, s) => `<text x="${W / 2}" y="${n2(y)}" text-anchor="middle" font-family="${F}" ` +
+      `font-size="4.2" font-weight="700" fill="${T.body}">${s}</text>`;
+    const message = ok ? '' : picked.length < 2
+      ? line(FIELD / 2 - 1.2, 'Pick 2–3 disciplines') + line(FIELD / 2 + 4.2, 'to generate your card')
+      : line(FIELD / 2 + 1.5, `That's ${picked.length}. Pick 2–3 disciplines`);
+    const field = ok ? buildField(name, picked, initials, theme, defs, defsSeen, T.ground, variant) : message;
     const label = (name || '').trim();
+    const RX = W - MX, cy = BAND_CY;
     const nameBlock = label
-      ? `<text x="82" y="44.7" text-anchor="end" font-family="${F}" font-size="2.9" font-weight="500" fill="${T.ink}">${esc(label)}</text>` +
-        `<text x="82" y="47.9" text-anchor="end" font-family="${F}" font-size="1.6" fill="${T.meta}">PolyU Info Day 2026 · JUPAS JS3000</text>`
-      : `<text x="82" y="46.4" text-anchor="end" font-family="${F}" font-size="1.6" fill="${T.meta}">PolyU Info Day 2026 · JUPAS JS3000</text>`;
+      ? `<text x="${RX}" y="${n2(cy - 0.55)}" text-anchor="end" font-family="${F}" font-size="${nameSize(label)}" font-weight="500" fill="${T.ink}">${esc(label)}</text>` +
+        `<text x="${RX}" y="${n2(cy + 2.65)}" text-anchor="end" font-family="${F}" font-size="1.6" fill="${T.meta}">PolyU Info Day 2026 · JUPAS JS3000</text>`
+      : `<text x="${RX}" y="${n2(cy + 1.15)}" text-anchor="end" font-family="${F}" font-size="1.6" fill="${T.meta}">PolyU Info Day 2026 · JUPAS JS3000</text>`;
     return `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 ${W} ${H}" width="${W}mm" height="${H}mm">` +
       `<title>BDSIS Info Day card${label ? ' · ' + esc(label) : ''}</title>` +
       `<defs>${defs.join('')}</defs>` +
@@ -260,15 +277,18 @@
 
   /* ── state and UI ──────────────────────────────────────────────────────── */
   const $ = id => document.getElementById(id);
-  const state = { name: '', picked: [0, 6], initials: '', theme: 'light' };
+  const MAX_PICK = 3, NAME_MAX = 20;
+  const state = { name: '', picked: [0, 6], initials: '', theme: 'light', variant: 0 };
 
   let lastSVG = '';
   function render() {
     const svg = cardSVG(state);
     lastSVG = svg;
     $('card-flat').innerHTML = svg;
-    $('if-clear-stage').hidden = state.picked.length <= 3;
-    $('if-clear').hidden = state.picked.length === 0;
+    const n = state.picked.length;
+    $('if-actions').hidden = n === 0;
+    $('if-shuffle').hidden = !(n >= 2 && n <= MAX_PICK);
+    $('if-clear').hidden = n === 0;
     document.dispatchEvent(new CustomEvent('if-cardchange'));
     location.hash = hashOf(state);
   }
@@ -279,29 +299,68 @@
     if (s.name.trim()) p.set('n', s.name.trim());
     p.set('d', s.picked.map(i => FACULTIES[i].key).join(','));
     if (s.theme !== 'light') p.set('t', s.theme);
+    if (s.variant) p.set('v', String(s.variant));
     return p.toString();
   }
   function restore() {
     if (!location.hash || location.hash.length < 2) return;
     const p = new URLSearchParams(location.hash.slice(1));
-    if (p.get('n')) { state.name = p.get('n'); $('if-name').value = state.name; }
+    if (p.get('n')) { state.name = p.get('n').slice(0, NAME_MAX); $('if-name').value = state.name; }
     if (p.get('d')) {
       const keys = p.get('d').split(',');
       const idx = keys.map(k => FACULTIES.findIndex(f => f.key === k)).filter(i => i >= 0);
-      if (idx.length) state.picked = idx;
+      if (idx.length) state.picked = [...new Set(idx)].slice(0, MAX_PICK);
     }
     const t = p.get('t');
     if (t && THEMES[t]) state.theme = t;
+    const v = parseInt(p.get('v') || '0', 10);
+    if (v > 0 && v < 1e6) state.variant = v;
+  }
+
+  /* ── save: the card as one opaque PNG, trimmed to the card, print-ready ──
+     600 dpi over 86 x 54 mm; the ground is painted first so the file has no
+     transparent margin whatever the browser does with the SVG. */
+  const DPI = 600;
+  function saveImage() {
+    const svg = lastSVG;
+    if (!svg) return;
+    const pw = Math.round(W / 25.4 * DPI), ph = Math.round(H / 25.4 * DPI);
+    const c = document.createElement('canvas');
+    c.width = pw; c.height = ph;
+    const ctx = c.getContext('2d');
+    const img = new Image();
+    const url = URL.createObjectURL(new Blob([svg], { type: 'image/svg+xml' }));
+    img.onload = () => {
+      URL.revokeObjectURL(url);
+      ctx.fillStyle = THEMES[state.theme].ground;
+      ctx.fillRect(0, 0, pw, ph);
+      ctx.drawImage(img, 0, 0, pw, ph);
+      const done = blob => {
+        const a = document.createElement('a');
+        a.href = URL.createObjectURL(blob);
+        const who = state.name.trim().replace(/[^\p{L}\p{N} _-]+/gu, '').trim();
+        a.download = `BDSIS Info Day card${who ? ' - ' + who : ''}.png`;
+        document.body.appendChild(a); a.click(); a.remove();
+        setTimeout(() => URL.revokeObjectURL(a.href), 4000);
+      };
+      if (c.toBlob) c.toBlob(done, 'image/png');
+      else fetch(c.toDataURL('image/png')).then(r => r.blob()).then(done);
+    };
+    img.src = url;
   }
 
   /* ── wiring ────────────────────────────────────────────────────────────── */
   function tiles() {
+    const full = state.picked.length >= MAX_PICK;
     $('if-tiles').innerHTML = FACULTIES.map((f, i) => {
       const on = state.picked.includes(i);
       const defs = [], seen = new Set();
       const sw = cell(f, i, 0, 0, f.rot ?? 1, 'light', seen, defs, '#F8F2E7', 'ift' + i);
+      /* three is the limit: with three picked the rest go quiet until one
+         is released, so a fourth can never be chosen */
+      const off = full && !on;
       return `<button type="button" class="if-tile${on ? ' on' : ''}" data-i="${i}" ` +
-        `aria-pressed="${on}" title="${esc(f.desc)}">` +
+        `aria-pressed="${on}"${off ? ' disabled' : ''} title="${off ? 'Three picked. Release one to swap' : esc(f.desc)}">` +
         `<svg viewBox="0 0 6 6" aria-hidden="true"><defs>${defs.join('')}</defs>${sw}</svg>` +
         `<span>${esc(f.en)}</span><span class="if-tile__box" aria-hidden="true"><svg viewBox="0 0 10 10"><path d="M2 5.3 L4.1 7.4 L8 2.7" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"/></svg></span></button>`;
     }).join('');
@@ -312,19 +371,28 @@
     restore();
     tiles();
 
-    $('if-name').addEventListener('input', () => { state.name = $('if-name').value; render(); });
+    const nameEl = $('if-name');
+    nameEl.maxLength = NAME_MAX;
+    nameEl.addEventListener('input', () => {
+      state.name = nameEl.value.slice(0, NAME_MAX);
+      if (nameEl.value.length > NAME_MAX) nameEl.value = state.name;
+      render();
+    });
     $('if-tiles').addEventListener('click', e => {
       const b = e.target.closest('button[data-i]');
-      if (!b) return;
+      if (!b || b.disabled) return;
       const i = +b.dataset.i;
       const at = state.picked.indexOf(i);
       if (at >= 0) state.picked.splice(at, 1);
-      else state.picked.push(i);
+      else if (state.picked.length < MAX_PICK) state.picked.push(i);
+      else return;
       tiles(); render();
     });
     const clear = () => { state.picked = []; tiles(); render(); };
     $('if-clear').addEventListener('click', clear);
     $('if-clear-stage').addEventListener('click', clear);
+    $('if-shuffle').addEventListener('click', () => { state.variant += 1; render(); });
+    $('if-save').addEventListener('click', saveImage);
     const themeCtl = $('if-theme');
     const syncTheme = () => {
       themeCtl.dataset.on = state.theme;
@@ -338,10 +406,10 @@
       if (e.key === ' ' || e.key === 'Enter') { e.preventDefault(); themeCtl.click(); }
     });
     syncTheme();
-    $('if-print').addEventListener('click', () => window.print());
+    /* ⌘P still prints the card itself, at true size */
     window.addEventListener('beforeprint', () => { $('print-card').innerHTML = lastSVG; });
     render();
   }
-  window.InfoDayCard = { svg: () => lastSVG, mm: { W, H } };
+  window.InfoDayCard = { svg: () => lastSVG, mm: { W, H, COLS, ROWS, FIELD }, save: saveImage };
   boot();
 })();

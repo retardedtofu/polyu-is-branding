@@ -50,6 +50,18 @@ jobs:
           # so this only bites if someone commits it by mistake.
           rm -rf _site/bdsis/fonts
 
+      - name: Stamp local script and style URLs with the commit
+        # GitHub Pages serves everything with a ten-minute cache. A visitor
+        # whose browser kept the old infoday.js saw new HTML run old code; a
+        # query string per commit makes every deploy fetch fresh files.
+        run: |
+          v="${GITHUB_SHA::7}"
+          find _site -name '*.html' -print0 | xargs -0 sed -i -E \
+            -e "s#(src=\"[^\"?:]*\.js)\"#\1?v=${v}\"#g" \
+            -e "s#(href=\"[^\"?:]*\.css)\"#\1?v=${v}\"#g" \
+            -e "s#(\"\./vendor/three\.module\.js)\"#\1?v=${v}\"#g"
+          grep -o 'infoday[^"]*\.js[^"]*' _site/bdsis/infoday.html
+
       - name: Check the assembled site
         run: |
           set -e
@@ -64,7 +76,9 @@ jobs:
             exit 1
           fi
           for f in index.html site.html guidelines.html artifacts.html web.css \
-                   svgexport.js hashgen.js cellhash.js favicon.ico; do
+                   svgexport.js hashgen.js cellhash.js favicon.ico \
+                   infoday.html infoday.js infoday-3d.js vendor/three.module.js \
+                   assets/bdsis-lockup-colour.svg assets/bdsis-lockup-white.svg; do
             test -f "_site/bdsis/$f" || { echo "missing _site/bdsis/$f"; exit 1; }
           done
           # the download pack is the point of the artifacts page; a silently

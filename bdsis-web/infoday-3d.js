@@ -6,7 +6,7 @@
    it. The card leans gently toward the pointer.
 
    The artwork itself stays the generator's SVG: it is rasterised to a
-   texture on every change, so the 3D card and the exported PNG are always
+   texture on every change, so the 3D card and the saved PNG are always
    the same picture. If WebGL is unavailable the flat SVG stays, and
    `#flat` in the URL forces it (used by the layout checks). */
 import * as THREE from 'three';
@@ -19,7 +19,7 @@ import { RoomEnvironment } from './vendor/RoomEnvironment.js';
   const stage = document.getElementById('card-stage');
   if (!stage || !window.InfoDayCard) return;
 
-  const { W, H } = window.InfoDayCard.mm;      /* 90 x 54 */
+  const { W, H, COLS, ROWS, FIELD } = window.InfoDayCard.mm;   /* 86 x 54 */
   const R = 3.18, DEPTH = 0.76;                /* ID-1 corner, card stock */
 
   let renderer;
@@ -107,7 +107,7 @@ import { RoomEnvironment } from './vendor/RoomEnvironment.js';
   scene.add(wall);
 
   /* ── the artwork as a texture, refreshed whenever the card changes ────── */
-  const TEXW = 1800, TEXH = 1080;
+  const TEXW = 1800, TEXH = Math.round(TEXW * H / W);   /* the card's own aspect */
   const cnv = document.createElement('canvas');
   cnv.width = TEXW; cnv.height = TEXH;
   const ctx = cnv.getContext('2d');
@@ -124,8 +124,8 @@ import { RoomEnvironment } from './vendor/RoomEnvironment.js';
      same way. A watchdog lands the final image even if animation frames
      stall, and an interrupted transition completes before the next one
      starts, so rapid toggling always makes forward progress. ── */
-  const GC = 15, FR = 6;                       /* the field's 6 mm grid */
-  const FIELD_H = Math.round(TEXH * 36 / 54);  /* field: top 36 of 54 mm */
+  const GC = COLS, FR = ROWS;                      /* the field's grid */
+  const FIELD_H = Math.round(TEXH * FIELD / H);    /* field: the top FIELD mm */
   const CW = TEXW / GC, CH2 = FIELD_H / FR;
   const OUT_MS = 280, IN_MS = 300;
   let anim = null, firstDraw = true;
@@ -240,7 +240,11 @@ import { RoomEnvironment } from './vendor/RoomEnvironment.js';
     }, 90);
   }
   /* a fingerprint of the texture canvas, for the layout checks */
-  window.InfoDay3D = { snap: () => { let h = 0; const d = ctx.getImageData(0, 0, 64, 64).data; for (let i = 0; i < d.length; i += 97) h = (h * 31 + d[i]) | 0; return h; } };
+  window.InfoDay3D = {
+    snap: () => { let h = 0; const d = ctx.getImageData(0, 0, 64, 64).data; for (let i = 0; i < d.length; i += 97) h = (h * 31 + d[i]) | 0; return h; },
+    /* render one frame NOW and fingerprint what the GPU drew */
+    shot: () => { renderer.render(scene, camera); const u = renderer.domElement.toDataURL('image/png'); let h = 0; for (let i = 0; i < u.length; i += 31) h = (h * 33 + u.charCodeAt(i)) | 0; return { h, len: u.length }; },
+  };
     document.addEventListener('if-cardchange', refresh);
   refresh();
 

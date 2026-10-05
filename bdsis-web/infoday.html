@@ -27,15 +27,8 @@ body { background: var(--paper-tint); }
   display: grid; gap: var(--s-5); align-content: start; justify-items: center;
 }
 
-.if-lockup { display: flex; align-items: flex-start; gap: 11px; }
-.if-lockup img { width: 46px; display: block; margin-top: 0; }
-.if-lockup .if-word { line-height: 1.25; margin-top: 3px; }
-.if-word b {
-  display: block; font-size: 9px; font-weight: var(--fw-medium);
-  letter-spacing: 0.05em; color: var(--ink);
-}
-.if-word span { display: block; font-size: 10px; font-weight: var(--fw-medium); color: var(--body); border-top: 1px solid var(--line); padding-top: 2px; margin-top: 2px; }
-.if-word span i { font-style: normal; font-weight: var(--fw-medium); color: var(--is-crimson-ink); }
+/* the College's official programme-name logo, as supplied */
+.if-lockup { display: block; width: min(100%, 250px); height: auto; }
 
 .if-head { width: 100%; text-align: center; }
 .if-head h1 {
@@ -43,7 +36,8 @@ body { background: var(--paper-tint); }
   letter-spacing: -0.015em; color: var(--ink); line-height: 1.06; margin: 0;
 }
 
-.if-stage { width: 100%; display: grid; justify-items: center; }
+.if-stage { width: 100%; display: grid; justify-items: center; gap: var(--s-4); }
+.if-actions { display: flex; gap: var(--s-3); flex-wrap: wrap; justify-content: center; }
 #card-stage { position: relative; width: 100%; max-width: 680px; }
 #card-stage canvas { display: block; width: 100%; height: auto; }
 #card-flat svg { display: block; width: 100%; height: auto; box-shadow: 0 10px 30px rgba(20,17,14,.12); }
@@ -104,6 +98,8 @@ body { background: var(--paper-tint); }
 }
 .if-tile svg { width: 20px; height: 20px; display: block; flex-shrink: 0; }
 .if-tile.on { border-color: var(--ink); box-shadow: inset 0 0 0 1px var(--ink); }
+/* with three picked the rest wait: visibly quiet, not clickable */
+.if-tile:disabled { opacity: 0.42; cursor: not-allowed; }
 .if-tile:focus-visible { outline: 2px solid var(--is-crimson-ink); outline-offset: 1px; }
 .if-tile__box {
   margin-left: auto; flex-shrink: 0;
@@ -114,16 +110,16 @@ body { background: var(--paper-tint); }
 .if-tile__box svg { width: 9px; height: 9px; display: block; }
 .if-tile.on .if-tile__box { background: var(--ink); border-color: var(--ink); color: var(--paper); }
 
-.if-print { position: fixed; top: var(--s-5); right: var(--s-5); z-index: 20; }
+.if-save { position: fixed; top: var(--s-5); right: var(--s-5); z-index: 20; }
 
-/* Print prints the card itself, at true size */
+/* ⌘P still prints the card itself, at true size */
 #print-card { display: none; }
-@page { size: 90mm 54mm; margin: 0; }
+@page { size: 86mm 54mm; margin: 0; }
 @media print {
   body { background: #FFFFFF; }
-  .if-app, .if-print { display: none !important; }
+  .if-app, .if-save { display: none !important; }
   #print-card { display: block; }
-  #print-card svg { display: block; width: 90mm; height: 54mm; }
+  #print-card svg { display: block; width: 86mm; height: 54mm; }
 }
 
 
@@ -139,18 +135,13 @@ body { background: var(--paper-tint); }
 </head>
 <body>
 
-<button type="button" class="btn btn--export if-print" id="if-print">Print</button>
+<button type="button" class="btn btn--export if-save" id="if-save">Save image</button>
 
 <main class="if-app">
   <aside class="if-side">
-    <!-- Our mark, our face, the College's bilingual naming for the programme -->
-    <div class="if-lockup">
-      <img src="assets/mark-colour.svg" alt="BDSIS">
-      <div class="if-word">
-        <b>BACHELOR'S DEGREE SCHEME IN<br>INTERDISCIPLINARY STUDIES</b>
-        <span>跨學科組合學士課程<i> · BDSIS</i></span>
-      </div>
-    </div>
+    <!-- The College's official programme-name logo -->
+    <img class="if-lockup" src="assets/bdsis-lockup-colour.svg"
+         alt="Bachelor's Degree Scheme in Interdisciplinary Studies · 跨學科組合學士課程 · BDSIS">
 
     <div class="if-ctl">
       <span class="if-ctl__head">Disciplines · pick 2 or 3
@@ -166,13 +157,16 @@ body { background: var(--paper-tint); }
 
     <div class="if-stage">
       <div id="card-stage" aria-label="Your card, live preview"><div id="card-flat"></div></div>
-      <button type="button" class="btn btn--export" id="if-clear-stage" hidden>Clear selection</button>
+      <div class="if-actions" id="if-actions" hidden>
+        <button type="button" class="btn btn--export" id="if-shuffle">Shuffle pattern</button>
+        <button type="button" class="btn btn--export" id="if-clear-stage">Clear selection</button>
+      </div>
     </div>
 
     <div class="if-row">
       <div class="if-ctl">
         <label for="if-name">Your name</label>
-        <input type="text" id="if-name" maxlength="40" autocomplete="off" spellcheck="false" placeholder="Type your English name">
+        <input type="text" id="if-name" maxlength="20" autocomplete="off" spellcheck="false" placeholder="Type your English name">
       </div>
       <div class="if-ctl">
         <span>Register</span>
