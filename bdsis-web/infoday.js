@@ -42,7 +42,7 @@
       zh: '建設及環境學院', shape: 'square', texture: 'stripes-d',
       a: '#A82850', b: '#981C42', t: '#E04068',
       desc: 'The built world: cities, structures and the environment they sit in.' },
-    { key: 'FE',   en: 'Faculty of Engineering',
+    { key: 'FE',   en: 'Faculty of Engineering', abbr: 'FENG',
       zh: '工程學院', shape: 'quarter', texture: 'none', rot: 2,
       a: '#3089C7', b: '#045C8C',
       desc: 'Making things work: systems, machines and the physics of both.' },
@@ -362,7 +362,7 @@
       return `<button type="button" class="if-tile${on ? ' on' : ''}" data-i="${i}" ` +
         `aria-pressed="${on}"${off ? ' disabled' : ''} title="${off ? 'Three picked. Release one to swap' : esc(f.desc)}">` +
         `<svg viewBox="0 0 6 6" aria-hidden="true"><defs>${defs.join('')}</defs>${sw}</svg>` +
-        `<span>${esc(f.en)}</span><span class="if-tile__box" aria-hidden="true"><svg viewBox="0 0 10 10"><path d="M2 5.3 L4.1 7.4 L8 2.7" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"/></svg></span></button>`;
+        `<span>${esc(f.en)} <i class="if-tile__abbr">(${f.abbr || f.key})</i></span><span class="if-tile__box" aria-hidden="true"><svg viewBox="0 0 10 10"><path d="M2 5.3 L4.1 7.4 L8 2.7" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"/></svg></span></button>`;
     }).join('');
   }
 
