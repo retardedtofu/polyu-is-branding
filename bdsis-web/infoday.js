@@ -264,8 +264,8 @@
     const RX = W - MX, cy = BAND_CY;
     const nameBlock = label
       ? `<text x="${RX}" y="${n2(cy - 0.55)}" text-anchor="end" font-family="${F}" font-size="${nameSize(label)}" font-weight="500" fill="${T.ink}">${esc(label)}</text>` +
-        `<text x="${RX}" y="${n2(cy + 2.65)}" text-anchor="end" font-family="${F}" font-size="1.6" fill="${T.meta}">PolyU Info Day 2026 · JUPAS Code: JS3000</text>`
-      : `<text x="${RX}" y="${n2(cy + 1.15)}" text-anchor="end" font-family="${F}" font-size="1.6" fill="${T.meta}">PolyU Info Day 2026 · JUPAS Code: JS3000</text>`;
+        `<text x="${RX}" y="${n2(cy + 2.65)}" text-anchor="end" font-family="${F}" font-size="1.6" fill="${T.meta}">JUPAS Code: JS3000</text>`
+      : `<text x="${RX}" y="${n2(cy + 1.15)}" text-anchor="end" font-family="${F}" font-size="1.6" fill="${T.meta}">JUPAS Code: JS3000</text>`;
     return `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 ${W} ${H}" width="${W}mm" height="${H}mm">` +
       `<title>BDSIS Info Day card${label ? ' · ' + esc(label) : ''}</title>` +
       `<defs>${defs.join('')}</defs>` +
