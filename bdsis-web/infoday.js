@@ -267,7 +267,7 @@
         `<text x="${RX}" y="${n2(cy + 2.65)}" text-anchor="end" font-family="${F}" font-size="1.6" fill="${T.meta}">JUPAS Code: JS3000</text>`
       : `<text x="${RX}" y="${n2(cy + 1.15)}" text-anchor="end" font-family="${F}" font-size="1.6" fill="${T.meta}">JUPAS Code: JS3000</text>`;
     return `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 ${W} ${H}" width="${W}mm" height="${H}mm">` +
-      `<title>BDSIS Info Day card${label ? ' · ' + esc(label) : ''}</title>` +
+      `<title>BDSIS card${label ? ' · ' + esc(label) : ''}</title>` +
       `<defs>${defs.join('')}</defs>` +
       `<rect width="${W}" height="${H}" fill="${T.ground}"/>` +
       field + lockup(theme) + nameBlock + '</svg>';
@@ -339,7 +339,7 @@
         const a = document.createElement('a');
         a.href = URL.createObjectURL(blob);
         const who = state.name.trim().replace(/[^\p{L}\p{N} _-]+/gu, '').trim();
-        a.download = `BDSIS Info Day card${who ? ' - ' + who : ''}.png`;
+        a.download = `BDSIS card${who ? ' - ' + who : ''}.png`;
         document.body.appendChild(a); a.click(); a.remove();
         setTimeout(() => URL.revokeObjectURL(a.href), 4000);
       };
